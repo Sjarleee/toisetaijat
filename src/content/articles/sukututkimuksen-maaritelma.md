@@ -1,0 +1,34 @@
+---
+title: 'Sukututkimuksen määritelmä'
+description: 'Epistemologinen lähestymistapa sukututkimuksen määrittelyyn: tietoatomi, elämäkerta ja sukupuu tiedon rakentumisen välineinä.'
+pubDate: 2021-01-15
+sourceUrl: 'https://www.toisetaijat.fi/2021/01/sukututkimuksen-maaritelma.html'
+heroImage: '/images/sukututkimuksen-maaritelma/sukututkimuksen-maaritelma-01.png'
+tags: ['sukututkimus', 'teoria']
+---
+
+*Artikkeli ilmestyi alun perin Genealogi-lehdessä (Genos) 1999: 123-126.*
+
+Tietoatomi, elämäkerta ja sukupuu — nämä kolme käsitettä muodostavat sukututkimuksen tietoteoreettisen perustan. Tässä artikkelissa tarkastelen sukututkimuksen käsitettä ja määrittelyä epistemologisesta näkökulmasta.
+
+## Sukututkimuksen tietoteoreettinen perusta
+
+Sukututkimuksen yksinkertaisin tietoyksikkö on *tietoatomi* eli vastaus kysymykseen: kuka teki mitä missä milloin? Tämä nelitahoinen kysymysrakenne (kuka-mitä-missä-milloin) on sukututkimuksen tiedonmuodostuksen perusyksikkö, josta kaikki monimutkaisemmat tulkinnat rakennetaan.
+
+Yksittäisistä tietoatomeista kootaan *elämäkerta*, joka kuvaa yhden henkilön elämänkaarta syntymästä kuolemaan. Elämäkerta ei ole pelkkä kronologinen luettelo tapahtumista, vaan se pyrkii ymmärtämään henkilöä osana aikaansa, perhettään ja yhteisöään.
+
+## Suvun tiedon rakentuminen
+
+Kun yksittäisten henkilöiden elämäkerrat yhdistetään perhesiteillä, syntyy *sukupuu* tai *sukutaulu*. Sukupuu on sukututkimuksen keskeinen esitysmuoto, mutta se on samalla tietoteoreettinen väline: se osoittaa, kuinka tieto siirtyy sukupolvelta toiselle ja kuinka biologiset ja sosiaaliset sidokset muodostavat verkostoja.
+
+Sukututkimuksen tietoteoreettinen haaste on se, että tietoatomit ovat harvoin täydellisiä. Lähteissä on aukkoja, virheitä ja ristiriitaisuuksia. Sukututkijan tehtävä on arvioida lähteitä kriittisesti ja rekonstruoida mahdollisimman todennäköinen kuva menneisyydestä.
+
+## Sukututkimuksen määritelmä
+
+Sukututkimus voidaan määritellä tieteenalaksi, joka tutkii henkilöiden välisiä sukulaisuussuhteita historiallisten lähteiden avulla. Tämä määritelmä kattaa sekä ammattimaisen tutkimuksen että harrastajatoiminnan, ja se tunnistaa sukututkimuksen erityisen epistemologisen aseman historiatieteiden joukossa.
+
+Sukututkimus on toisaalta *soveltava tiede*, joka hyödyntää muiden tieteenalojen — historiantutkimuksen, paleografian, arkisto-opin, demografian — menetelmiä ja löydöksiä. Toisaalta sillä on omia metodologisia erityispiirteitä, kuten genealogisten polveutumislinjojen todistaminen.
+
+## Johtopäätökset
+
+Tietoatomi → elämäkerta → sukupuu: tämä kolmiportainen rakenne kuvaa, kuinka sukututkimustieto kumuloituu yksittäisistä havainnoista laajemmiksi kokonaisuuksiksi. Sukututkimuksen tieteellinen arvo riippuu siitä, kuinka huolellisesti tämä rakentumisprosessi dokumentoidaan ja kuinka kriittisesti lähteitä arvioidaan.

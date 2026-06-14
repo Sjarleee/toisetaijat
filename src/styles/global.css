@@ -1,0 +1,48 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: 'Georgia', 'Times New Roman', serif;
+  --font-heading: 'Georgia', serif;
+  --color-brand: #1a3a2a;
+  --color-brand-light: #2d6a4f;
+  --color-accent: #8b6914;
+  --color-bg: #faf9f6;
+  --color-surface: #ffffff;
+  --color-text: #1c1c1c;
+  --color-muted: #6b7280;
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply bg-[#faf9f6] text-[#1c1c1c] antialiased;
+    font-family: 'Georgia', 'Times New Roman', serif;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Georgia', serif;
+  }
+  p {
+    @apply leading-relaxed;
+  }
+  a {
+    @apply transition-colors duration-200;
+  }
+  article img {
+    @apply rounded-md max-w-full h-auto;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center gap-2 bg-[#1a3a2a] text-white px-5 py-2.5 rounded-md font-medium hover:bg-[#2d6a4f] transition-colors duration-200;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 border border-[#1a3a2a] text-[#1a3a2a] px-5 py-2.5 rounded-md font-medium hover:bg-[#1a3a2a] hover:text-white transition-colors duration-200;
+  }
+  .prose-article {
+    @apply prose prose-lg max-w-none prose-headings:font-serif prose-headings:text-[#1a3a2a] prose-a:text-[#2d6a4f] prose-a:no-underline hover:prose-a:underline;
+  }
+}

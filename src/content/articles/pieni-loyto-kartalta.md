@@ -1,0 +1,29 @@
+---
+title: 'Pieni löytö kartalta'
+description: 'Havainto Ylä-Satakunnan vanhimmalta kartalta vuodelta 1650: Mäyränen-Meuronen-nimen yhteys Kolkinlahden kylässä.'
+pubDate: 2016-09-26
+sourceUrl: 'https://www.toisetaijat.fi/2016/09/pieni-loyto-kartalta-ja-tietoja.html'
+tags: ['nimistö', 'kartat', 'Satakunta']
+---
+
+Käytin hiljattain vanhakarttojen hakupalvelua tutkiakseni Ylä-Satakuntaa. Sieltä löytyy Ylä-Satakunnan vanhin säilynyt kartta vuodelta 1650, ja siinä on pieni mutta kiinnostava yksityiskohta.
+
+## Kolkinlahti kartalla
+
+Kartta esittää Kolkinlahden kylän nimellä "Kåiklacks". Tämä on mielenkiintoinen kirjoitusasu, joka kertoo 1600-luvun kartoittajan tavasta merkitä suomenkielisiä paikannimiä ruotsalaisella kirjoitusjärjestelmällä.
+
+Kartalla näkyy myös nimi, joka on kirjoitettu muodossa "Meürenen". Tämä on selvästi sama nimi kuin Mäyränen — ja vielä tärkeämpää: se osoittaa yhteyden nimeen Meuronen.
+
+## Mäyränen ja Meuronen — sama nimi?
+
+Mäyränen ja Meuronen ovat nimiä, jotka esiintyvät Ylä-Satakunnan sukututkimuksessa. On pitkään epäilty, että ne saattavat olla saman nimen eri muotoja — mutta kirjallista todistetta ei ole ollut.
+
+Vuoden 1650 kartta tarjoaa tähän vastauksen. Muoto "Meürenen" on äänteellisesti puolivälissä Mäyränen ja Meuronen: se alkaa M:llä, jatkuu eu-äänteellä ja päättyy -nen-loppuun. Tämä on käytännössä todiste siitä, että kyseessä on sama nimi eri aikoina ja eri kirjureiden käsistä kirjoitettuna.
+
+## Merkitys sukututkimukselle
+
+Löydöllä on käytännön merkitystä sukututkijoille, jotka jäljittävät Mäyränen- tai Meuronen-nimisiä sukuja Ylä-Satakunnassa. Kaksi näennäisesti eri sukua saattaa todellisuudessa olla sama suku, jonka nimen kirjoitusasu on muuttunut vuosisatojen kuluessa.
+
+---
+
+*Lähde: Vanhakartta.fi-palvelu, kartta vuodelta 1650. Luettu 25.9.2016.*

@@ -1,0 +1,68 @@
+backend:
+  name: github
+  repo: YOUR_GITHUB_USERNAME/toisetaijat
+  branch: main
+  base_url: https://sveltia-cms-auth.YOUR_WORKER.workers.dev  # tai bruk Cloudflare Access
+
+# Bruk Cloudflare Pages' innebygde Identity (eller Netlify Identity proxy)
+# For enklest oppsett: bruk sveltia-cms-auth på Cloudflare Workers
+# Se: https://github.com/sveltia/sveltia-cms-auth
+
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+locale: fi
+
+collections:
+  - name: articles
+    label: Artikkelit
+    label_singular: Artikkeli
+    folder: src/content/articles
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    format: frontmatter
+    sortable_fields: ['pubDate', 'title']
+    view_filters:
+      - label: Luonnokset
+        field: draft
+        pattern: true
+    fields:
+      - label: Otsikko
+        name: title
+        widget: string
+      - label: Kuvaus
+        name: description
+        widget: text
+        required: false
+        hint: Lyhyt kuvaus artikkelista (näkyy listauksessa ja hakukoneissa)
+      - label: Julkaisupäivä
+        name: pubDate
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        default: ''
+      - label: Päivityspäivä
+        name: updatedDate
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        required: false
+      - label: Kansikuva
+        name: heroImage
+        widget: image
+        required: false
+      - label: Tagit
+        name: tags
+        widget: list
+        required: false
+        hint: 'Esim: historia, sukututkimus, DNA'
+      - label: Luonnos
+        name: draft
+        widget: boolean
+        default: false
+        hint: Luonnoksia ei julkaista
+      - label: Sisältö
+        name: body
+        widget: markdown
+        modes: ['rich_text', 'raw']

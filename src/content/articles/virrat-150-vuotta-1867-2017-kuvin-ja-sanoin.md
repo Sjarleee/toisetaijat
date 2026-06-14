@@ -1,0 +1,70 @@
+---
+title: 'Virrat 150 vuotta 1867 - 2017 - kuvin ja sanoin'
+description: 'Olen blogipalstallani ollut melko pitkään hiljaa. En ole ollut toimeton, vaan päinvastoin hyvin ahkera. Toukokuussa kävin kahdesti ulkomailla. Muutaman päivän o'
+pubDate: 2017-06-15
+tags: ['Pirkanmaa', 'paikallishistoria']
+---
+
+Olen blogipalstallani ollut melko
+pitkään hiljaa. En ole ollut toimeton, vaan päinvastoin hyvin ahkera.
+Toukokuussa kävin kahdesti ulkomailla. Muutaman päivän olin Puolassa ja pari
+päivää pitempään Slovakiassa. Niistäkin voisi tietysti kertoa, mutta
+varsinainen asiani koskee otsikon Virrat-teemaa.
+
+
+Olen sopinut kesäkuun alussa Virtain
+kaupungin kanssa tietokirjan kirjoittamisesta. Työnimenä on ”Kimaltelevilta
+vesiltä – Virrat 150 vuotta 1867-2017 kuvin ja sanoin”. Kimaltelevat vedet viittaavat paitsi
+tietysti Virtaihin myös Into Konrad Inhaan ja huhtikuussa Killinkoskella
+avattuun Into-keskukseen.
+
+
+Koko Suomessa erotettiin 1860-luvulla
+seurakuntien toiminnasta erilleen kunnallinen toiminta. Näin myös Virroilla
+kunnallinen itsehallinto sai alkunsa. Olen aloittanut tehtävän jo maaliskuussa.
+Kirjoitustyö on sen verran pitkällä, että siitä voi kertoa muillekin.
+
+
+Virtain historia on Vanhan Ruoveden
+historian yhteydessä kirjoitettu 1970-luvulle asti. Se on ollut hyvä
+lähtökohta. Toimeksiantaja toivoo kirjassa painotusta tuon historiasarjan
+jälkeiseen aikaan, mikä on hyvin ymmärrettävää ja haasteellista. En olisi
+solminut sopimusta, jos en luottaisi siihen, että pystyn tehtävästä
+suoriutumaan. Olen hahmotellut kirjan muodostuvan kolmesta tasosta:
+
+
+Ajallinen jänne haetaan 150 vuoden
+takaisesta ajasta. Ilman sitä monet tämän päivän asiat – hyvänä esimerkkinä
+Into-keskus – eivät tulisi ymmärretyiksi. Miksi Inha oli niin virtolainen? Olenkin
+nimennyt vuosikymmenet Virroilla 1870-luvulta 1900-luvun alkuun Inhan
+aikakaudeksi.
+
+
+Toinen taso on kylittäinen
+tarkastelu. Kerron jokaisesta kylästä ja kyläkunnasta ajatuksella, että Virrat
+on kyliensä muodostama kokonaisuus. Kaikki kylät ovat omanlaatuisiansa ja se
+tulee saada kirjassa kerrottua. Kyläkirjat ja kylien kotisivut ovat tässä
+hyvänä apuna.
+
+
+Kolmannen tason, jota parhaillaan työstän,
+on otsikolla ”Toimintojen Virrat”. Tarkoitus on käsitellä tämän hetken
+tilanteista käsin moninaista toimintaa Virroilla alkaen maa- ja metsätaloudesta
+sekä teollisuudesta ja liikenteestä. Palvelusektori on hyvin monitahoinen.
+Siihen on tarkoitus sisällyttää harrastustoiminta ja luontoon liittyvät asiat,
+joita Virroilla kelpaa kyllä esitellä. Parhaaksi lähteeksi olen havainnut
+paikallislehden, Suomenselän Sanomat. Jo tehdessäni tekstiä Sanomien
+juhlalehteen vuonna 2011, kävin läpi kaikki siihen mennessä ilmestyneet lehdet.
+Silloiset viitteenomaiset muistiinpanot ovat nyt käytettävissä. Vuodesta 1911
+ilmestyneet lehdet olen tässä yhteydessä lukenut. Olen kirjannut ylös sellaiset
+asiat ja teemat, joita pitäisi ja voisi kirjassa kertoa.
+
+
+Kun saan kolmannesta tasosta rungon
+tehtyä, tarkoitukseni on ottaa yhteyttä eri tahoille. Aion käydä kylissä,
+joista esimerkiksi kuvia on vähän käytettävissäni, yrityksissä ym. Tulen
+ottamaan yhteyksiä kyläyhdistyksiin ja eri toimijoihin saadakseni ajantasaista
+tietoa ja näkemyksiä tulevasta. Yhteydenotot tännekin päin ovat toivottavia
+tämän kesäkauden aikana. Esimerkiksi, jos yrityksissä, yhdistyksissä tai
+kylissä on tapahtumia, joista voi saada hyviä tilannekuvia, niistä olisi hyvä
+tietää ennakolta.

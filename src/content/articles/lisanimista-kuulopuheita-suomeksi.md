@@ -1,0 +1,38 @@
+---
+title: 'Lisänimistä — kuulopuheita suomeksi, paperilla ruotsiksi'
+description: 'Tutkimusnote sotilaiden lisänimistä ja korvakuulolta kirjoittamisesta Porin läänin jalkaväkirykmentin matrikkelissa Kustaa III:n Venäjänsodan ajalta.'
+pubDate: 2016-10-06
+sourceUrl: 'https://www.toisetaijat.fi/2016/10/lisanimista-kuulopuheita-suomeksi.html'
+tags: ['sotahistoria', 'nimistö', 'Kustaa III:n sota', 'Satakunta']
+---
+
+Pohtiessani Porin läänin jalkaväkirykmentin matrikkelia Kustaa III:n Venäjänsodan (1788-1790) ajalta törmäsin mielenkiintoiseen ilmiöön: sotilaille kirjatut lisänimet eivät aina vastaa sitä, miltä ne suomen kielessä kuulostaisivat. Syy on yksinkertainen — kirjuri kuuli nimen suomeksi ja kirjoitti sen ylös ruotsiksi.
+
+## Aapo vai Kaapo?
+
+Kenties tunnetuin esimerkki korvakuulolta kirjoittamisen haasteista on etunimienparin Abraham/Gabriel sekoittuminen. Suomeksi Abraham on Aapo ja Gabriel on Kaapo. Suomen kielessä nämä kuulostavat hyvin samanlaisilta: molemmat alkavat A:lla tai Ka-tavulla riippuen murteesta ja henkilöstä. Ruotsinkielinen kirjuri, joka ei tuntenut suomen kieltä hyvin, saattoi merkitä toisen toisen paikalle.
+
+Tämä sekaannus aiheuttaa ongelmia sukututkijalle: jos matrikkelissa lukee Abraham, se saattaa tarkoittaa henkilöä, jonka sukulaiset tuntevat nimellä Kaapo tai Gabriel.
+
+## Manu, Emanuel ja Wigg
+
+Toinen esimerkki on nimi Manu. Lyhennys Manu viittaa suomessa Emanueliin, mutta sama henkilö saattaa esiintyä muissa lähteissä nimellä Wigg — mikä on täysin eri lisänimi. Kaikki kolme voivat kuitenkin viitata samaan henkilöön, jos kirjurilla on ollut eri tavat merkitä nimi.
+
+Wigg-lisänimellä esiintyy matrikkelissa useampia sotilaita, ja heidän tunnistamisensa vaatii muiden tietojen — kotipitäjän, palveluajan, yksikön — ristiintarkistamista.
+
+## Kask ja Bask, Lum ja Blom
+
+Samantyyppinen ongelma esiintyy myös muissa nimissä:
+
+- **Kask** (suomalainen sana, kaskenpoltto) saattaa sekoittua nimeen **Bask** tai päinvastoin, koska K:n ja B:n kuuloero ei ole selkeä kaikissa murteissa.
+- **Lum** ja **Blom** ovat eri nimiä (Blom on ruotsalainen kukkanimi), mutta niiden kuuloero ruotsinkieliselle kirjurille saattoi olla pieni etenkin, jos sotilas sanoi nimensä nopeasti tai hiljaa.
+
+## Miksi tällä on merkitystä?
+
+Sotilasmatrikkeleissa lisänimet ovat keskeisiä henkilöntunnisteita. Rykmentissä saattoi olla useita Juho Matinpoikia, mutta vain yksi Juho Matinpoika Kask. Lisänimi erottaa heidät toisistaan. Jos lisänimi on kirjattu väärin, henkilön jäljittäminen muista lähteistä — rippikirjoista, henkikirjoista, tuomiokirjoista — vaikeutuu tai jopa estyy.
+
+Sukututkijan on siis tunnettava lisänimiin liittyvät ongelmat ja oltava valmis kokeilemaan eri kirjoitusasuja, kun etsii tiettyä henkilöä.
+
+## Lähde
+
+Porin läänin jalkaväkirykmentti, matrikkelit Kustaa III:n Venäjänsodan ajalta (1788-1790). Ruotsin Sota-arkisto (Krigsarkivet), Tukholma.

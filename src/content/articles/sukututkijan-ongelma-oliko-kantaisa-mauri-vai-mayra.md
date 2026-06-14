@@ -1,0 +1,80 @@
+---
+title: 'Sukututkijan ongelma: oliko kantaisä Mauri vai Mäyrä'
+description: 'Kuluneen kesän jälkipuolella olen tutkinut oman isälinjani alkuperää. Päädyin arkistolähteiden avulla Kolkinlahden Mäyräsen talon autiosta 1606 asuttaneeseen Ju'
+pubDate: 2016-09-19
+tags: ['sukututkimus', 'nimistö', 'Satakunta']
+---
+
+Kuluneen
+kesän jälkipuolella olen tutkinut oman isälinjani alkuperää. Päädyin
+arkistolähteiden avulla Kolkinlahden Mäyräsen talon autiosta 1606 asuttaneeseen
+Juho Laurinpoika Mäyräseen. Kolkinlahti kuului silloin Ruoveden pitäjään ja
+kuuluu nykyisin Mänttä-Vilppulaan. Pikaisen alkututkimuksen muiden tutkimusten
+lomassa tein jo vuosina 2011-2012. Nyt kesällä päätin, että täydennän sen
+kunnolliseksi tutkimukseksi. Tehtävä, vaikka suunta sille oli jo löytynyt
+alkututkimuksissa, osoittautui erinomaisen työlääksi. Tuloksista olisi ainesta
+ainakin yhdeksi tai kahdeksi artikkeliksi, mutta taitavat hautautua iäksi
+”pöytälaatikkoon” julkaisukanavan puuttuessa. Vastaan tuli useita hämmentäviä
+seikkoja, jotka voi tiivistää otsikon sanoihin Mauri vai Mäyrä. Siitä tässä vaivaamatta
+lukijaa liian tarkoilla lähdeviitteillä.
+
+
+Eläinkantainen
+ja nen-päätteinen sukunimi, jonka Juho Laurinpoika toi mukanaan, kuulostaa
+hyvin savo-karjalaiselta. Isälinjan dna-tutkimuksen mukaan sukujuuri voitiin
+määritellä savokarjalaiseksi. Mutta esimerkiksi Savon maakuntahistoriassa
+todetaan nimenomaan, että Mäyränen on ei-savolainen suku. Ainoa, mistä Kauko
+Pirinen löysi siihen yhdistettävän sukunimen, oli Pohjois-Pohjanmaalla. Mitään
+Juhon isäksi sopivaa Lauri Mäyrästä sieltä ei ole löydettävissä. Toiseksi
+muuttosuunta Pohjois-Pohjanmaalta vanhan Ruoveden alueelle on erittäin
+epätodennäköinen. Pohjois-Pohjanmaan historian Kirjoittanut Armas Luukko
+viittaa, vaikkakin varovaisesti, Lappeen suuntaan. Varovaisuus lienee johtunut
+nimistöntutkijoiden erilaisista käsityksistä.
+
+
+Lappeen
+suunta on yleisen asutushistorian valossa uskottava. Vanhan Ruoveden asuttajien
+1500-luvun lopulla sukunimistöstä löytyy mm. nimi Lappvetinen, Lappveteläinen.
+Mutta alueen historiat (Aulikki Ylönen Lappeen kihlakunnan historia I ja pari
+vuottta sitten ilmestynyt Lappeen historia I) eivät tunne lainkaan sukunimeä
+Mäyränen. Hakemistoja selatessa ainoa sen suuntainen nimi oli Meuronen. Vanhoja
+tekstejä lukeneena muunnos ä:stä e:ksi tai päinvastoin on hyvin tuttua.
+
+
+Olen
+luonnollisesti katsonut myös nimistöntutkijoiden kirjoituksia (Mikkonen &amp;
+Paikkala, Sukunimet). Sen sijaan, että niistä olisi ollut apua, ne lisäsivät
+hämmennystä. Hakusanan Meuronen kohdalla nimen arvellaan johtuvan
+Mauritiuksesta. Se olisi siis etunimilähtöinen. Tutkimuksen tehtyäni täytyy
+korostaa, että kysymyksessä on puhdas arvelu. Ainoatakaan Mauria ei lähteistä
+Lappeen suunnalta löydy. Toiseksi muunnos a:sta e:ksi lienee aika harvinainen.
+Onko se kielitieteellisesti edes perusteltu?
+
+
+Kirjallisuuden
+pohjalta Lappeen Meurosista ei paljon tietoa löytynyt. Ylönen on kirjassaan
+keskittynyt lähinnä tarkastelemaan vain kylien nimiin liittyviä sukunimiä.
+Jukka Partanen teki katsauksen Lappeen pitäjän sukunimistöön vanhimmassa eli
+vuoden 1543 maakirjassa. Kumpikaan katsaus ei löytänyt Meurosia. Jouduin itse
+käymään lähes kaikki voudintilit Lappeen osalta läpi. Yritin päästä muutaman
+vuoden välein tehdyillä otoksilla, mutta tarkkuus ei ollut riittävä. Kiinnitin
+huomiota seikkaan, josta en löytänyt mainintoja mainituista Lappeen
+historioista: Vuodelta 1544 on kaksi maakirjaa, joista toisessa on lähes puolta
+enemmän nimiä kuin toisessa! Siinä, jossa oli enemmän nimiä, oli merkitty myös
+kylien nimiä. Siinä oli ensimmäisen kerran Meurosen sukunimikin. Meurosia oli
+kokonainen täysvero, jossa oli neljä savua. Kokovero tavataan tulkita
+kantatilaksi ja savut siitä jaetuiksi taloiksi. Siitä alkaen sukulinjoja on
+johdettavissa niin, että etunimistössä on myös nimiä Juho ja Lauri eli Lassi.
+Kolkinlahden Juho Laurinpojallekin löytyy sieltä mahdollinen isälinja.
+
+
+Jouduin
+vertailemaan vuosien 1543 ja 1544 (kaksi kirjaa) tiedot verokunta kerrallaan
+nähdäkseni, millainen jatkuvuus niillä oli. Päädyin todennäköiseen tulokseen,
+että Meuroset ja Mäyräset ovat kaikki kotoisin Lappeen seuduilta. Nimen Meuro
+täytyy johtua sanasta mäyrä ja suvun kantaisä, johon nimi on liitetty, lienee
+elänyt joskus 1400-luvulla. Onko muunnos kirjurin tekemä vai oliko
+lappeelaisilla siihen sopiva murteellinen puhetapa? Suvun tyyssija sijoittuu
+Vilkjärven (Vilkajärvi) seutukuntaan. Eräistä 1540-luvun savuveroluetteloista
+kylännimi löytyi muodossa Virkajärvi. Nimi voi siten olla hämäläismurteinen
+muoto eräkautisesta nimestä ja eräkauteen nimi mäyräkin voidaan yhdistää.

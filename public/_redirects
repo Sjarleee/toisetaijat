@@ -1,0 +1,106 @@
+# Cloudflare Pages redirects
+# Redirect old Blogger URLs to new article paths
+
+# 2026 artikkelit
+/2026/01/kirjojen-tilaaminen-on-edelleen.html /artikkelit/kirjojen-tilaaminen-2026 301
+
+# 2025 artikkelit
+/2025/03/ison-vihan-aika-suomessa.html /artikkelit/ison-vihan-aika-suomessa 301
+
+# 2024 tuotesivut
+/2024/03/uudenmaan-ratsurykmentti-1641-1809.html /myynissa 301
+/2024/03/viipurin-laanintilit-1635-1724.html /myynissa 301
+
+# 2023 artikkelit
+/2023/06/dna-ja-sukututkimus.html /artikkelit/dna-ja-sukututkimus 301
+
+# 2021 artikkelit
+/2021/04/sukututkimuksen-teoria-ja-kaytanto.html /artikkelit/sukututkimuksen-teoria-ja-kaytanto 301
+/2021/04/onko-sukututkimustieteella-omaa-metodia.html /artikkelit/onko-sukututkimustieteella-omaa-metodia 301
+/2021/03/kuka-oli-se-soini-josta-johtuu-soinin.html /artikkelit/kuka-oli-se-soini 301
+/2021/03/karl-frosteruksen-tytar-vappu.html /artikkelit/karl-frosteruksen-tytar-vappu 301
+/2021/02/turun-ja-porin-laanin-ratsurykmentin.html /artikkelit/turun-ja-porin-laanin-ratsurykmentin-vapaakomppania 301
+/2021/02/vilhunen-vilhuinen.html /artikkelit/vilhunen-vilhuinen 301
+/2021/01/esipolvet-ja-jalkipolvet-toisilleen.html /artikkelit/esipolvet-ja-jalkipolvet-toisilleen-vastakkaisia 301
+/2021/01/sukututkimuksen-maaritelma.html /artikkelit/sukututkimuksen-maaritelma 301
+
+# 2020 artikkelit ja tuotesivut
+/2020/12/ala-honkajoen-ruotusotamiehet.html /artikkelit/ala-honkajoen-ruotusotamiehet 301
+/2020/12/karjalan-ratsurykmentti-1643-1809.html /myynissa 301
+/2020/08/pohjanmaan-ratsukomppania-1620-ja-1630.html /artikkelit/pohjanmaan-ratsukomppania-1620-ja-1630 301
+/2020/07/lundin-taistelu-vuonna-1676-ja.html /myynissa 301
+/2020/04/toiset-aijat-i.html /myynissa 301
+
+# 2019 tuotesivut
+/2019/09/viipurin-ja-savonlinnan-laanien.html /myynissa 301
+/2019/09/ruoveden-ja-keuruun-karajapoytakirjoist.html /myynissa 301
+/2019/09/tyrvaan-vanhimmat-rippikirjat-1693-1722.html /myynissa 301
+/2019/07/suur-ruoveden-vanhimmat-rippikirjat.html /myynissa 301
+/2019/04/ruoveden-ja-keuruun-karajapoytakirjoist.html /myynissa 301
+
+# 2018 tuotesivut
+/2018/12/kimaltelevilta-vesilta-virrat-kuvin-ja.html /myynissa 301
+/2018/07/toiset-aijat-ii.html /myynissa 301
+/2018/07/ruoveden-komppanian-miehet-suomen.html /myynissa 301
+/2018/07/karjalainen-karilainen.html /myynissa 301
+
+# 2017 artikkelit ja sivut
+/2017/12/matti-j-kankaanpaa-on-kuolut.html /matti-j-kankaanpaa 301
+/2017/09/kuka-olli-v-j-heino.html /artikkelit/kuka-olli-v-j-heino 301
+/2017/08/suomalainen-ratsuvaki-ruotsin-ajalla.html /myynissa 301
+/2017/06/virrat-150-vuotta-1867-2017-kuvin-ja-sanoin.html /artikkelit/virrat-150-vuotta-1867-2017-kuvin-ja-sanoin 301
+/2017/04/kirjoja-vanhan-ruoveden-historiasta.html /myynissa 301
+/2017/03/otaniemessa-sukututkimusviikolla-18-19.html / 301
+/2017/01/sampolassa-ja-saatytalolla.html / 301
+/2017/01/sukututkimuspaiva-tampereella-2812017.html / 301
+
+# 2016 artikkelit ja sivut
+/2016/12/suomalainen-ratsuvaki-ruotsin-ajalla.html /myynissa 301
+/2016/11/ratsuvakikirja-julkistettiin-25.html / 301
+/2016/11/kirjan-ratsuvaesta-ruotsin-ajalla-julkistaminen.html /myynissa 301
+/2016/10/lisanimista-kuulopuheita-suomeksi.html /artikkelit/lisanimista-kuulopuheita-suomeksi 301
+/2016/10/kirja-suomalaisesta-ratsuvaesta-ruotsin.html /myynissa 301
+/2016/09/sukututkijan-ongelma-oliko-kantaisa-mauri-vai-mayra.html /artikkelit/sukututkijan-ongelma-oliko-kantaisa-mauri-vai-mayra 301
+/2016/09/pieni-loyto-kartalta-ja-tietoja.html /artikkelit/pieni-loyto-kartalta 301
+/2016/08/suomalainen-ratsuvaki-ruotsin-ajalla.html /myynissa 301
+/2016/04/tulossa-syksylla-kirja.html / 301
+/2016/04/tietokirjailijan-kurssiterveisia.html / 301
+/2016/03/kevattalven-mietteita-ratsuvaki.html / 301
+
+# 2015 artikkelit ja tapahtumat
+/2015/10/terveiset-vantaalta-olen-nyt-14.html / 301
+/2015/07/kuulutko-sukuuni-10-11102015.html / 301
+/2015/07/sota-kansallisin-joukoin.html /artikkelit/sota-kansallisin-joukoin 301
+/2015/07/sota-kansallisin-joukoin-kirjoitettu.html /artikkelit/sota-kansallisin-joukoin 301
+/2015/07/isokakkonen-i-on-vuoden-sukukirja.html /myynissa 301
+/2015/07/porin-laanin-jalkavakirykmentin.html /myynissa 301
+
+# Vuosikoosteet → etusivu
+/2014/12/vuonna-2014.html / 301
+/2013/12/vuonna-2013.html / 301
+/2012/12/vuonna-2012.html / 301
+/2011/12/vuonna-2011.html / 301
+/2010/12/vuonna-2010.html / 301
+/2009/12/vuonna-2009.html / 301
+/2007/12/vuonna-2007.html / 301
+/2006/07/vuonna-2006.html / 301
+/2005/12/vuonna-2005.html / 301
+/2004/12/vuonna-2004.html / 301
+/2003/12/vuonna-2003.html / 301
+/2002/12/vuonna-2002.html / 301
+/2015/07/vuonna-2001.html / 301
+/2015/07/vuonna-2000.html / 301
+/1999/07/1999.html / 301
+
+# Kirjasivut
+/2001/07/suuri-pohjansota-iso-viha-ja-suomalaiset.html /myynissa 301
+
+# Staattiset sivuohjaukset
+/p/myynissa.html /myynissa 301
+/p/kirjat.html /kirjat 301
+/p/matti-j-kankaanpaa.html /matti-j-kankaanpaa 301
+/p/ota-yhteytta.html /ota-yhteytta 301
+/p/linkit.html / 301
+/p/tekijanoikeus.html /tekijanoikeus 301
+/p/toimitusehdot.html /toimitusehdot 301
+/p/privacy-policy.html /tietosuoja 301

@@ -1,3 +1,5 @@
+/// <reference types="@cloudflare/workers-types" />
+
 /**
  * Cloudflare Pages Function: POST /api/order
  *

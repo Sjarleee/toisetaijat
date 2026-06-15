@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getEntry } from 'astro:content';
 
 const page = await getEntry('pages', 'kirjat');
+const byIsbn = new Map<string, never>();
 ---
 
 <BaseLayout title={page.data.title} description={page.data.description}>

@@ -1,8 +1,11 @@
-import type { APIRoute } from 'astro';
+/// <reference types="@cloudflare/workers-types" />
 
-export const prerender = false;
+interface Env {
+  GITHUB_CLIENT_ID: string;
+  GITHUB_CLIENT_SECRET: string;
+}
 
-export const GET: APIRoute = async ({ request }) => {
+export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
   const error = url.searchParams.get('error');
@@ -11,14 +14,13 @@ export const GET: APIRoute = async ({ request }) => {
     return htmlResponse('error', error ?? 'no_code', '');
   }
 
-  const clientId = import.meta.env.GITHUB_CLIENT_ID;
-  const clientSecret = import.meta.env.GITHUB_CLIENT_SECRET;
+  const clientId = env.GITHUB_CLIENT_ID;
+  const clientSecret = env.GITHUB_CLIENT_SECRET;
 
   if (!clientId || !clientSecret) {
     return htmlResponse('error', 'server_misconfigured', '');
   }
 
-  // Exchange code for access token
   let token: string;
   try {
     const res = await fetch('https://github.com/login/oauth/access_token', {
@@ -41,7 +43,6 @@ export const GET: APIRoute = async ({ request }) => {
   return htmlResponse('success', '', token);
 };
 
-// Decap CMS expects the popup to postMessage with this format, then close itself
 function htmlResponse(status: 'success' | 'error', errorMsg: string, token: string) {
   const content =
     status === 'success'

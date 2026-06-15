@@ -1,8 +1,10 @@
-import type { APIRoute } from 'astro';
+/// <reference types="@cloudflare/workers-types" />
 
-export const prerender = false;
+interface Env {
+  GITHUB_CLIENT_ID: string;
+}
 
-export const GET: APIRoute = ({ request, redirect }) => {
+export const onRequestGet: PagesFunction<Env> = ({ request, env }) => {
   const url = new URL(request.url);
   const provider = url.searchParams.get('provider');
 
@@ -10,7 +12,7 @@ export const GET: APIRoute = ({ request, redirect }) => {
     return new Response('Unsupported provider', { status: 400 });
   }
 
-  const clientId = import.meta.env.GITHUB_CLIENT_ID;
+  const clientId = env.GITHUB_CLIENT_ID;
   if (!clientId) {
     return new Response('GITHUB_CLIENT_ID not configured', { status: 500 });
   }
@@ -23,5 +25,5 @@ export const GET: APIRoute = ({ request, redirect }) => {
   githubAuthUrl.searchParams.set('scope', 'repo');
   githubAuthUrl.searchParams.set('state', crypto.randomUUID());
 
-  return redirect(githubAuthUrl.toString());
+  return Response.redirect(githubAuthUrl.toString(), 302);
 };

@@ -1,8 +1,6 @@
-import type { APIRoute } from 'astro';
+/// <reference types="@cloudflare/workers-types" />
 
-export const prerender = false;
-
-export const GET: APIRoute = () => {
+export const onRequestGet: PagesFunction = () => {
   return new Response(
     JSON.stringify({
       ok: true,
@@ -16,7 +14,7 @@ export const GET: APIRoute = () => {
   );
 };
 
-export const POST: APIRoute = async ({ request }) => {
+export const onRequestPost: PagesFunction = async ({ request }) => {
   const body = await request.json().catch(() => null);
   return new Response(
     JSON.stringify({

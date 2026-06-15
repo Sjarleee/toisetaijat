@@ -51,8 +51,8 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
 function htmlResponse(status: 'success' | 'error', errorMsg: string, token: string) {
   const content =
     status === 'success'
-      ? token
-      : `{"error":"${errorMsg}"}`;
+      ? JSON.stringify({ token, provider: 'github' })
+      : JSON.stringify({ error: errorMsg });
 
   const html = `<!DOCTYPE html>
 <html>
@@ -63,14 +63,42 @@ function htmlResponse(status: 'success' | 'error', errorMsg: string, token: stri
   (function() {
     var content = ${JSON.stringify(content)};
     var status = ${JSON.stringify(status)};
-    var msg = 'authorization:github:' + status + ':' + content;
+    var provider = 'github';
     var opener = window.opener;
-    if (opener) {
-      opener.postMessage(msg, '*');
-      setTimeout(function(){ window.close(); }, 500);
-    } else {
-      document.getElementById('msg').textContent = 'Status: ' + status + (status !== 'success' ? ' — feil: ' + content : ' — OK, men vinduet lukkes ikke automatisk. Lukk det manuelt.');
+
+    if (!opener) {
+      document.getElementById('msg').textContent = 'Error: popup has no opener. Try logging in again.';
+      return;
     }
+
+    if (status !== 'success') {
+      var errMsg = 'authorization:' + provider + ':error:' + content;
+      opener.postMessage(errMsg, '*');
+      document.getElementById('msg').textContent = 'Auth error: ' + content;
+      return;
+    }
+
+    // Decap CMS handshake: send "authorizing:github", wait for ack, then send token
+    var successMsg = 'authorization:' + provider + ':success:' + content;
+
+    function receiveAck(e) {
+      if (e.data === 'authorizing:' + provider) {
+        window.removeEventListener('message', receiveAck, false);
+        opener.postMessage(successMsg, e.origin || '*');
+        setTimeout(function() { window.close(); }, 500);
+      }
+    }
+
+    window.addEventListener('message', receiveAck, false);
+    opener.postMessage('authorizing:' + provider, '*');
+
+    // Fallback: if no ack within 3s, try sending directly
+    setTimeout(function() {
+      window.removeEventListener('message', receiveAck, false);
+      opener.postMessage(successMsg, '*');
+      document.getElementById('msg').textContent = 'Authorized! You can close this window.';
+      setTimeout(function() { window.close(); }, 1000);
+    }, 3000);
   })();
 </script>
 </body>

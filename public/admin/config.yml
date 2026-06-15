@@ -2,7 +2,7 @@ backend:
   name: github
   repo: Sjarleee/toisetaijat
   branch: main
-  base_url: https://www.toisetaijat.fi
+  base_url: https://toisetaijat.pages.dev
   auth_endpoint: api/auth
 
 local_backend: true

@@ -1,5 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry } from 'astro:content';
+
+const frontpage = await getEntry('pages', 'etusivu');
+const vatRate = frontpage.data.vatRate ?? '13,5';
 ---
 <BaseLayout title="Toimitusehdot" description="Toimitusehdot – T:mi Toiset Aijat">
   <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
@@ -14,7 +18,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         NORWAY<br />
         <a href="mailto:jarle@toisetaijat.fi" class="text-[#2d6a4f] underline hover:no-underline">jarle@toisetaijat.fi</a>
       </p>
-      <p>Myyn tuotteita täysi-ikäisille yksityishenkilöille. Tuotteiden hinnat sisältävät arvonlisäveron 14 % ja 24 % postituksesta. Pidämme oikeuden hintojen ja toimituskulujen muutoksiin.</p>
+      <p>Myyn tuotteita täysi-ikäisille yksityishenkilöille. Tuotteiden hinnat sisältävät arvonlisäveron {vatRate} % ja 24 % postituksesta. Pidämme oikeuden hintojen ja toimituskulujen muutoksiin.</p>
 
       <h4>TILAAMINEN</h4>
       <p>Kaikki asiakastiedot käsitellään luottamuksellisesti. Tilauksen yhteydessä kysyttyjä yhteystietoja ei käytetä muuhun kuin tilauksen toimitukseen tai siinä ilmenevien epäselvyyksien selvittämiseen, ellei erikseen toisin mainita. Tilatessasi sinun edellytetään tutustuneen ja sitoutuneen kulloinkin voimassa oleviin toimitusehtoihin.</p>

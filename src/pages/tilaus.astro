@@ -1,10 +1,25 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry } from 'astro:content';
+
+const frontpage = await getEntry('pages', 'etusivu');
+const { shippingNotice, shippingNoticeVisible } = frontpage.data;
 ---
 
 <BaseLayout title="Tilaus" description="Täytä tilauslomake.">
   <div class="max-w-2xl mx-auto px-4 sm:px-6 py-12">
-    <h1 class="font-serif text-3xl font-bold text-[#1a3a2a] mb-2">Tilaus</h1>
+    <h1 class="font-serif text-3xl font-bold text-[#1a3a2a] mb-6">Tilaus</h1>
+
+    <!-- Global shipping notice -->
+    {shippingNoticeVisible !== false && shippingNotice && (
+    <div class="flex items-start gap-3 bg-[#8b6914]/10 border-2 border-[#8b6914]/50 rounded-lg p-4 mb-6 text-[#6b4f0a]">
+      <span class="text-2xl shrink-0">📦</span>
+      <div>
+        <p class="font-bold text-sm uppercase tracking-wide mb-0.5">Postitusaikataulu</p>
+        <p class="text-sm leading-relaxed">{shippingNotice}</p>
+      </div>
+    </div>
+    )}
 
     <!-- Order summary (populated client-side) -->
     <div id="order-summary" class="bg-[#f5f0e8] border border-[#e5d9c3] rounded-lg p-4 mb-8 text-sm">

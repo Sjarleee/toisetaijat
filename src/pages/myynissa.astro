@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductCard from '../components/ProductCard.astro';
+import BundleCard from '../components/BundleCard.astro';
 import { entryToBook, entryToCollection } from '../data/products';
 import { getEntry, getCollection } from 'astro:content';
 
@@ -9,6 +10,11 @@ const allCollectionEntries = await getCollection('articleCollections');
 
 const books = allBookEntries
   .filter(e => e.data.productType === 'book')
+  .sort((a, b) => (a.data.sortOrder ?? 99) - (b.data.sortOrder ?? 99))
+  .map(entryToBook);
+
+const bundles = allBookEntries
+  .filter(e => e.data.productType === 'bundle')
   .sort((a, b) => (a.data.sortOrder ?? 99) - (b.data.sortOrder ?? 99))
   .map(entryToBook);
 
@@ -30,6 +36,8 @@ const availableBooks = books.filter(b => b.availability !== 'soldout' && b.avail
 const externalBooks = books.filter(b => b.availability === 'external');
 
 const page = await getEntry('pages', 'myynissa');
+const frontpage = await getEntry('pages', 'etusivu');
+const { shippingNotice, shippingNoticeVisible } = frontpage.data;
 ---
 
 <BaseLayout title={page.data.title} description={page.data.description}>
@@ -38,11 +46,34 @@ const page = await getEntry('pages', 'myynissa');
     <h1 class="font-serif text-3xl sm:text-4xl font-bold text-[#1a3a2a] mb-2">{page.data.title}</h1>
     <p class="text-[#44403c] mb-4 text-lg">Kirjat ja artikkelikokoelmat tilattavissa.</p>
 
+    <!-- Global shipping notice -->
+    {shippingNoticeVisible !== false && shippingNotice && (
+    <div class="flex items-start gap-3 bg-[#8b6914]/10 border border-[#8b6914]/40 rounded-lg p-4 mb-8 text-[#6b4f0a]">
+      <span class="text-xl shrink-0 mt-0.5">📦</span>
+      <div>
+        <p class="font-semibold text-sm">Postitusaikataulu</p>
+        <p class="text-sm mt-0.5">{shippingNotice}</p>
+      </div>
+    </div>
+    )}
+
     <!-- Shipping notice -->
-    {page.data.deliveryNote && (
+    {!shippingNotice && page.data.deliveryNote && (
     <div class="bg-[#d4a843]/10 border border-[#d4a843]/40 rounded-lg p-4 mb-10 text-sm text-[#6b4f0a]">
       {page.data.deliveryNote}
     </div>
+    )}
+
+    <!-- KIRJAPAKETTI -->
+    {bundles.length > 0 && (
+    <section class="mb-14">
+      <h2 class="font-serif text-2xl font-bold text-[#1a3a2a] border-b border-gray-200 pb-3 mb-6">Kirjapaketti</h2>
+      <div class="grid sm:grid-cols-2 gap-6 max-w-2xl">
+        {bundles.map(bundle => (
+          <BundleCard bundle={bundle} books={books} />
+        ))}
+      </div>
+    </section>
     )}
 
     <!-- KIRJAT -->

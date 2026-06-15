@@ -22,8 +22,9 @@ collections:
           - { label: Otsikko, name: title, widget: string }
           - { label: Kuvaus (hakukoneet), name: description, widget: text, required: false }
           - { label: Hero-teksti, name: heroSubtitle, widget: text, required: false, hint: Lyhyt esittelyteksti etusivulla }
-          - { label: Ilmoitus näkyy, name: announcementVisible, widget: boolean, default: true, required: false }
-          - { label: Ilmoitusteksti, name: announcementText, widget: text, required: false, hint: 'Keltainen banneri etusivulla. Esim: Kirjojen postitus seuraavan kerran...' }
+          - { label: ALV-kanta kirjoille (%), name: vatRate, widget: string, required: false, hint: 'Esim: 13,5 — näkyy toimitusehdoissa ja tilauslomakkeessa' }
+          - { label: Ilmoitus näkyy, name: shippingNoticeVisible, widget: boolean, default: true, required: false }
+          - { label: Postitusaikataulu (global), name: shippingNotice, widget: text, required: false, hint: 'Näkyy etusivulla, myynti- ja tilaussivulla. Esim: Kirjojen postitus seuraavan kerran...' }
       - name: myynissa
         label: Myynissä
         file: src/content/pages/myynissa.md
@@ -214,6 +215,7 @@ collections:
           - { label: 'Fyysinen kirja', value: book }
           - { label: 'E-kirja', value: ebook }
           - { label: 'Yksittäinen artikkeli', value: single-article }
+          - { label: 'Paketti (bundle)', value: bundle }
       - { label: Vuosi, name: year, widget: number }
       - { label: ISBN, name: isbn, widget: string, required: false }
       - { label: Sivumäärä, name: pages, widget: string, required: false, hint: 'esim. 790' }
@@ -237,6 +239,8 @@ collections:
       - { label: E-kirjan hinta (€), name: ebookPrice, widget: number, required: false, value_type: float }
       - { label: Ulkoinen URL, name: externalUrl, widget: string, required: false }
       - { label: Huomio, name: note, widget: string, required: false, hint: 'esim. Myynnissä Virtain kirjakaupassa' }
+      - { label: Paketti – kirja-ID:t, name: bundleBookIds, widget: list, required: false, hint: 'Paketin kirjojen ID:t, esim. suomalainen-ratsuvaki' }
+      - { label: Pakettialennus (€), name: bundleDiscount, widget: number, required: false, value_type: float }
       - { label: Järjestysnumero, name: sortOrder, widget: number, required: false }
 
   - name: articleCollections

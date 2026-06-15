@@ -1,0 +1,105 @@
+---
+import type { BookProduct } from '../data/products';
+
+interface Props {
+  bundle: BookProduct;
+  books: BookProduct[];
+}
+
+const { bundle, books } = Astro.props;
+const bundleBooks = (bundle.bundleBookIds ?? []).map(id => books.find(b => b.id === id)).filter(Boolean) as BookProduct[];
+const originalPrice = bundleBooks.reduce((sum, b) => sum + (b.price ?? 0), 0);
+const discount = bundle.bundleDiscount ?? 0;
+---
+
+<div class="bg-white border-2 border-[#d4a843] rounded-lg overflow-hidden shadow-sm">
+  <!-- Header bar -->
+  <div class="bg-[#1a3a2a] text-white px-5 py-3 flex items-center justify-between">
+    <span class="font-serif font-bold text-base">Kirjapaketti</span>
+    <span class="bg-[#d4a843] text-[#1a3a2a] text-xs font-bold px-2.5 py-1 rounded-full">
+      Säästät {discount} €
+    </span>
+  </div>
+
+  <div class="p-5">
+    <!-- Book pair -->
+    <div class="flex gap-3 mb-5">
+      {bundleBooks.map(book => (
+        <div class="flex-1 flex flex-col items-center gap-2 text-center">
+          {book.image ? (
+            <div class="h-28 flex items-center justify-center">
+              <img src={book.image} alt={book.title} class="max-h-28 max-w-full object-contain rounded shadow-sm" loading="lazy" />
+            </div>
+          ) : (
+            <div class="h-28 w-20 bg-gray-100 rounded flex items-center justify-center text-gray-400 text-xs">Ei kuvaa</div>
+          )}
+          <p class="text-xs font-medium text-[#1a3a2a] leading-snug">{book.title}</p>
+          <p class="text-xs text-[#78716c]">{book.year} · €{book.price}</p>
+        </div>
+      ))}
+    </div>
+
+    <!-- Price breakdown -->
+    <div class="bg-[#f5f0e8] rounded-lg px-4 py-3 mb-4 text-sm space-y-1">
+      <div class="flex justify-between text-[#78716c]">
+        <span>Normaalihinta yhteensä</span>
+        <span class="line-through">€{originalPrice}</span>
+      </div>
+      <div class="flex justify-between text-[#2d6a4f] font-medium">
+        <span>Pakettialennus</span>
+        <span>−€{discount}</span>
+      </div>
+      <div class="flex justify-between font-bold text-[#1a3a2a] text-base border-t border-[#e5d9c3] pt-1 mt-1">
+        <span>Pakettihinta</span>
+        <span>€{bundle.price}</span>
+      </div>
+      {bundle.shippingPrice && (
+        <p class="text-xs text-[#78716c] text-right">+ €{bundle.shippingPrice} postitus</p>
+      )}
+    </div>
+
+    {bundle.description && (
+      <p class="text-sm text-[#44403c] mb-4">{bundle.description}</p>
+    )}
+
+    <!-- Add to cart -->
+    <button
+      class="add-to-cart-btn w-full inline-flex items-center justify-center gap-2 bg-[#1a3a2a] text-white text-sm px-4 py-2.5 rounded-md hover:bg-[#2d6a4f] transition-colors font-medium"
+      data-id={bundle.id}
+      data-title={bundle.title}
+      data-price={bundle.price}
+      data-shipping={bundle.shippingPrice ?? 0}
+      data-image=""
+      data-type="book"
+    >
+      <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+      </svg>
+      Lisää koriin – €{bundle.price}
+    </button>
+  </div>
+</div>
+
+<script>
+  import { addItem } from '../scripts/cart';
+  import type { CartItem } from '../scripts/cart';
+
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as Element).closest('.add-to-cart-btn') as HTMLButtonElement | null;
+    if (!btn) return;
+    const item: CartItem = {
+      id: btn.dataset.id!,
+      title: btn.dataset.title!,
+      price: parseFloat(btn.dataset.price!),
+      shippingPrice: parseFloat(btn.dataset.shipping ?? '0'),
+      type: 'book',
+      quantity: 1,
+      image: btn.dataset.image || undefined,
+    };
+    addItem(item);
+    const original = btn.innerHTML;
+    btn.innerHTML = '<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Lisätty!';
+    btn.disabled = true;
+    setTimeout(() => { btn.innerHTML = original; btn.disabled = false; }, 1500);
+  });
+</script>

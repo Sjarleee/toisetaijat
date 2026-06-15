@@ -27,6 +27,8 @@ export interface BookProduct {
   };
   externalUrl?: string;
   note?: string;
+  bundleBookIds?: string[];
+  bundleDiscount?: number;
 }
 
 export interface ArticleCollection {
@@ -60,6 +62,8 @@ export function entryToBook(entry: CollectionEntry<'books'>): BookProduct {
     ebook: d.ebookUrl ? { url: d.ebookUrl, label: d.ebookLabel, price: d.ebookPrice } : undefined,
     externalUrl: d.externalUrl,
     note: d.note,
+    bundleBookIds: d.bundleBookIds,
+    bundleDiscount: d.bundleDiscount,
   };
 }
 

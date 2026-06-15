@@ -16,6 +16,9 @@ interface Props {
 
 const { title, description, pubDate, updatedDate, heroImage, tags = [], sourceUrl, blocks } = Astro.props;
 
+const productBlocks = blocks?.filter(b => b.type === 'product') ?? [];
+const otherBlocks = blocks?.filter(b => b.type !== 'product') ?? [];
+
 const formattedDate = pubDate.toLocaleDateString('fi-FI', {
   weekday: 'long',
   year: 'numeric',
@@ -64,11 +67,16 @@ const formattedDate = pubDate.toLocaleDateString('fi-FI', {
       prose-li:text-[#1c1c1c]
       prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
       prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3">
+      {productBlocks.length > 0 && (
+        <div class="not-prose float-right ml-6 mb-6 w-64 clear-right">
+          <BlockRenderer blocks={productBlocks} compact={true} />
+        </div>
+      )}
       <slot />
     </div>
 
-    {blocks && blocks.length > 0 && (
-      <BlockRenderer blocks={blocks} />
+    {otherBlocks.length > 0 && (
+      <BlockRenderer blocks={otherBlocks} />
     )}
 
     <footer class="mt-12 pt-6 border-t border-gray-200 space-y-4">

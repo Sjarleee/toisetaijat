@@ -10,9 +10,10 @@ type Block =
 
 interface Props {
   blocks: Block[];
+  compact?: boolean;
 }
 
-const { blocks } = Astro.props;
+const { blocks, compact = false } = Astro.props;
 
 const allBookEntries = await getCollection('books');
 const allProducts = allBookEntries.map(entryToBook);
@@ -30,14 +31,13 @@ const calloutIcons = {
 };
 ---
 
-<div class="mt-10 space-y-8">
+<div class:list={['space-y-4', compact ? '' : 'mt-10 space-y-8']}>
   {blocks.map(block => {
     if (block.type === 'product') {
       const product = allProducts.find(p => p.id === block.bookId);
       if (!product) return null;
       return (
         <div class="not-prose">
-          <p class="text-xs uppercase tracking-widest text-[#78716c] mb-3 font-medium">Kirja</p>
           <ProductCard product={product} variant="full" />
         </div>
       );

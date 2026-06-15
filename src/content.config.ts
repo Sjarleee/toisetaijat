@@ -42,8 +42,9 @@ const pages = defineCollection({
     description: z.string().optional(),
     // etusivu
     heroSubtitle: z.string().optional(),
-    announcementText: z.string().optional(),
-    announcementVisible: z.boolean().optional(),
+    shippingNotice: z.string().optional(),
+    shippingNoticeVisible: z.boolean().optional(),
+    vatRate: z.string().optional(),
     // myynissa
     introText: z.string().optional(),
     deliveryNote: z.string().optional(),
@@ -67,7 +68,7 @@ const books = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
-    productType: z.enum(['book', 'ebook', 'single-article']),
+    productType: z.enum(['book', 'ebook', 'single-article', 'bundle']),
     year: z.number(),
     isbn: z.string().optional(),
     pages: z.string().optional(),
@@ -83,6 +84,8 @@ const books = defineCollection({
     ebookPrice: z.number().optional(),
     externalUrl: z.string().optional(),
     note: z.string().optional(),
+    bundleBookIds: z.array(z.string()).optional(),
+    bundleDiscount: z.number().optional(),
     sortOrder: z.number().optional(),
   }),
 });

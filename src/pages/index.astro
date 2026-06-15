@@ -8,7 +8,7 @@ const recentArticles = allArticles
   .slice(0, 3);
 
 const frontpage = await getEntry('pages', 'etusivu');
-const { heroSubtitle, announcementText, announcementVisible } = frontpage.data;
+const { heroSubtitle, shippingNotice, shippingNoticeVisible } = frontpage.data;
 ---
 
 <BaseLayout title={frontpage.data.title} description={frontpage.data.description}>
@@ -46,11 +46,11 @@ const { heroSubtitle, announcementText, announcementVisible } = frontpage.data;
   </section>
 
   <!-- Info bar -->
-  {announcementVisible !== false && announcementText && (
+  {shippingNoticeVisible !== false && shippingNotice && (
   <section class="bg-[#8b6914]/10 border-y border-[#8b6914]/30">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 py-4">
       <p class="text-sm text-[#6b4f0a] text-center">
-        <strong>Huom:</strong> {announcementText}
+        <strong>Huom:</strong> {shippingNotice}
         <a href="/myynissa" class="underline hover:no-underline ml-1">Tilaa etukäteen &rarr;</a>
       </p>
     </div>

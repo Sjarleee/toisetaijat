@@ -1,0 +1,12 @@
+title: "Paketti: Suomalainen ratsuväki + Suuri Pohjansota"
+description: "Matti J. Kankaanpään kaksi pääteosta yhdessä paketissa – säästät 10 €."
+productType: bundle
+year: 2016
+availability: available
+price: 84
+shippingPrice: 15
+bundleBookIds:
+  - suomalainen-ratsuvaki
+  - suuri-pohjansota
+bundleDiscount: 10
+sortOrder: 0

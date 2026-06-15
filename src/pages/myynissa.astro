@@ -148,32 +148,4 @@ const page = await getEntry('pages', 'myynissa');
   </div>
 </BaseLayout>
 
-<script>
-  import { addItem } from '../scripts/cart';
-  import type { CartItem } from '../scripts/cart';
 
-  document.addEventListener('click', (e) => {
-    const btn = (e.target as Element).closest('.add-to-cart-btn') as HTMLButtonElement | null;
-    if (!btn) return;
-
-    const item: CartItem = {
-      id: btn.dataset.id!,
-      title: btn.dataset.title!,
-      price: parseFloat(btn.dataset.price!),
-      shippingPrice: parseFloat(btn.dataset.shipping ?? '0'),
-      type: (btn.dataset.type as CartItem['type']) ?? 'article-collection',
-      quantity: 1,
-      image: btn.dataset.image || undefined,
-    };
-
-    addItem(item);
-
-    const original = btn.innerHTML;
-    btn.innerHTML = '<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Lisätty!';
-    btn.disabled = true;
-    setTimeout(() => {
-      btn.innerHTML = original;
-      btn.disabled = false;
-    }, 1500);
-  });
-</script>

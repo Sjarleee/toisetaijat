@@ -41,7 +41,7 @@ const soldOut = product.availability === 'soldout';
         ) : (
           <h3 class="font-serif text-base font-bold text-[#1a3a2a] leading-snug mb-1">{product.title}</h3>
         )}
-        <p class="text-xs text-[#9ca3af] mb-2">
+        <p class="text-xs text-[#78716c] mb-2">
           {product.year}{product.pages ? ` · ${product.pages} s.` : ''}{product.isbn ? ` · ISBN ${product.isbn}` : ''}
         </p>
         {product.description && (
@@ -51,10 +51,10 @@ const soldOut = product.availability === 'soldout';
 
       <div class="mt-auto">
         {soldOut ? (
-          <span class="inline-block text-sm text-[#9ca3af] italic">Loppuunmyyty</span>
+          <span class="inline-block text-sm text-[#78716c] italic">Loppuunmyyty</span>
         ) : product.availability === 'external' ? (
           <div>
-            {product.note && <p class="text-sm text-[#6b7280] mb-2">{product.note}</p>}
+            {product.note && <p class="text-sm text-[#44403c] mb-2">{product.note}</p>}
             {product.externalUrl && (
               <a href={product.externalUrl} target="_blank" rel="noopener noreferrer"
                 class="inline-flex items-center gap-1.5 text-sm text-[#2d6a4f] border border-[#2d6a4f] px-4 py-2 rounded-md hover:bg-[#2d6a4f] hover:text-white transition-colors">
@@ -78,7 +78,7 @@ const soldOut = product.availability === 'soldout';
               <div>
                 <span class="text-lg font-bold text-[#1a3a2a]">€{product.price}</span>
                 {product.shippingPrice && (
-                  <span class="text-xs text-[#9ca3af] ml-1">+ €{product.shippingPrice} posti</span>
+                  <span class="text-xs text-[#78716c] ml-1">+ €{product.shippingPrice} posti</span>
                 )}
               </div>
             )}
@@ -128,11 +128,11 @@ const soldOut = product.availability === 'soldout';
       ) : (
         <span class="font-medium text-sm text-[#1a3a2a] leading-snug">{product.title}</span>
       )}
-      <p class="text-xs text-[#9ca3af]">{product.year}</p>
+      <p class="text-xs text-[#78716c]">{product.year}</p>
     </div>
     <div class="shrink-0 text-right">
       {soldOut ? (
-        <span class="text-xs text-[#9ca3af] italic">Loppuunmyyty</span>
+        <span class="text-xs text-[#78716c] italic">Loppuunmyyty</span>
       ) : product.price ? (
         <span class="text-sm font-bold text-[#1a3a2a]">€{product.price}</span>
       ) : product.ebook ? (

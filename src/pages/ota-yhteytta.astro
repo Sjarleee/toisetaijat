@@ -10,7 +10,7 @@ const { name, address, email, deliveryInfo } = page.data;
 <BaseLayout title={page.data.title} description={page.data.description}>
   <div class="max-w-2xl mx-auto px-4 sm:px-6 py-12">
     <h1 class="font-serif text-3xl sm:text-4xl font-bold text-[#1a3a2a] mb-4">{page.data.title}</h1>
-    <div class="text-[#6b7280] text-lg mb-10 prose">
+    <div class="text-[#44403c] text-lg mb-10 prose">
       <Content />
     </div>
 
@@ -19,19 +19,19 @@ const { name, address, email, deliveryInfo } = page.data;
       <dl class="space-y-3 text-sm">
         {name && (
           <div class="flex gap-3">
-            <dt class="text-[#6b7280] w-24 flex-shrink-0">Nimi</dt>
+            <dt class="text-[#44403c] w-24 flex-shrink-0">Nimi</dt>
             <dd class="text-[#1c1c1c]">{name}</dd>
           </div>
         )}
         {address && (
           <div class="flex gap-3">
-            <dt class="text-[#6b7280] w-24 flex-shrink-0">Osoite</dt>
+            <dt class="text-[#44403c] w-24 flex-shrink-0">Osoite</dt>
             <dd class="text-[#1c1c1c]">{address}</dd>
           </div>
         )}
         {email && (
           <div class="flex gap-3">
-            <dt class="text-[#6b7280] w-24 flex-shrink-0">Sähköposti</dt>
+            <dt class="text-[#44403c] w-24 flex-shrink-0">Sähköposti</dt>
             <dd>
               <a href={`mailto:${email}`} class="text-[#2d6a4f] hover:underline font-medium">
                 {email}

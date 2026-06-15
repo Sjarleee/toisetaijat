@@ -5,7 +5,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <BaseLayout title="Tilaus vahvistettu" description="Tilauksesi on vastaanotettu.">
   <div class="max-w-2xl mx-auto px-4 sm:px-6 py-12">
     <div id="confirm-root">
-      <p class="text-[#9ca3af]">Ladataan…</p>
+      <p class="text-[#78716c]">Ladataan…</p>
     </div>
   </div>
 </BaseLayout>
@@ -45,7 +45,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   if (!order) {
     root.innerHTML = `
       <div class="text-center py-12">
-        <p class="text-[#6b7280] mb-4">Tilausvahvistusta ei löydy.</p>
+        <p class="text-[#44403c] mb-4">Tilausvahvistusta ei löydy.</p>
         <a href="/" class="text-[#2d6a4f] hover:underline">← Etusivu</a>
       </div>
     `;
@@ -63,7 +63,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </svg>
         </div>
         <h1 class="font-serif text-3xl font-bold text-[#1a3a2a] mb-2">Tilaus vastaanotettu!</h1>
-        <p class="text-[#6b7280]">Tilausnumero: <strong class="text-[#1a3a2a]">${order.orderId}</strong></p>
+        <p class="text-[#44403c]">Tilausnumero: <strong class="text-[#1a3a2a]">${order.orderId}</strong></p>
       </div>
 
       <!-- Order details -->
@@ -71,14 +71,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <h2 class="font-semibold text-[#1a3a2a] mb-4">Tilauksen tiedot</h2>
         <div class="grid sm:grid-cols-2 gap-4 text-sm mb-5">
           <div>
-            <p class="text-[#9ca3af] text-xs uppercase tracking-wide mb-1">Tilaaja</p>
+            <p class="text-[#78716c] text-xs uppercase tracking-wide mb-1">Tilaaja</p>
             <p class="text-[#1a3a2a] font-medium">${order.name}</p>
             <p class="text-[#4a4a4a]">${order.email}</p>
             ${order.phone ? `<p class="text-[#4a4a4a]">${order.phone}</p>` : ''}
           </div>
           ${hasBooks && order.address ? `
             <div>
-              <p class="text-[#9ca3af] text-xs uppercase tracking-wide mb-1">Toimitusosoite</p>
+              <p class="text-[#78716c] text-xs uppercase tracking-wide mb-1">Toimitusosoite</p>
               <p class="text-[#4a4a4a]">${order.address}</p>
               <p class="text-[#4a4a4a]">${order.postalCode} ${order.city}</p>
               <p class="text-[#4a4a4a]">${order.country}</p>
@@ -87,7 +87,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <div class="border-t border-gray-100 pt-4">
-          <p class="text-[#9ca3af] text-xs uppercase tracking-wide mb-2">Tuotteet</p>
+          <p class="text-[#78716c] text-xs uppercase tracking-wide mb-2">Tuotteet</p>
           <ul class="space-y-1.5 text-sm mb-4">
             ${order.items.map(i => `
               <li class="flex justify-between">
@@ -97,7 +97,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             `).join('')}
           </ul>
           ${hasBooks && order.shipping > 0 ? `
-            <div class="flex justify-between text-sm text-[#6b7280] border-t border-gray-100 pt-2 mb-1">
+            <div class="flex justify-between text-sm text-[#44403c] border-t border-gray-100 pt-2 mb-1">
               <span>Postitus</span><span>€${order.shipping}</span>
             </div>
           ` : ''}
@@ -108,7 +108,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         ${order.notes ? `
           <div class="border-t border-gray-100 pt-3 mt-3">
-            <p class="text-[#9ca3af] text-xs uppercase tracking-wide mb-1">Lisätiedot</p>
+            <p class="text-[#78716c] text-xs uppercase tracking-wide mb-1">Lisätiedot</p>
             <p class="text-sm text-[#4a4a4a]">${order.notes}</p>
           </div>
         ` : ''}
@@ -123,11 +123,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           ${hasBooks ? '<li>Kirjat postitetaan laskun maksamisen jälkeen.</li>' : ''}
           ${hasCollections ? '<li>PDF-artikkelit toimitetaan sähköpostitse maksun jälkeen.</li>' : ''}
         </ul>
-        <p class="text-[#6b7280]">Kysymyksiä? <a href="mailto:jarle@toisetaijat.fi" class="text-[#2d6a4f] hover:underline">jarle@toisetaijat.fi</a></p>
+        <p class="text-[#44403c]">Kysymyksiä? <a href="mailto:jarle@toisetaijat.fi" class="text-[#2d6a4f] hover:underline">jarle@toisetaijat.fi</a></p>
       </div>
 
       <div class="flex flex-wrap gap-3">
-        <a href="/" class="px-5 py-2.5 rounded-md border border-gray-300 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors">
+        <a href="/" class="px-5 py-2.5 rounded-md border border-gray-400 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors">
           Etusivulle
         </a>
       </div>

@@ -36,7 +36,7 @@ const page = await getEntry('pages', 'myynissa');
   <div class="max-w-4xl mx-auto px-4 sm:px-6 py-12">
 
     <h1 class="font-serif text-3xl sm:text-4xl font-bold text-[#1a3a2a] mb-2">{page.data.title}</h1>
-    <p class="text-[#6b7280] mb-4 text-lg">Kirjat ja artikkelikokoelmat tilattavissa.</p>
+    <p class="text-[#44403c] mb-4 text-lg">Kirjat ja artikkelikokoelmat tilattavissa.</p>
 
     <!-- Shipping notice -->
     {page.data.deliveryNote && (
@@ -60,7 +60,7 @@ const page = await getEntry('pages', 'myynissa');
           ))}
         </div>
       )}
-      <p class="text-sm text-[#6b7280] mt-4">
+      <p class="text-sm text-[#44403c] mt-4">
         Muita kirjoja: katso <a href="/kirjat" class="text-[#2d6a4f] hover:underline">julkaisuluettelo</a>. Saatavuus vaihtelee — kysy sähköpostitse.
       </p>
     </section>
@@ -78,7 +78,7 @@ const page = await getEntry('pages', 'myynissa');
     <!-- ARTIKKELIKOKOELMAT & E-ARTIKKELIT -->
     <section class="mb-12">
       <h2 class="font-serif text-2xl font-bold text-[#1a3a2a] border-b border-gray-200 pb-3 mb-2">E-artikkelit</h2>
-      <p class="text-sm text-[#6b7280] mb-6">
+      <p class="text-sm text-[#44403c] mb-6">
         PDF-artikkeleita ja e-artikkeleita. Toimitetaan sähköpostitse tai Google Play -kaupasta. €4 per artikkeli tai kaikki sarjan artikkelit yhteishintaan.
       </p>
 
@@ -99,10 +99,10 @@ const page = await getEntry('pages', 'myynissa');
               <h3 class="font-serif text-lg font-bold text-[#1a3a2a]">{col.title}</h3>
               <div class="shrink-0 text-right">
                 <span class="block text-lg font-bold text-[#1a3a2a]">€{col.priceAll}</span>
-                <span class="text-xs text-[#6b7280]">kaikki {col.articleCount} artikkelia</span>
+                <span class="text-xs text-[#44403c]">kaikki {col.articleCount} artikkelia</span>
               </div>
             </div>
-            <p class="text-sm text-[#6b7280] mb-4">€{col.pricePerArticle} / yksittäinen artikkeli · PDF sähköpostitse</p>
+            <p class="text-sm text-[#44403c] mb-4">€{col.pricePerArticle} / yksittäinen artikkeli · PDF sähköpostitse</p>
             <ul class="grid sm:grid-cols-2 gap-1 text-sm text-[#4a4a4a] mb-4">
               {col.articles.map(a => (
                 <li class="flex items-center gap-1.5">
@@ -135,7 +135,7 @@ const page = await getEntry('pages', 'myynissa');
           </div>
         ))}
       </div>
-      <p class="text-sm text-[#6b7280] mt-4 italic">
+      <p class="text-sm text-[#44403c] mt-4 italic">
         Artikkeleita ei saa jakaa muille ilman tekijänoikeusomistajan lupaa.
       </p>
     </section>

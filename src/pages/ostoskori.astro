@@ -6,7 +6,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
     <h1 class="font-serif text-3xl font-bold text-[#1a3a2a] mb-8">Ostoskori</h1>
     <div id="cart-root">
-      <p class="text-[#9ca3af]">Ladataan…</p>
+      <p class="text-[#78716c]">Ladataan…</p>
     </div>
   </div>
 </BaseLayout>
@@ -26,7 +26,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <svg class="w-16 h-16 text-gray-200 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
           </svg>
-          <p class="text-[#6b7280] mb-6">Ostoskorisi on tyhjä.</p>
+          <p class="text-[#44403c] mb-6">Ostoskorisi on tyhjä.</p>
           <a href="/myynissa" class="inline-flex items-center gap-2 bg-[#1a3a2a] text-white px-6 py-2.5 rounded-md font-medium hover:bg-[#2d6a4f] transition-colors">
             Katso tuotteet →
           </a>
@@ -53,15 +53,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             }
             <div class="flex-1 min-w-0">
               <p class="font-semibold text-[#1a3a2a] text-sm leading-snug">${item.title}</p>
-              <p class="text-xs text-[#9ca3af] mt-0.5">${item.type === 'article-collection' ? 'PDF-artikkelit — toimitetaan sähköpostitse' : 'Kirja'}</p>
+              <p class="text-xs text-[#78716c] mt-0.5">${item.type === 'article-collection' ? 'PDF-artikkelit — toimitetaan sähköpostitse' : 'Kirja'}</p>
             </div>
             ${item.type === 'book' ? `
               <div class="flex items-center gap-1 shrink-0">
-                <button class="qty-dec w-7 h-7 rounded border border-gray-300 hover:bg-gray-100 text-base font-medium flex items-center justify-center" data-id="${item.id}">−</button>
+                <button class="qty-dec w-7 h-7 rounded border border-gray-400 hover:bg-gray-100 text-base font-medium flex items-center justify-center" data-id="${item.id}">−</button>
                 <span class="w-7 text-center text-sm font-semibold">${item.quantity}</span>
-                <button class="qty-inc w-7 h-7 rounded border border-gray-300 hover:bg-gray-100 text-base font-medium flex items-center justify-center" data-id="${item.id}">+</button>
+                <button class="qty-inc w-7 h-7 rounded border border-gray-400 hover:bg-gray-100 text-base font-medium flex items-center justify-center" data-id="${item.id}">+</button>
               </div>
-            ` : `<span class="text-sm text-[#6b7280] shrink-0">×${item.quantity}</span>`}
+            ` : `<span class="text-sm text-[#44403c] shrink-0">×${item.quantity}</span>`}
             <div class="text-right shrink-0 min-w-[52px]">
               <p class="font-bold text-[#1a3a2a]">€${(item.price * item.quantity)}</p>
             </div>
@@ -84,7 +84,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           `).join('')}
         </div>
         ${hasBooks && shipping > 0 ? `
-          <div class="flex justify-between text-sm text-[#6b7280] border-t border-[#d4b896] pt-2">
+          <div class="flex justify-between text-sm text-[#44403c] border-t border-[#d4b896] pt-2">
             <span>Arvioitu postitus</span>
             <span>€${shipping}</span>
           </div>
@@ -93,14 +93,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <span>Arvioitu yhteensä</span>
           <span>€${total}</span>
         </div>
-        <p class="text-xs text-[#9ca3af] mt-2">
+        <p class="text-xs text-[#78716c] mt-2">
           ${hasBooks ? 'Todelliset toimituskulut vahvistetaan tilauksessa. ' : ''}
           ${hasCollections ? 'PDF-artikkelit toimitetaan sähköpostitse maksun jälkeen.' : ''}
         </p>
       </div>
 
       <div class="flex flex-wrap gap-3">
-        <a href="/myynissa" class="px-5 py-2.5 rounded-md border border-gray-300 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors">
+        <a href="/myynissa" class="px-5 py-2.5 rounded-md border border-gray-400 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors">
           ← Jatka ostoksia
         </a>
         <a href="/tilaus" class="flex-1 min-w-[200px] bg-[#d4a843] text-[#1a3a2a] text-center px-5 py-2.5 rounded-md font-bold hover:bg-[#c9a040] transition-colors text-sm">

@@ -26,7 +26,7 @@ const { tag, articles } = Astro.props;
   description={`Artikkelit aiheesta ${tag} – Toiset Aijat`}
 >
   <div class="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-    <nav class="text-sm text-[#6b7280] mb-6">
+    <nav class="text-sm text-[#44403c] mb-6">
       <a href="/artikkelit" class="hover:text-[#2d6a4f]">Artikkelit</a>
       <span class="mx-2">›</span>
       <span>{tag}</span>
@@ -35,7 +35,7 @@ const { tag, articles } = Astro.props;
     <h1 class="font-serif text-3xl sm:text-4xl font-bold text-[#1a3a2a] mb-2">
       {tag}
     </h1>
-    <p class="text-[#6b7280] mb-10">
+    <p class="text-[#44403c] mb-10">
       {articles.length} artikkeli{articles.length !== 1 ? 'a' : ''}
     </p>
 
@@ -46,7 +46,7 @@ const { tag, articles } = Astro.props;
           class="group flex gap-5 p-4 bg-white rounded-lg border border-gray-200 hover:border-[#2d6a4f] hover:shadow-sm transition-all duration-200"
         >
           <div class="flex-shrink-0 w-24 text-right">
-            <span class="text-xs text-[#6b7280]">
+            <span class="text-xs text-[#44403c]">
               {article.data.pubDate.toLocaleDateString('fi-FI', {
                 day: 'numeric',
                 month: 'numeric',
@@ -59,7 +59,7 @@ const { tag, articles } = Astro.props;
               {article.data.title}
             </h3>
             {article.data.description && (
-              <p class="text-sm text-[#6b7280] mt-1 leading-relaxed line-clamp-2">
+              <p class="text-sm text-[#44403c] mt-1 leading-relaxed line-clamp-2">
                 {article.data.description}
               </p>
             )}

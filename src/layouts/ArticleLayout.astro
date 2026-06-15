@@ -34,12 +34,12 @@ const formattedDate = pubDate.toLocaleDateString('fi-FI', {
       />
     )}
     <header class="mb-8 border-b border-gray-200 pb-6">
-      <p class="text-sm text-[#6b7280] uppercase tracking-wide mb-2">{formattedDate}</p>
+      <p class="text-sm text-[#44403c] uppercase tracking-wide mb-2">{formattedDate}</p>
       <h1 class="text-3xl sm:text-4xl font-serif font-bold text-[#1a3a2a] leading-tight">
         {title}
       </h1>
       {description && (
-        <p class="mt-3 text-lg text-[#6b7280] leading-relaxed">{description}</p>
+        <p class="mt-3 text-lg text-[#44403c] leading-relaxed">{description}</p>
       )}
       {tags.length > 0 && (
         <div class="flex gap-2 mt-4 flex-wrap">
@@ -60,7 +60,7 @@ const formattedDate = pubDate.toLocaleDateString('fi-FI', {
       prose-p:text-[#1c1c1c] prose-p:leading-relaxed
       prose-a:text-[#2d6a4f] prose-a:font-medium hover:prose-a:underline
       prose-strong:text-[#1a3a2a]
-      prose-blockquote:border-l-[#8b6914] prose-blockquote:text-[#6b7280]
+      prose-blockquote:border-l-[#8b6914] prose-blockquote:text-[#44403c]
       prose-li:text-[#1c1c1c]
       prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
       prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3">
@@ -73,7 +73,7 @@ const formattedDate = pubDate.toLocaleDateString('fi-FI', {
 
     <footer class="mt-12 pt-6 border-t border-gray-200 space-y-4">
       {sourceUrl && (
-        <p class="text-sm text-[#6b7280]">
+        <p class="text-sm text-[#44403c]">
           Alkuperäinen julkaisu: <a href={sourceUrl} class="text-[#2d6a4f] hover:underline" target="_blank" rel="noopener noreferrer">{sourceUrl}</a>
         </p>
       )}

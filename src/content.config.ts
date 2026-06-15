@@ -105,4 +105,24 @@ const articleCollections = defineCollection({
   }),
 });
 
-export const collections = { articles, pages, books, articleCollections };
+const hakemisto = defineCollection({
+  loader: glob({ pattern: '**/*.yaml', base: './src/content/hakemisto' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    reference: z.discriminatedUnion('type', [
+      z.object({ type: z.literal('book'), id: z.string() }),
+      z.object({ type: z.literal('article'), id: z.string() }),
+      z.object({ type: z.literal('article-collection'), id: z.string() }),
+      z.object({ type: z.literal('unpublished'), label: z.string(), note: z.string().optional() }),
+    ]),
+    persons: z.array(z.string()).default([]),
+    places: z.array(z.string()).default([]),
+    events: z.array(z.string()).default([]),
+    regiments: z.array(z.string()).default([]),
+    families: z.array(z.string()).default([]),
+    other: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { articles, pages, books, articleCollections, hakemisto };

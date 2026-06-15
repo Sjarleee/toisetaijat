@@ -1,0 +1,49 @@
+title: "Karjalan Ratsurykmentti – Matrikkeli 1700–1737"
+description: "Karjalan ratsurykmentin matrikkeli vuosilta 1700–1737. Sisältää yksityiskohtaiset tiedot rykmentin upseereista, aliupseereista ja ratsumiehistä kotipitäjineen. Saatavana e-kirjana."
+reference:
+  type: book
+  id: karjalan-ratsurykmentti-matrikkeli
+persons:
+  - "Johan Creutz"
+  - "Carl Cronstedt"
+  - "Gustaf Otto Douglas"
+places:
+  - "Karjala"
+  - "Viipuri"
+  - "Käkisalmi"
+  - "Sortavala"
+  - "Lappeenranta"
+  - "Hamina"
+  - "Savonlinna"
+  - "Mikkeli"
+  - "Imatra"
+  - "Joutseno"
+  - "Ruokolahti"
+  - "Jääski"
+  - "Äyräpää"
+  - "Rautus"
+  - "Sakkola"
+  - "Pyhäjärvi"
+events:
+  - "Suuri Pohjansota 1700–1721"
+  - "Isoviha 1713–1721"
+  - "Pikkuviha 1741–1743"
+  - "Isokyrön taistelu 1714"
+regiments:
+  - "Karjalan ratsurykmentti"
+  - "KRR"
+families:
+  - "Creutz"
+  - "Douglas"
+  - "Cronstedt"
+other:
+  - "matrikkeli"
+  - "katselmusrulla"
+  - "pääkatselmusrulla"
+  - "ratsumies"
+  - "rusthollari"
+  - "kornetti"
+  - "kapteeni"
+  - "eversti"
+  - "komppania"
+  - "e-kirja"

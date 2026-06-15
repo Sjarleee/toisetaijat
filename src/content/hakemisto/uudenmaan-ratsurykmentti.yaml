@@ -1,0 +1,36 @@
+title: "Uudenmaan Ratsurykmentti 1641–1809"
+description: "Katselmusrullat ja luettelot Uudenmaan ratsurykmentin miehistöstä vuosilta 1641–1809. Artikkelit 27 eri vuodelta. Saatavana PDF-artikkelisarjana."
+reference:
+  type: article-collection
+  id: uudenmaan-ratsurykmentti
+places:
+  - "Uusimaa"
+  - "Helsinki"
+  - "Porvoo"
+  - "Loviisa"
+  - "Tammisaari"
+  - "Raasepori"
+  - "Espoo"
+  - "Sipoo"
+  - "Pernaja"
+  - "Askola"
+  - "Mäntsälä"
+  - "Nurmijärvi"
+  - "Vihti"
+  - "Lohja"
+events:
+  - "Kolmikymmenvuotinen sota 1618–1648"
+  - "Suuri Pohjansota 1700–1721"
+  - "Isoviha 1713–1721"
+  - "Pikkuviha 1741–1743"
+  - "Suomen sota 1808–1809"
+regiments:
+  - "Uudenmaan ratsurykmentti"
+  - "URR"
+other:
+  - "katselmusrulla"
+  - "ratsumies"
+  - "rusthollari"
+  - "komppania"
+  - "torpari"
+  - "PDF-artikkeli"

@@ -1,0 +1,281 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const hakemistoEntries = await getCollection('hakemisto');
+const allBooks = await getCollection('books');
+const allArticles = await getCollection('articles', ({ data }) => !data.draft);
+const allArticleCollections = await getCollection('articleCollections');
+
+const bookMap = Object.fromEntries(allBooks.map(b => [b.id, b.data]));
+const articleMap = Object.fromEntries(allArticles.map(a => [a.id, a.data]));
+const collectionMap = Object.fromEntries(allArticleCollections.map(c => [c.id, c.data]));
+
+type CtaStyle = 'gold' | 'green' | 'gray';
+
+const searchData = hakemistoEntries.map(entry => {
+  const d = entry.data;
+  const ref = d.reference;
+
+  let url: string | null = null;
+  let price: number | null = null;
+  let refLabel = '';
+  let ctaLabel = '';
+  let ctaStyle: CtaStyle = 'gold';
+
+  if (ref.type === 'book') {
+    const book = bookMap[ref.id];
+    if (book) {
+      price = book.price ?? book.ebookPrice ?? null;
+      if (book.productType === 'ebook' || book.availability === 'ebook-only') {
+        refLabel = 'E-kirja';
+        ctaLabel = 'Lue e-kirja →';
+        ctaStyle = 'green';
+        url = book.ebookUrl ?? null;
+      } else if (book.availability === 'soldout') {
+        refLabel = 'Kirja (loppunut)';
+        ctaLabel = 'Loppunut';
+        ctaStyle = 'gray';
+        url = book.articleUrl ?? null;
+      } else if (book.availability === 'ask') {
+        refLabel = 'Kirja';
+        ctaLabel = 'Kysy saatavuutta →';
+        ctaStyle = 'gray';
+        url = '/ota-yhteytta';
+      } else {
+        refLabel = 'Kirja';
+        ctaLabel = 'Lue lisää ja osta →';
+        ctaStyle = 'gold';
+        url = book.articleUrl ?? null;
+      }
+    }
+  } else if (ref.type === 'article') {
+    const article = articleMap[ref.id];
+    if (article) {
+      url = `/artikkelit/${ref.id}`;
+    }
+    refLabel = 'Artikkeli';
+    ctaLabel = 'Lue artikkeli →';
+    ctaStyle = 'green';
+  } else if (ref.type === 'article-collection') {
+    const col = collectionMap[ref.id];
+    if (col) {
+      url = col.articleUrl ?? col.orderUrl;
+      price = col.priceAll;
+    }
+    refLabel = 'Artikkelikokoelma';
+    ctaLabel = 'Katso artikkelit →';
+    ctaStyle = 'gold';
+  } else if (ref.type === 'unpublished') {
+    refLabel = ref.label;
+    ctaLabel = 'Ota yhteyttä →';
+    ctaStyle = 'gray';
+    url = '/ota-yhteytta';
+  }
+
+  return {
+    id: entry.id,
+    title: d.title,
+    description: d.description,
+    refType: ref.type,
+    refLabel,
+    url,
+    price,
+    ctaLabel,
+    ctaStyle,
+    persons: d.persons,
+    places: d.places,
+    events: d.events,
+    regiments: d.regiments,
+    families: d.families,
+    other: d.other,
+  };
+});
+---
+
+<BaseLayout
+  title="Hakemisto"
+  description="Etsi henkilöitä, paikkoja, tapahtumia ja rykmenttejä Matti J. Kankaanpään julkaisuista ja tutkimuksista."
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+    <h1 class="font-serif text-3xl sm:text-4xl font-bold text-[#1a3a2a] mb-3">Hakemisto</h1>
+    <p class="text-[#44403c] text-sm mb-8 max-w-2xl leading-relaxed">
+      Hae henkilöitä, paikkoja, tapahtumia, rykmenttejä ja sukuja Matti J. Kankaanpään julkaisuista
+      ja tutkimuksista. Tulokset viittaavat saatavilla oleviin kirjoihin, artikkeleihin tai
+      yhteydenottopyyntöön julkaisemattomasta aineistosta.
+    </p>
+
+    <div class="relative mb-6">
+      <input
+        id="search-input"
+        type="search"
+        placeholder="Hae nimellä, paikalla, tapahtumalla, rykmentillä..."
+        autofocus
+        class="w-full px-4 py-3 pl-11 border border-gray-400 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-[#2d6a4f]"
+      />
+      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+      </svg>
+    </div>
+
+    <p id="result-count" class="text-sm text-[#44403c] mb-4 min-h-[1.25rem]"></p>
+    <div id="results" class="space-y-4"></div>
+    <p id="no-results" class="hidden text-[#44403c]">
+      Ei tuloksia haulla &ldquo;<span id="no-results-query"></span>&rdquo;.
+    </p>
+    <p id="start-prompt" class="text-[#44403c] text-sm">
+      Kirjoita hakutermi yllä olevaan kenttään — esimerkiksi henkilön nimi, pitäjä tai rykmentin nimi.
+    </p>
+  </div>
+</BaseLayout>
+
+<script define:vars={{ searchData }}>
+  const input = document.getElementById('search-input');
+  const resultsEl = document.getElementById('results');
+  const noResultsEl = document.getElementById('no-results');
+  const noResultsQuery = document.getElementById('no-results-query');
+  const countEl = document.getElementById('result-count');
+  const startPrompt = document.getElementById('start-prompt');
+
+  const MAX_CHIPS = 5;
+
+  function esc(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function chips(terms, colorClass) {
+    if (!terms.length) return '';
+    const shown = terms.slice(0, MAX_CHIPS);
+    const rest = terms.length - MAX_CHIPS;
+    const html = shown.map(t => `<span class="text-xs ${colorClass} rounded px-1.5 py-0.5">${esc(t)}</span>`).join('');
+    const more = rest > 0 ? `<span class="text-xs text-gray-400 italic">+${rest} lisää</span>` : '';
+    return html + more;
+  }
+
+  function matchRow(label, terms, colorClass) {
+    if (!terms.length) return '';
+    return `
+      <div class="flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
+        <span class="text-xs text-gray-400 font-medium shrink-0">${label}:</span>
+        ${chips(terms, colorClass)}
+      </div>`;
+  }
+
+  function badgeClass(refType) {
+    const map = {
+      book: 'bg-[#1a3a2a] text-white',
+      article: 'bg-[#2d6a4f] text-white',
+      'article-collection': 'bg-purple-700 text-white',
+      unpublished: 'bg-gray-500 text-white',
+    };
+    return map[refType] ?? 'bg-gray-500 text-white';
+  }
+
+  function ctaClass(style) {
+    const map = {
+      gold: 'bg-[#d4a843] text-[#1a3a2a] hover:bg-[#c9a040]',
+      green: 'bg-[#2d6a4f] text-white hover:bg-[#245c42]',
+      gray: 'bg-gray-500 text-white hover:bg-gray-600',
+    };
+    return map[style] ?? map.gray;
+  }
+
+  function renderCard(r) {
+    const hasKeywordMatches =
+      r.mPersons.length || r.mPlaces.length || r.mEvents.length ||
+      r.mRegiments.length || r.mFamilies.length || r.mOther.length;
+
+    const matchesHtml = hasKeywordMatches ? `
+      <div class="mt-3 space-y-1.5 border-t border-gray-100 pt-3">
+        <p class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-1">Löytyi:</p>
+        ${matchRow('Henkilöt', r.mPersons, 'bg-blue-50 text-blue-700')}
+        ${matchRow('Paikat', r.mPlaces, 'bg-green-50 text-green-700')}
+        ${matchRow('Tapahtumat', r.mEvents, 'bg-orange-50 text-orange-700')}
+        ${matchRow('Rykmentit', r.mRegiments, 'bg-purple-50 text-purple-700')}
+        ${matchRow('Suvut', r.mFamilies, 'bg-pink-50 text-pink-700')}
+        ${matchRow('Muut', r.mOther, 'bg-gray-100 text-gray-600')}
+      </div>` : '';
+
+    const priceHtml = r.price
+      ? `<span class="text-sm font-semibold text-[#d4a843]">${r.price} €</span>`
+      : '';
+
+    const ctaHtml = r.url
+      ? `<a href="${esc(r.url)}" class="inline-block mt-4 px-4 py-2 rounded text-sm font-semibold transition-colors ${ctaClass(r.ctaStyle)}">${esc(r.ctaLabel)}</a>`
+      : `<span class="inline-block mt-4 px-4 py-2 rounded text-sm font-semibold bg-gray-200 text-gray-500 cursor-default">${esc(r.ctaLabel)}</span>`;
+
+    return `
+      <div class="p-5 bg-white rounded-lg border border-gray-200 hover:border-[#2d6a4f] hover:shadow-sm transition-all duration-200">
+        <div class="flex items-center justify-between gap-3 mb-2">
+          <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${badgeClass(r.refType)}">${esc(r.refLabel)}</span>
+          ${priceHtml}
+        </div>
+        <h2 class="font-serif text-lg font-bold text-[#1a3a2a] leading-snug">${esc(r.title)}</h2>
+        ${r.description ? `<p class="text-sm text-[#44403c] mt-1 line-clamp-3">${esc(r.description)}</p>` : ''}
+        ${matchesHtml}
+        ${ctaHtml}
+      </div>`;
+  }
+
+  function render(results, query) {
+    startPrompt.classList.add('hidden');
+    if (results.length === 0) {
+      resultsEl.innerHTML = '';
+      noResultsEl.classList.remove('hidden');
+      noResultsQuery.textContent = query;
+      countEl.textContent = '';
+      return;
+    }
+    noResultsEl.classList.add('hidden');
+    countEl.textContent = `${results.length} lähde${results.length === 1 ? '' : 'ttä'}`;
+    resultsEl.innerHTML = results.map(r => renderCard(r)).join('');
+  }
+
+  function search(query) {
+    const q = query.toLowerCase().trim();
+    if (!q) {
+      resultsEl.innerHTML = '';
+      noResultsEl.classList.add('hidden');
+      countEl.textContent = '';
+      startPrompt.classList.remove('hidden');
+      return;
+    }
+
+    const results = [];
+    for (const entry of searchData) {
+      const titleHit = entry.title.toLowerCase().includes(q);
+      const descHit = entry.description.toLowerCase().includes(q);
+      const mPersons = entry.persons.filter(t => t.toLowerCase().includes(q));
+      const mPlaces = entry.places.filter(t => t.toLowerCase().includes(q));
+      const mEvents = entry.events.filter(t => t.toLowerCase().includes(q));
+      const mRegiments = entry.regiments.filter(t => t.toLowerCase().includes(q));
+      const mFamilies = entry.families.filter(t => t.toLowerCase().includes(q));
+      const mOther = entry.other.filter(t => t.toLowerCase().includes(q));
+
+      if (titleHit || descHit || mPersons.length || mPlaces.length ||
+          mEvents.length || mRegiments.length || mFamilies.length || mOther.length) {
+        results.push({ ...entry, mPersons, mPlaces, mEvents, mRegiments, mFamilies, mOther });
+      }
+    }
+    render(results, query);
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const initialQ = params.get('q') ?? '';
+  if (initialQ) {
+    input.value = initialQ;
+    search(initialQ);
+  }
+
+  input.addEventListener('input', e => {
+    const val = e.target.value;
+    const url = new URL(window.location.href);
+    if (val) url.searchParams.set('q', val); else url.searchParams.delete('q');
+    history.replaceState(null, '', url);
+    search(val);
+  });
+</script>

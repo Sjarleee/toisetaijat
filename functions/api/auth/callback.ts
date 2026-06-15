@@ -58,6 +58,7 @@ function htmlResponse(status: 'success' | 'error', errorMsg: string, token: stri
 <html>
 <head><title>Authorizing…</title></head>
 <body>
+<p id="msg" style="font-family:sans-serif;padding:2rem">Authorizing… this window should close automatically.</p>
 <script>
   (function() {
     var content = ${JSON.stringify(content)};
@@ -66,11 +67,12 @@ function htmlResponse(status: 'success' | 'error', errorMsg: string, token: stri
     var opener = window.opener;
     if (opener) {
       opener.postMessage(msg, '*');
+      setTimeout(function(){ window.close(); }, 500);
+    } else {
+      document.getElementById('msg').textContent = 'Status: ' + status + (status !== 'success' ? ' — feil: ' + content : ' — OK, men vinduet lukkes ikke automatisk. Lukk det manuelt.');
     }
-    window.close();
   })();
 </script>
-<p>Authorizing… this window should close automatically.</p>
 </body>
 </html>`;
 

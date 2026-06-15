@@ -136,33 +136,38 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
             <p class="text-sm text-[#44403c] mb-4">€{col.pricePerArticle} / yksittäinen artikkeli · PDF sähköpostitse</p>
             <ul class="grid sm:grid-cols-2 gap-1 text-sm text-[#4a4a4a] mb-4">
               {col.articles.map(a => (
-                <li class="flex items-center gap-1.5">
-                  <span class="text-[#2d6a4f]">•</span> {a}
+                <li class="flex items-center justify-between gap-2 py-1 border-b border-gray-100 last:border-0">
+                  <span class="text-[#44403c]">{a}</span>
+                  <button
+                    class="add-to-cart-btn shrink-0 text-xs bg-[#1a3a2a]/5 hover:bg-[#1a3a2a] text-[#1a3a2a] hover:text-white border border-[#1a3a2a]/20 hover:border-[#1a3a2a] px-2 py-0.5 rounded transition-colors"
+                    data-id={`${col.id}-${a.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '').toLowerCase()}`}
+                    data-title={`${col.title} – ${a}`}
+                    data-price={col.pricePerArticle}
+                    data-shipping="0"
+                    data-type="article-collection"
+                    data-image=""
+                  >
+                    + €{col.pricePerArticle}
+                  </button>
                 </li>
               ))}
             </ul>
-            <a
-              href={col.orderUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 bg-[#1a3a2a] text-white px-5 py-2.5 rounded-md font-medium hover:bg-[#2d6a4f] transition-colors text-sm"
-            >
-              Tilaa artikkelit →
-            </a>
-            <button
-              class="add-to-cart-btn inline-flex items-center gap-2 border border-[#1a3a2a] text-[#1a3a2a] px-5 py-2.5 rounded-md font-medium hover:bg-[#1a3a2a] hover:text-white transition-colors text-sm"
-              data-id={col.id}
-              data-title={col.title}
-              data-price={col.priceAll}
-              data-shipping="0"
-              data-type="article-collection"
-              data-image=""
-            >
-              <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-              </svg>
-              Lisää koriin (€{col.priceAll})
-            </button>
+            <div class="flex flex-wrap items-center gap-3 mt-4">
+              <button
+                class="add-to-cart-btn inline-flex items-center gap-2 bg-[#1a3a2a] text-white px-5 py-2.5 rounded-md font-medium hover:bg-[#2d6a4f] transition-colors text-sm"
+                data-id={col.id}
+                data-title={`${col.title} – kaikki ${col.articleCount} artikkelia`}
+                data-price={col.priceAll}
+                data-shipping="0"
+                data-type="article-collection"
+                data-image=""
+              >
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                Kaikki {col.articleCount} artikkelia – €{col.priceAll}
+              </button>
+            </div>
           </div>
         ))}
       </div>

@@ -29,7 +29,12 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
-      body: JSON.stringify({ client_id: clientId, client_secret: clientSecret, code }),
+      body: JSON.stringify({
+        client_id: clientId,
+        client_secret: clientSecret,
+        code,
+        redirect_uri: new URL('/api/auth/callback', url.origin).toString(),
+      }),
     });
     const data = await res.json() as { access_token?: string; error?: string };
     if (!data.access_token) {

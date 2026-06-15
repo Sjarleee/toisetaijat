@@ -4,6 +4,7 @@ pricePerArticle: 4
 priceAll: 80
 articleCount: 27
 orderUrl: "https://docs.google.com/forms/d/e/1FAIpQLSdafbB5W_AJYPs7i2woFzE_j-FFdsqrrtSy1w29JlyTknvdJw/viewform"
+articleUrl: /artikkelit/uudenmaan-ratsurykmentti-1641-1809
 sortOrder: 1
 articles:
   - "1641"

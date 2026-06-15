@@ -51,7 +51,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
 function htmlResponse(status: 'success' | 'error', errorMsg: string, token: string) {
   const content =
     status === 'success'
-      ? `{"token":"${token}","provider":"github"}`
+      ? token
       : `{"error":"${errorMsg}"}`;
 
   const html = `<!DOCTYPE html>

@@ -4,9 +4,9 @@ import { getCollection, getEntry } from 'astro:content';
 import { entryToBook } from '../data/products';
 
 const allArticles = await getCollection('articles', ({ data }) => !data.draft);
-const recentArticles = allArticles
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3);
+const sortedArticles = allArticles
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const [featuredArticle, ...recentArticles] = sortedArticles.slice(0, 5);
 
 const frontpage = await getEntry('pages', 'etusivu');
 const { heroSubtitle, shippingNotice, shippingNoticeVisible } = frontpage.data;
@@ -72,43 +72,62 @@ const bundle = allBookEntries
 
   <!-- Recent articles -->
   <section class="max-w-5xl mx-auto px-4 sm:px-6 py-16">
-    <div class="flex items-center justify-between mb-8">
+    <div class="flex items-center justify-between mb-8 border-b-2 border-[#1a3a2a] pb-3">
       <h2 class="font-serif text-2xl sm:text-3xl font-bold text-[#1a3a2a]">Uusimmat artikkelit</h2>
       <a href="/artikkelit" class="text-[#2d6a4f] text-sm font-medium hover:underline">Kaikki artikkelit →</a>
     </div>
 
-    {recentArticles.length > 0 ? (
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {recentArticles.map(article => (
+    {featuredArticle && (
+      <div class="mb-8 border-b border-[#d8c9a8] pb-8">
+        <a href={`/artikkelit/${featuredArticle.id}`} class="group grid sm:grid-cols-5 gap-6 items-start">
+          {featuredArticle.data.heroImage ? (
+            <div class="sm:col-span-2">
+              <img src={featuredArticle.data.heroImage} alt={featuredArticle.data.title} class="w-full aspect-[4/3] object-cover rounded border border-[#d8c9a8]" />
+            </div>
+          ) : (
+            <div class="sm:col-span-2 bg-[#1a3a2a]/5 rounded border border-[#d8c9a8] aspect-[4/3] flex items-center justify-center">
+              <svg class="w-12 h-12 text-[#1a3a2a]/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </div>
+          )}
+          <div class="sm:col-span-3">
+            <p class="text-xs text-[#8b6914] font-semibold uppercase tracking-wide mb-2">
+              {featuredArticle.data.pubDate.toLocaleDateString('fi-FI', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </p>
+            <h3 class="font-serif text-2xl sm:text-3xl font-bold text-[#1a3a2a] group-hover:text-[#2d6a4f] leading-tight mb-3">
+              {featuredArticle.data.title}
+            </h3>
+            {featuredArticle.data.description && (
+              <p class="text-[#44403c] leading-relaxed text-base mb-4">
+                {featuredArticle.data.description}
+              </p>
+            )}
+            <span class="text-[#2d6a4f] text-sm font-semibold group-hover:underline">Lue artikkeli →</span>
+          </div>
+        </a>
+      </div>
+    )}
+
+    {recentArticles.length > 0 && (
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {recentArticles.map((article, i) => (
           <a
             href={`/artikkelit/${article.id}`}
-            class="group block bg-[#faf4e8] rounded border border-[#d8c9a8] hover:border-[#8b6914] hover:shadow-md transition-all duration-200 overflow-hidden"
+            class={`group block border-t-2 border-[#1a3a2a] pt-4 ${i === 0 ? 'lg:col-span-2' : ''}`}
           >
-            {article.data.heroImage && (
-              <img
-                src={article.data.heroImage}
-                alt={article.data.title}
-                class="w-full h-40 object-cover"
-              />
-            )}
-            <div class="p-5">
-              <p class="text-xs text-[#8b6914] mb-2">
-                {article.data.pubDate.toLocaleDateString('fi-FI', { year: 'numeric', month: 'long', day: 'numeric' })}
+            <p class="text-xs text-[#8b6914] mb-1">
+              {article.data.pubDate.toLocaleDateString('fi-FI', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </p>
+            <h3 class={`font-serif font-bold text-[#1a3a2a] group-hover:text-[#2d6a4f] leading-snug mb-2 ${i === 0 ? 'text-xl' : 'text-base'}`}>
+              {article.data.title}
+            </h3>
+            {article.data.description && (
+              <p class="text-sm text-[#44403c] leading-relaxed line-clamp-3">
+                {article.data.description}
               </p>
-              <h3 class="font-serif text-lg font-bold text-[#1a3a2a] group-hover:text-[#2d6a4f] leading-snug mb-2">
-                {article.data.title}
-              </h3>
-              {article.data.description && (
-                <p class="text-sm text-[#44403c] leading-relaxed line-clamp-3">
-                  {article.data.description}
-                </p>
-              )}
-            </div>
+            )}
           </a>
         ))}
       </div>
-    ) : (
-      <p class="text-[#44403c]">Ei artikkeleita vielä.</p>
     )}
   </section>
 

@@ -5,8 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <title>Toiset Aijat – CMS</title>
+    <style>
+      /* Compact image preview in block widgets */
+      [class*="ImageWidgetContent"] img,
+      [class*="image-widget"] img {
+        max-height: 120px !important;
+        width: auto !important;
+        object-fit: contain;
+      }
+      [class*="ImageWidgetContent"],
+      [class*="image-widget"] {
+        max-height: 140px !important;
+        overflow: hidden;
+      }
+    </style>
   </head>
   <body>
+    <script>window.CMS_MANUAL_INIT = true;</script>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script>
+      CMS.registerEditorComponent({
+        id: 'figure',
+        label: 'Kuva',
+        fields: [
+          {
+            name: 'src',
+            label: 'Kuvatiedosto',
+            widget: 'image',
+          },
+          {
+            name: 'alt',
+            label: 'Alt-teksti (saavutettavuus)',
+            widget: 'string',
+            required: false,
+          },
+          {
+            name: 'caption',
+            label: 'Kuvateksti',
+            widget: 'string',
+            required: false,
+          },
+          {
+            name: 'size',
+            label: 'Koko',
+            widget: 'select',
+            default: 'medium',
+            options: [
+              { label: 'Koko leveys', value: 'full' },
+              { label: 'Keskikokoinen', value: 'medium' },
+              { label: 'Pieni', value: 'small' },
+            ],
+          },
+          {
+            name: 'placement',
+            label: 'Sijoittelu',
+            widget: 'select',
+            default: 'center',
+            options: [
+              { label: 'Keskitetty', value: 'center' },
+              { label: 'Vasemmalle (teksti oikealla)', value: 'left' },
+              { label: 'Oikealle (teksti vasemmalla)', value: 'right' },
+            ],
+          },
+        ],
+        pattern: /^<Figure\s[^>]*\/>/,
+        fromBlock(match) {
+          const str = match[0];
+          const get = (attr) => {
+            const m = str.match(new RegExp(attr + '="([^"]*)"'));
+            return m ? m[1] : '';
+          };
+          return {
+            src: get('src'),
+            alt: get('alt'),
+            caption: get('caption'),
+            size: get('size') || 'medium',
+            placement: get('placement') || 'center',
+          };
+        },
+        toBlock(data) {
+          const attrs = [`src="${data.src || ''}"`];
+          if (data.alt) attrs.push(`alt="${data.alt}"`);
+          if (data.caption) attrs.push(`caption="${data.caption}"`);
+          if (data.size) attrs.push(`size="${data.size}"`);
+          if (data.placement) attrs.push(`placement="${data.placement}"`);
+          return `<Figure ${attrs.join(' ')} />`;
+        },
+        toPreview(data) {
+          return `<figure style="max-width:${data.size === 'small' ? '200px' : data.size === 'full' ? '100%' : '320px'};margin:auto;text-align:center">
+            <img src="${data.src}" alt="${data.alt || ''}" style="max-width:100%;border-radius:4px" />
+            ${data.caption ? `<figcaption style="font-size:0.85em;color:#666;font-style:italic;margin-top:4px">${data.caption}</figcaption>` : ''}
+          </figure>`;
+        },
+      });
+      CMS.init();
+    </script>
   </body>
 </html>

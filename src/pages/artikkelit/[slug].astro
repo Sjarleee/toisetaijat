@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import Figure from '../../components/Figure.astro';
 
 export async function getStaticPaths() {
   const articles = await getCollection('articles', ({ data }) => !data.draft);
@@ -11,7 +12,7 @@ export async function getStaticPaths() {
 }
 
 const { article } = Astro.props;
-const { Content } = await render(article);
+const { Content } = await render(article, { components: { Figure } });
 ---
 
 <ArticleLayout
@@ -22,6 +23,7 @@ const { Content } = await render(article);
   heroImage={article.data.heroImage}
   tags={article.data.tags}
   sourceUrl={article.data.sourceUrl}
+  blocks={article.data.blocks}
 >
   <Content />
 </ArticleLayout>

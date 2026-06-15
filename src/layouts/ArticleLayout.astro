@@ -1,5 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import BlockRenderer from '../components/BlockRenderer.astro';
+import { tagToSlug } from '../utils/tags';
 
 interface Props {
   title: string;
@@ -9,9 +11,10 @@ interface Props {
   heroImage?: string;
   tags?: string[];
   sourceUrl?: string;
+  blocks?: any[];
 }
 
-const { title, description, pubDate, updatedDate, heroImage, tags = [], sourceUrl } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags = [], sourceUrl, blocks } = Astro.props;
 
 const formattedDate = pubDate.toLocaleDateString('fi-FI', {
   weekday: 'long',
@@ -42,7 +45,7 @@ const formattedDate = pubDate.toLocaleDateString('fi-FI', {
         <div class="flex gap-2 mt-4 flex-wrap">
           {tags.map(tag => (
             <a
-              href={`/artikkelit/tagi/${encodeURIComponent(tag)}`}
+              href={`/artikkelit/tagi/${tagToSlug(tag)}`}
               class="text-xs bg-[#1a3a2a]/10 text-[#1a3a2a] hover:bg-[#1a3a2a]/20 px-2.5 py-1 rounded-full transition-colors"
             >
               {tag}
@@ -63,6 +66,10 @@ const formattedDate = pubDate.toLocaleDateString('fi-FI', {
       prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3">
       <slot />
     </div>
+
+    {blocks && blocks.length > 0 && (
+      <BlockRenderer blocks={blocks} />
+    )}
 
     <footer class="mt-12 pt-6 border-t border-gray-200 space-y-4">
       {sourceUrl && (

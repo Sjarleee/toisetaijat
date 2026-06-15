@@ -1,0 +1,178 @@
+---
+import type { BookProduct } from '../data/products';
+
+interface Props {
+  product: BookProduct;
+  /** 'full' viser bilde + ingress + pris + knapp; 'compact' viser bare tittel + pris + knapp */
+  variant?: 'full' | 'compact';
+}
+
+const { product, variant = 'full' } = Astro.props;
+
+const availabilityLabel: Record<BookProduct['availability'], string | null> = {
+  available: null,
+  ask: null,
+  soldout: 'Loppuunmyyty',
+  external: null,
+  'ebook-only': null,
+};
+
+const soldOut = product.availability === 'soldout';
+---
+
+{variant === 'full' ? (
+  <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden flex flex-col">
+    {product.image && (
+      <div class="h-40 bg-gray-50 flex items-center justify-center overflow-hidden border-b border-gray-100">
+        <img
+          src={product.image}
+          alt={product.title}
+          class="max-h-40 max-w-full object-contain p-3"
+          loading="lazy"
+        />
+      </div>
+    )}
+    <div class="p-5 flex flex-col flex-1">
+      <div class="flex-1">
+        {product.articleUrl ? (
+          <a href={product.articleUrl} class="hover:text-[#2d6a4f] hover:underline">
+            <h3 class="font-serif text-base font-bold text-[#1a3a2a] leading-snug mb-1">{product.title}</h3>
+          </a>
+        ) : (
+          <h3 class="font-serif text-base font-bold text-[#1a3a2a] leading-snug mb-1">{product.title}</h3>
+        )}
+        <p class="text-xs text-[#9ca3af] mb-2">
+          {product.year}{product.pages ? ` · ${product.pages} s.` : ''}{product.isbn ? ` · ISBN ${product.isbn}` : ''}
+        </p>
+        {product.description && (
+          <p class="text-sm text-[#4a4a4a] leading-relaxed mb-4">{product.description}</p>
+        )}
+      </div>
+
+      <div class="mt-auto">
+        {soldOut ? (
+          <span class="inline-block text-sm text-[#9ca3af] italic">Loppuunmyyty</span>
+        ) : product.availability === 'external' ? (
+          <div>
+            {product.note && <p class="text-sm text-[#6b7280] mb-2">{product.note}</p>}
+            {product.externalUrl && (
+              <a href={product.externalUrl} target="_blank" rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 text-sm text-[#2d6a4f] border border-[#2d6a4f] px-4 py-2 rounded-md hover:bg-[#2d6a4f] hover:text-white transition-colors">
+                Osta →
+              </a>
+            )}
+          </div>
+        ) : product.availability === 'ebook-only' && product.ebook ? (
+          <div class="flex items-center gap-3">
+            {product.ebook.price && (
+              <span class="text-lg font-bold text-[#1a3a2a]">€{product.ebook.price}</span>
+            )}
+            <a href={product.ebook.url} target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 bg-[#1a3a2a] text-white text-sm px-4 py-2 rounded-md hover:bg-[#2d6a4f] transition-colors">
+              {product.ebook.label ?? 'Tilaa e-kirja'} →
+            </a>
+          </div>
+        ) : (
+          <div class="flex items-center gap-3 flex-wrap">
+            {product.price && (
+              <div>
+                <span class="text-lg font-bold text-[#1a3a2a]">€{product.price}</span>
+                {product.shippingPrice && (
+                  <span class="text-xs text-[#9ca3af] ml-1">+ €{product.shippingPrice} posti</span>
+                )}
+              </div>
+            )}
+            {product.availability === 'available' && product.price ? (
+              <button
+                class="add-to-cart-btn inline-flex items-center gap-1.5 bg-[#1a3a2a] text-white text-sm px-4 py-2 rounded-md hover:bg-[#2d6a4f] transition-colors"
+                data-id={product.id}
+                data-title={product.title}
+                data-price={product.price}
+                data-shipping={product.shippingPrice ?? 0}
+                data-image={product.image ?? ''}
+                data-type="book"
+              >
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                Lisää koriin
+              </button>
+            ) : (
+              <a href="mailto:jarle@toisetaijat.fi"
+                class="inline-flex items-center gap-1.5 bg-[#1a3a2a] text-white text-sm px-4 py-2 rounded-md hover:bg-[#2d6a4f] transition-colors">
+                Kysy hintaa →
+              </a>
+            )}
+            {product.ebook && (
+              <a href={product.ebook.url} target="_blank" rel="noopener noreferrer"
+                class="text-sm text-[#2d6a4f] hover:underline">
+                E-kirja
+              </a>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+) : (
+  /* compact variant */
+  <div class="flex items-center gap-4 py-3 border-b border-gray-100 last:border-0">
+    {product.image && (
+      <div class="w-10 h-10 shrink-0 bg-gray-50 rounded overflow-hidden">
+        <img src={product.image} alt="" class="w-full h-full object-contain" loading="lazy" />
+      </div>
+    )}
+    <div class="flex-1 min-w-0">
+      {product.articleUrl ? (
+        <a href={product.articleUrl} class="font-medium text-sm text-[#1a3a2a] hover:text-[#2d6a4f] hover:underline leading-snug">{product.title}</a>
+      ) : (
+        <span class="font-medium text-sm text-[#1a3a2a] leading-snug">{product.title}</span>
+      )}
+      <p class="text-xs text-[#9ca3af]">{product.year}</p>
+    </div>
+    <div class="shrink-0 text-right">
+      {soldOut ? (
+        <span class="text-xs text-[#9ca3af] italic">Loppuunmyyty</span>
+      ) : product.price ? (
+        <span class="text-sm font-bold text-[#1a3a2a]">€{product.price}</span>
+      ) : product.ebook ? (
+        <a href={product.ebook.url} target="_blank" rel="noopener noreferrer"
+          class="text-xs text-[#2d6a4f] hover:underline">E-kirja →</a>
+      ) : (
+        <a href="mailto:jarle@toisetaijat.fi" class="text-xs text-[#2d6a4f] hover:underline">Kysy →</a>
+      )}
+    </div>
+  </div>
+)}
+
+<script>
+  import { addItem } from '../scripts/cart';
+  import type { CartItem } from '../scripts/cart';
+
+  // Event delegation: one listener handles all .add-to-cart-btn on the page
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as Element).closest('.add-to-cart-btn') as HTMLButtonElement | null;
+    if (!btn) return;
+
+    const item: CartItem = {
+      id: btn.dataset.id!,
+      title: btn.dataset.title!,
+      price: parseFloat(btn.dataset.price!),
+      shippingPrice: parseFloat(btn.dataset.shipping ?? '0'),
+      type: (btn.dataset.type as CartItem['type']) ?? 'book',
+      quantity: 1,
+      image: btn.dataset.image || undefined,
+    };
+
+    addItem(item);
+
+    // Brief feedback on button
+    const original = btn.innerHTML;
+    btn.innerHTML = '<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Lisätty!';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.innerHTML = original;
+      btn.disabled = false;
+    }, 1500);
+  });
+</script>

@@ -1,0 +1,165 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Tilaus vahvistettu" description="Tilauksesi on vastaanotettu.">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 py-12">
+    <div id="confirm-root">
+      <p class="text-[#9ca3af]">Ladataan…</p>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  interface OrderItem {
+    title: string;
+    quantity: number;
+    price: number;
+    type: string;
+  }
+  interface Order {
+    orderId: string;
+    orderedAt: string;
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+    postalCode: string;
+    city: string;
+    country: string;
+    notes: string;
+    items: OrderItem[];
+    subtotal: number;
+    shipping: number;
+    total: number;
+  }
+
+  const root = document.getElementById('confirm-root')!;
+
+  let order: Order | null = null;
+  try {
+    const raw = sessionStorage.getItem('last_order');
+    if (raw) order = JSON.parse(raw);
+  } catch {}
+
+  if (!order) {
+    root.innerHTML = `
+      <div class="text-center py-12">
+        <p class="text-[#6b7280] mb-4">Tilausvahvistusta ei löydy.</p>
+        <a href="/" class="text-[#2d6a4f] hover:underline">← Etusivu</a>
+      </div>
+    `;
+  } else {
+    const hasBooks = order.items.some(i => i.type === 'book');
+    const hasCollections = order.items.some(i => i.type === 'article-collection');
+    const date = new Date(order.orderedAt).toLocaleString('fi-FI');
+
+    // Build email copy body
+    const emailBody = [
+      `Tilausvahvistus – Toiset Aijat`,
+      `Tilausnumero: ${order.orderId}`,
+      `Päivämäärä: ${date}`,
+      ``,
+      `Tilaaja:`,
+      order.name,
+      order.email,
+      order.phone || '',
+      order.address ? `${order.address}, ${order.postalCode} ${order.city}, ${order.country}` : '',
+      ``,
+      `Tilaus:`,
+      ...order.items.map(i => `  ${i.title} ×${i.quantity} — €${i.price * i.quantity}`),
+      ``,
+      `Yhteensä: €${order.total}`,
+      hasBooks ? `(Postitus €${order.shipping} sisältyy summaan)` : '',
+      order.notes ? `\nLisätiedot: ${order.notes}` : '',
+    ].filter(Boolean).join('\n');
+
+    const mailtoHref = `mailto:${order.email}?subject=Tilausvahvistus ${order.orderId} – Toiset Aijat&body=${encodeURIComponent(emailBody)}`;
+
+    root.innerHTML = `
+      <div class="text-center mb-10">
+        <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+          <svg class="w-9 h-9 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <h1 class="font-serif text-3xl font-bold text-[#1a3a2a] mb-2">Tilaus vastaanotettu!</h1>
+        <p class="text-[#6b7280]">Tilausnumero: <strong class="text-[#1a3a2a]">${order.orderId}</strong></p>
+      </div>
+
+      <!-- Order details -->
+      <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6 shadow-sm">
+        <h2 class="font-semibold text-[#1a3a2a] mb-4">Tilauksen tiedot</h2>
+        <div class="grid sm:grid-cols-2 gap-4 text-sm mb-5">
+          <div>
+            <p class="text-[#9ca3af] text-xs uppercase tracking-wide mb-1">Tilaaja</p>
+            <p class="text-[#1a3a2a] font-medium">${order.name}</p>
+            <p class="text-[#4a4a4a]">${order.email}</p>
+            ${order.phone ? `<p class="text-[#4a4a4a]">${order.phone}</p>` : ''}
+          </div>
+          ${hasBooks && order.address ? `
+            <div>
+              <p class="text-[#9ca3af] text-xs uppercase tracking-wide mb-1">Toimitusosoite</p>
+              <p class="text-[#4a4a4a]">${order.address}</p>
+              <p class="text-[#4a4a4a]">${order.postalCode} ${order.city}</p>
+              <p class="text-[#4a4a4a]">${order.country}</p>
+            </div>
+          ` : ''}
+        </div>
+
+        <div class="border-t border-gray-100 pt-4">
+          <p class="text-[#9ca3af] text-xs uppercase tracking-wide mb-2">Tuotteet</p>
+          <ul class="space-y-1.5 text-sm mb-4">
+            ${order.items.map(i => `
+              <li class="flex justify-between">
+                <span class="text-[#4a4a4a]">${i.title}${i.quantity > 1 ? ` ×${i.quantity}` : ''}</span>
+                <span class="font-medium text-[#1a3a2a]">€${i.price * i.quantity}</span>
+              </li>
+            `).join('')}
+          </ul>
+          ${hasBooks && order.shipping > 0 ? `
+            <div class="flex justify-between text-sm text-[#6b7280] border-t border-gray-100 pt-2 mb-1">
+              <span>Postitus</span><span>€${order.shipping}</span>
+            </div>
+          ` : ''}
+          <div class="flex justify-between font-bold text-[#1a3a2a] border-t border-gray-100 pt-2">
+            <span>Yhteensä</span><span>€${order.total}</span>
+          </div>
+        </div>
+
+        ${order.notes ? `
+          <div class="border-t border-gray-100 pt-3 mt-3">
+            <p class="text-[#9ca3af] text-xs uppercase tracking-wide mb-1">Lisätiedot</p>
+            <p class="text-sm text-[#4a4a4a]">${order.notes}</p>
+          </div>
+        ` : ''}
+      </div>
+
+      <!-- Next steps -->
+      <div class="bg-[#f5f0e8] border border-[#e5d9c3] rounded-lg p-5 mb-6 text-sm space-y-2">
+        <p class="font-semibold text-[#1a3a2a]">Mitä tapahtuu seuraavaksi?</p>
+        <ul class="text-[#4a4a4a] space-y-1.5 list-disc list-inside">
+          <li>Käsittelemme tilauksesi 1–2 arkipäivän kuluessa.</li>
+          <li>Lähetämme teille laskun sähköpostitse.</li>
+          ${hasBooks ? '<li>Kirjat postitetaan laskun maksamisen jälkeen.</li>' : ''}
+          ${hasCollections ? '<li>PDF-artikkelit toimitetaan sähköpostitse maksun jälkeen.</li>' : ''}
+        </ul>
+        <p class="text-[#6b7280]">Kysymyksiä? <a href="mailto:jarle@toisetaijat.fi" class="text-[#2d6a4f] hover:underline">jarle@toisetaijat.fi</a></p>
+      </div>
+
+      <!-- Email copy -->
+      <div class="flex flex-wrap gap-3">
+        <a href="${mailtoHref}"
+          class="inline-flex items-center gap-2 bg-[#1a3a2a] text-white px-5 py-2.5 rounded-md font-medium hover:bg-[#2d6a4f] transition-colors text-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+          Lähetä kopio itsellesi
+        </a>
+        <a href="/" class="px-5 py-2.5 rounded-md border border-gray-300 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors">
+          Etusivulle
+        </a>
+      </div>
+    `;
+  }
+</script>

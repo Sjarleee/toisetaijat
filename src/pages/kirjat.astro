@@ -1,12 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry } from 'astro:content';
+
+const page = await getEntry('pages', 'kirjat');
 ---
 
-<BaseLayout title="Kirjat" description="Matti J. Kankaanpään julkaisuluettelo – kirjat, sukukirjat, historiikit ja lehtiartikkelit">
+<BaseLayout title={page.data.title} description={page.data.description}>
   <div class="max-w-4xl mx-auto px-4 sm:px-6 py-12">
     <h1 class="font-serif text-3xl sm:text-4xl font-bold text-[#1a3a2a] mb-2">Julkaisuluettelo</h1>
     <p class="text-[#6b7280] mb-10 text-lg">
-      Matti J. Kankaanpään (1943–2017) kirjat, sukukirjat, historiikit ja lehtiartikkelit.
+      {page.data.introText ?? 'Matti J. Kankaanpään (1943–2017) kirjat, sukukirjat, historiikit ja lehtiartikkelit.'}
     </p>
 
     <!-- Navigaatio -->
@@ -40,7 +43,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <span class="text-sm text-[#9ca3af] w-12 shrink-0 pt-0.5 text-right">2016</span>
           <div>
             <p class="font-medium text-[#1a3a2a]">Suomalainen ratsuväki Ruotsin ajalla</p>
-            <p class="text-sm text-[#6b7280]">Porvoo 2016. T:mi Toiset Aijat. 790 s. ISBN 978-952-99106-9-4. <a href="/myynissa" class="text-[#2d6a4f] hover:underline">Tilaa tästä</a></p>
+            <p class="text-sm text-[#6b7280]">
+              Porvoo 2016. T:mi Toiset Aijat. 790 s. ISBN 978-952-99106-9-4.
+              {(() => {
+                const p = byIsbn.get('978-952-99106-9-4');
+                if (p && p.availability === 'available' && p.price) return (
+                  <span class="ml-2">
+                    <span class="font-semibold text-[#1a3a2a]">€{p.price}</span>
+                    {p.shippingPrice && <span class="text-[#9ca3af]"> + €{p.shippingPrice} posti</span>}
+                    {' · '}
+                    <a href={p.orderUrl ?? '/myynissa'} class="text-[#2d6a4f] hover:underline" target={p.orderUrl ? '_blank' : undefined} rel={p.orderUrl ? 'noopener noreferrer' : undefined}>Tilaa tästä</a>
+                  </span>
+                );
+                return <a href="/myynissa" class="ml-2 text-[#2d6a4f] hover:underline">Tilaa tästä</a>;
+              })()}
+            </p>
           </div>
         </li>
 

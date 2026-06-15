@@ -1,0 +1,39 @@
+---
+interface Props {
+  src: string;
+  alt?: string;
+  caption?: string;
+  size?: 'full' | 'medium' | 'small';
+  placement?: 'center' | 'left' | 'right';
+}
+
+const {
+  src,
+  alt = '',
+  caption,
+  size = 'medium',
+  placement = 'center',
+} = Astro.props;
+
+const sizeClass = size === 'small' ? 'max-w-[200px]' : size === 'medium' ? 'max-w-sm' : 'max-w-none w-full';
+const placementClass =
+  placement === 'left'
+    ? 'float-left mr-6 mb-4 clear-left'
+    : placement === 'right'
+    ? 'float-right ml-6 mb-4 clear-right'
+    : 'mx-auto clear-both';
+---
+
+<figure class={`not-prose ${sizeClass} ${placementClass}`}>
+  <img
+    src={src}
+    alt={alt}
+    class="w-full rounded shadow"
+    loading="lazy"
+  />
+  {caption && (
+    <figcaption class="text-sm text-[#6b7280] mt-1.5 text-center italic">
+      {caption}
+    </figcaption>
+  )}
+</figure>

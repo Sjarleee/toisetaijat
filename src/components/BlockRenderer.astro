@@ -1,0 +1,86 @@
+---
+import ProductCard from './ProductCard.astro';
+import { getCollection } from 'astro:content';
+import { entryToBook } from '../data/products';
+
+type Block =
+  | { type: 'product'; bookId: string }
+  | { type: 'figure'; image: string; caption?: string; size?: 'full' | 'medium' | 'small'; placement?: 'center' | 'left' | 'right' }
+  | { type: 'callout'; text: string; variant?: 'note' | 'tip' | 'warning' };
+
+interface Props {
+  blocks: Block[];
+}
+
+const { blocks } = Astro.props;
+
+const allBookEntries = await getCollection('books');
+const allProducts = allBookEntries.map(entryToBook);
+
+const calloutStyles = {
+  note: 'bg-blue-50 border-blue-300 text-blue-900',
+  tip: 'bg-[#f0faf5] border-[#2d6a4f] text-[#1a3a2a]',
+  warning: 'bg-yellow-50 border-yellow-400 text-yellow-900',
+};
+
+const calloutIcons = {
+  note: 'ℹ️',
+  tip: '💡',
+  warning: '⚠️',
+};
+---
+
+<div class="mt-10 space-y-8">
+  {blocks.map(block => {
+    if (block.type === 'product') {
+      const product = allProducts.find(p => p.id === block.bookId);
+      if (!product) return null;
+      return (
+        <div class="not-prose">
+          <p class="text-xs uppercase tracking-widest text-[#9ca3af] mb-3 font-medium">Kirja</p>
+          <ProductCard product={product} variant="full" />
+        </div>
+      );
+    }
+
+    if (block.type === 'figure') {
+      const size = block.size ?? 'full';
+      const placement = block.placement ?? 'center';
+      const wrapClass = [
+        'not-prose',
+        size === 'small' ? 'max-w-xs' : size === 'medium' ? 'max-w-md' : 'max-w-none',
+        placement === 'left' ? 'float-left mr-6 mb-4' : placement === 'right' ? 'float-right ml-6 mb-4' : 'mx-auto clear-both',
+      ].join(' ');
+      return (
+        <figure class={wrapClass}>
+          <img
+            src={block.image}
+            alt={block.caption ?? ''}
+            class="w-full rounded-lg shadow"
+            loading="lazy"
+          />
+          {block.caption && (
+            <figcaption class="mt-2 text-center text-sm text-[#6b7280] italic">
+              {block.caption}
+            </figcaption>
+          )}
+        </figure>
+      );
+    }
+
+    if (block.type === 'callout') {
+      const style = calloutStyles[block.variant ?? 'note'];
+      const icon = calloutIcons[block.variant ?? 'note'];
+      return (
+        <div class={`not-prose border-l-4 rounded-r-lg p-4 ${style}`}>
+          <p class="flex gap-2 items-start text-sm leading-relaxed">
+            <span class="shrink-0">{icon}</span>
+            <span>{block.text}</span>
+          </p>
+        </div>
+      );
+    }
+
+    return null;
+  })}
+</div>

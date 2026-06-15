@@ -1,0 +1,255 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Tilaus" description="Täytä tilauslomake.">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 py-12">
+    <h1 class="font-serif text-3xl font-bold text-[#1a3a2a] mb-2">Tilaus</h1>
+
+    <!-- Order summary (populated client-side) -->
+    <div id="order-summary" class="bg-[#f5f0e8] border border-[#e5d9c3] rounded-lg p-4 mb-8 text-sm">
+      <p class="text-[#9ca3af]">Ladataan tilauksen tietoja…</p>
+    </div>
+
+    <!-- Redirect if cart is empty -->
+    <div id="empty-cart-msg" class="hidden text-center py-8">
+      <p class="text-[#6b7280] mb-4">Ostoskorisi on tyhjä.</p>
+      <a href="/myynissa" class="text-[#2d6a4f] hover:underline">← Takaisin tuotteisiin</a>
+    </div>
+
+    <!-- Finland-only notice (shown only when cart has books) -->
+    <div id="finland-notice" class="hidden bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 text-sm text-amber-800">
+      <strong>Huom:</strong> Kirjatilauksia toimitetaan ainoastaan Suomeen.
+      PDF-artikkelit toimitetaan sähköpostitse kaikkialle.
+    </div>
+
+    <!-- Checkout form -->
+    <form id="order-form" class="space-y-5" novalidate>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-[#1a3a2a] mb-1" for="firstName">Etunimi *</label>
+          <input id="firstName" name="firstName" type="text" required autocomplete="given-name"
+            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-[#1a3a2a] mb-1" for="lastName">Sukunimi *</label>
+          <input id="lastName" name="lastName" type="text" required autocomplete="family-name"
+            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-[#1a3a2a] mb-1" for="email">Sähköpostiosoite *</label>
+        <input id="email" name="email" type="email" required autocomplete="email"
+          class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent" />
+      </div>
+
+      <div id="phone-field">
+        <label class="block text-sm font-medium text-[#1a3a2a] mb-1" for="phone">
+          Matkapuhelin *
+          <span class="font-normal text-[#6b7280] text-xs ml-1">(pakollinen postituksessa — muuten +€1,90 lisämaksu)</span>
+        </label>
+        <input id="phone" name="phone" type="tel" required autocomplete="tel"
+          class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent" />
+      </div>
+
+      <div id="shipping-fields">
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-[#1a3a2a] mb-1" for="address">Katuosoite *</label>
+          <input id="address" name="address" type="text" required autocomplete="street-address"
+            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent" />
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-[#1a3a2a] mb-1" for="postalCode">Postinumero *</label>
+            <input id="postalCode" name="postalCode" type="text" required autocomplete="postal-code"
+              class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-[#1a3a2a] mb-1" for="city">Kaupunki *</label>
+            <input id="city" name="city" type="text" required autocomplete="address-level2"
+              class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent" />
+          </div>
+        </div>
+        <input type="hidden" name="country" value="Suomi" />
+      </div>
+
+      <!-- Payment method (books only) -->
+      <div id="payment-method-field">
+        <p class="block text-sm font-medium text-[#1a3a2a] mb-2">Maksu ja postitus *</p>
+        <div class="space-y-2">
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="radio" name="paymentMethod" value="ennakkomaksu" required checked
+              class="mt-0.5 accent-[#2d6a4f]" />
+            <span class="text-sm text-[#4a4a4a]">
+              <strong>Ennakkomaksu</strong> — lähetämme laskun sähköpostiin, lähetys maksun jälkeen
+            </span>
+          </label>
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="radio" name="paymentMethod" value="postiennakko"
+              class="mt-0.5 accent-[#2d6a4f]" />
+            <span class="text-sm text-[#4a4a4a]">
+              <strong>Postiennakko</strong> — maksat postimiehelle toimituksen yhteydessä (+€9,90)
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-[#1a3a2a] mb-1" for="notes">Lisätiedot</label>
+        <textarea id="notes" name="notes" rows="3" placeholder="Esim. useampi kappale tai erityistoiveet"
+          class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent resize-none"></textarea>
+      </div>
+
+      <!-- Terms -->
+      <div class="flex items-start gap-3">
+        <input id="terms" name="terms" type="checkbox" required
+          class="mt-0.5 w-4 h-4 accent-[#2d6a4f] shrink-0" />
+        <label for="terms" class="text-sm text-[#4a4a4a]">
+          Hyväksyn <a href="/toimitusehdot" target="_blank" class="text-[#2d6a4f] hover:underline">toimitusehdot</a> *
+        </label>
+      </div>
+
+      <div id="form-error" class="hidden bg-red-50 border border-red-200 rounded-md p-3 text-sm text-red-700"></div>
+
+      <div class="pt-2 flex flex-wrap gap-3">
+        <a href="/ostoskori" class="px-5 py-2.5 rounded-md border border-gray-300 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors">
+          ← Ostoskori
+        </a>
+        <button id="submit-btn" type="submit"
+          class="flex-1 min-w-[200px] bg-[#1a3a2a] text-white px-6 py-2.5 rounded-md font-bold hover:bg-[#2d6a4f] transition-colors text-sm disabled:opacity-60 disabled:cursor-not-allowed">
+          Lähetä tilaus →
+        </button>
+      </div>
+
+      <p class="text-xs text-[#9ca3af]">
+        Tilauksen lähettämisen jälkeen saat yhteenvedon. Lähetämme teille laskun sähköpostitse.
+        PDF-artikkelit toimitetaan sähköpostitse maksun jälkeen.
+      </p>
+    </form>
+  </div>
+</BaseLayout>
+
+<script>
+  import { getItems, getShipping, getSubtotal, clearCart, getVat } from '../scripts/cart';
+
+  const items = getItems();
+  const summary = document.getElementById('order-summary')!;
+  const form = document.getElementById('order-form') as HTMLFormElement;
+  const emptyMsg = document.getElementById('empty-cart-msg')!;
+  const shippingFields = document.getElementById('shipping-fields')!;
+  const finlandNotice = document.getElementById('finland-notice')!;
+  const paymentMethodField = document.getElementById('payment-method-field')!;
+  const phoneField = document.getElementById('phone-field')!;
+  const hasBooks = items.some(i => i.type === 'book');
+
+  // Redirect if cart empty
+  if (items.length === 0) {
+    emptyMsg.classList.remove('hidden');
+    form.classList.add('hidden');
+    summary.innerHTML = '';
+  } else {
+    const subtotal = getSubtotal(items);
+    const shipping = getShipping(items);
+    const total = subtotal + shipping;
+    const vatAmount = getVat(subtotal);
+    const exVat = subtotal - vatAmount;
+
+    summary.innerHTML = `
+      <h2 class="font-semibold text-[#1a3a2a] mb-2">Tilauksesi</h2>
+      <ul class="space-y-1 mb-3">
+        ${items.map(i => `
+          <li class="flex justify-between">
+            <span>${i.title}${i.quantity > 1 ? ` ×${i.quantity}` : ''}</span>
+            <span class="font-medium">€${i.price * i.quantity}</span>
+          </li>
+        `).join('')}
+      </ul>
+      ${hasBooks && shipping > 0 ? `
+        <div class="flex justify-between text-[#6b7280] border-t border-[#d4b896] pt-2 mb-1">
+          <span>Arvioitu postitus</span><span>€${shipping}</span>
+        </div>
+      ` : ''}
+      <div class="flex justify-between font-bold text-[#1a3a2a] border-t border-[#d4b896] pt-1">
+        <span>Arvioitu yhteensä</span><span>€${total}</span>
+      </div>
+      <div class="mt-2 pt-2 border-t border-[#e5d9c3] text-xs text-[#9ca3af] space-y-0.5">
+        <div class="flex justify-between"><span>Veroton hinta</span><span>€${exVat.toFixed(2)}</span></div>
+        <div class="flex justify-between"><span>ALV 13,5 %</span><span>€${vatAmount.toFixed(2)}</span></div>
+      </div>
+    `;
+
+    if (hasBooks) {
+      finlandNotice.classList.remove('hidden');
+    } else {
+      // Digital only: hide shipping address, payment method, phone
+      shippingFields.querySelectorAll('input').forEach(i => i.removeAttribute('required'));
+      shippingFields.innerHTML = `<p class="text-sm text-[#6b7280] bg-blue-50 border border-blue-100 rounded-md px-4 py-3">
+        Tilaus sisältää vain digitaalisia tuotteita — toimitusosoitetta ei tarvita.
+      </p>`;
+      paymentMethodField.style.display = 'none';
+      paymentMethodField.querySelectorAll('input').forEach(i => i.removeAttribute('required'));
+      phoneField.querySelector('input')?.removeAttribute('required');
+      phoneField.querySelector('label span')?.remove();
+    }
+  }
+
+  // Form submission
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn') as HTMLButtonElement;
+    const errorBox = document.getElementById('form-error')!;
+    errorBox.classList.add('hidden');
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Lähetetään…';
+
+    const fd = new FormData(form);
+    const orderId = 'TA-' + Date.now().toString(36).toUpperCase();
+    const orderedAt = new Date().toISOString();
+
+    const order = {
+      orderId,
+      orderedAt,
+      name: `${fd.get('firstName')} ${fd.get('lastName')}`.trim(),
+      email: fd.get('email') as string,
+      phone: fd.get('phone') as string || '',
+      address: fd.get('address') as string || '',
+      postalCode: fd.get('postalCode') as string || '',
+      city: fd.get('city') as string || '',
+      country: fd.get('country') as string || '',
+      notes: fd.get('notes') as string || '',
+      vatAmount: getVat(getSubtotal()),
+      paymentMethod: fd.get('paymentMethod') as string || 'ennakkomaksu',
+      items: getItems(),
+      subtotal: getSubtotal(),
+      shipping: getShipping(),
+      total: getSubtotal() + getShipping(),
+    };
+
+    try {
+      const res = await fetch('/api/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(order),
+      });
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      // Store for confirmation page
+      sessionStorage.setItem('last_order', JSON.stringify(order));
+      clearCart();
+      window.location.href = '/tilaus-vahvistettu';
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Lähetä tilaus →';
+      errorBox.textContent = 'Tilauksen lähetys epäonnistui. Yritä uudelleen tai ota yhteyttä sähköpostitse: jarle@toisetaijat.fi';
+      errorBox.classList.remove('hidden');
+    }
+  });
+</script>

@@ -1,100 +1,65 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { entryToBook, entryToCollection } from '../data/products';
+import { getEntry, getCollection } from 'astro:content';
+
+const allBookEntries = await getCollection('books');
+const allCollectionEntries = await getCollection('articleCollections');
+
+const books = allBookEntries
+  .filter(e => e.data.productType === 'book')
+  .sort((a, b) => (a.data.sortOrder ?? 99) - (b.data.sortOrder ?? 99))
+  .map(entryToBook);
+
+const ebooks = allBookEntries
+  .filter(e => e.data.productType === 'ebook')
+  .sort((a, b) => (a.data.sortOrder ?? 99) - (b.data.sortOrder ?? 99))
+  .map(entryToBook);
+
+const singleArticles = allBookEntries
+  .filter(e => e.data.productType === 'single-article')
+  .sort((a, b) => (a.data.sortOrder ?? 99) - (b.data.sortOrder ?? 99))
+  .map(entryToBook);
+
+const articleCollections = allCollectionEntries
+  .sort((a, b) => (a.data.sortOrder ?? 99) - (b.data.sortOrder ?? 99))
+  .map(entryToCollection);
+
+const availableBooks = books.filter(b => b.availability !== 'soldout' && b.availability !== 'external');
+const externalBooks = books.filter(b => b.availability === 'external');
+
+const page = await getEntry('pages', 'myynissa');
 ---
 
-<BaseLayout title="Myynissä" description="Tilaa Matti J. Kankaanpään kirjoja ja artikkeleita">
+<BaseLayout title={page.data.title} description={page.data.description}>
   <div class="max-w-4xl mx-auto px-4 sm:px-6 py-12">
 
-    <h1 class="font-serif text-3xl sm:text-4xl font-bold text-[#1a3a2a] mb-2">Myynissä</h1>
+    <h1 class="font-serif text-3xl sm:text-4xl font-bold text-[#1a3a2a] mb-2">{page.data.title}</h1>
     <p class="text-[#6b7280] mb-4 text-lg">Kirjat ja artikkelikokoelmat tilattavissa.</p>
 
     <!-- Shipping notice -->
+    {page.data.deliveryNote && (
     <div class="bg-[#d4a843]/10 border border-[#d4a843]/40 rounded-lg p-4 mb-10 text-sm text-[#6b4f0a]">
-      <strong>Toimitusaikataulu:</strong> Asun ulkomailla, mutta käyn Suomessa säännöllisesti.
-      Seuraava mahdollisuus lähettää tilauksia:
-      <ul class="mt-2 list-disc list-inside space-y-0.5">
-        <li>22–29 huhtikuuta</li>
-        <li>20 toukokuuta – 24 heinäkuuta</li>
-      </ul>
-      <p class="mt-2">Jos jokin kirja kiinnostaa, ota yhteyttä etukäteen.</p>
+      {page.data.deliveryNote}
     </div>
+    )}
 
     <!-- KIRJAT -->
     <section class="mb-14">
       <h2 class="font-serif text-2xl font-bold text-[#1a3a2a] border-b border-gray-200 pb-3 mb-6">Kirjat</h2>
-      <div class="space-y-4">
-
-        <div class="flex gap-4 bg-white border border-gray-200 rounded-lg p-5 shadow-sm items-start">
-          <div class="flex-1">
-            <h3 class="font-serif text-base font-bold text-[#1a3a2a]">Suomalainen ratsuväki Ruotsin ajalla</h3>
-            <p class="text-sm text-[#6b7280] mt-0.5">Porvoo 2016. 790 s. ISBN 978-952-99106-9-4.</p>
-          </div>
-          <div class="shrink-0 text-right">
-            <a href="mailto:jarle@toisetaijat.fi" class="inline-block bg-[#1a3a2a] text-white text-sm px-4 py-2 rounded-md hover:bg-[#2d6a4f] transition-colors">Kysy hintaa</a>
-          </div>
-        </div>
-
-        <div class="flex gap-4 bg-white border border-gray-200 rounded-lg p-5 shadow-sm items-start">
-          <div class="flex-1">
-            <h3 class="font-serif text-base font-bold text-[#1a3a2a]">Suuri Pohjansota, Iso Viha ja suomalaiset</h3>
-            <p class="text-sm text-[#6b7280] mt-0.5">Jyväskylä 2001. 464 s. ISBN 952-91-3934-9.</p>
-          </div>
-          <div class="shrink-0 text-right">
-            <a href="mailto:jarle@toisetaijat.fi" class="inline-block bg-[#1a3a2a] text-white text-sm px-4 py-2 rounded-md hover:bg-[#2d6a4f] transition-colors">Kysy hintaa</a>
-          </div>
-        </div>
-
-        <div class="flex gap-4 bg-white border border-gray-200 rounded-lg p-5 shadow-sm items-start">
-          <div class="flex-1">
-            <h3 class="font-serif text-base font-bold text-[#1a3a2a]">Ruoveden komppanian miehet Suomen sodassa</h3>
-            <p class="text-sm text-[#6b7280] mt-0.5">Jyväskylä 2011. ISBN 978-952-99106-8-7.</p>
-          </div>
-          <div class="shrink-0 text-right">
-            <a href="mailto:jarle@toisetaijat.fi" class="inline-block bg-[#1a3a2a] text-white text-sm px-4 py-2 rounded-md hover:bg-[#2d6a4f] transition-colors">Kysy hintaa</a>
-          </div>
-        </div>
-
-        <div class="flex gap-4 bg-white border border-gray-200 rounded-lg p-5 shadow-sm items-start">
-          <div class="flex-1">
-            <h3 class="font-serif text-base font-bold text-[#1a3a2a]">Suur-Ruoveden vanhimmat rippikirjat</h3>
-            <p class="text-sm text-[#6b7280] mt-0.5">Virrat 1983. 220 s. ISBN 951-99502-5-7.</p>
-          </div>
-          <div class="shrink-0 text-right">
-            <a href="mailto:jarle@toisetaijat.fi" class="inline-block bg-[#1a3a2a] text-white text-sm px-4 py-2 rounded-md hover:bg-[#2d6a4f] transition-colors">Kysy hintaa</a>
-          </div>
-        </div>
-
-        <div class="flex gap-4 bg-white border border-gray-200 rounded-lg p-5 shadow-sm items-start">
-          <div class="flex-1">
-            <h3 class="font-serif text-base font-bold text-[#1a3a2a]">Toiset Aijat II</h3>
-            <p class="text-sm text-[#6b7280] mt-0.5">Turku 1985. ISBN 951-99640-8-8.</p>
-          </div>
-          <div class="shrink-0 text-right">
-            <a href="mailto:jarle@toisetaijat.fi" class="inline-block bg-[#1a3a2a] text-white text-sm px-4 py-2 rounded-md hover:bg-[#2d6a4f] transition-colors">Kysy hintaa</a>
-          </div>
-        </div>
-
-        <div class="flex gap-4 bg-white border border-gray-200 rounded-lg p-5 shadow-sm items-start">
-          <div class="flex-1">
-            <h3 class="font-serif text-base font-bold text-[#1a3a2a]">Karjalainen Karilainen</h3>
-            <p class="text-sm text-[#6b7280] mt-0.5">Jyväskylä 2006. 238 s. ISBN 952-99106-6-5.</p>
-          </div>
-          <div class="shrink-0 text-right">
-            <a href="mailto:jarle@toisetaijat.fi" class="inline-block bg-[#1a3a2a] text-white text-sm px-4 py-2 rounded-md hover:bg-[#2d6a4f] transition-colors">Kysy hintaa</a>
-          </div>
-        </div>
-
-        <div class="flex gap-4 bg-white border border-gray-200 rounded-lg p-5 shadow-sm items-start">
-          <div class="flex-1">
-            <h3 class="font-serif text-base font-bold text-[#1a3a2a]">Ruoveden ja Keuruun käräjäpöytäkirjoista 1722–1746</h3>
-            <p class="text-sm text-[#6b7280] mt-0.5">Jyväskylä 2008. 254 s. ISBN 978-952-99106-7-0.</p>
-          </div>
-          <div class="shrink-0 text-right">
-            <a href="mailto:jarle@toisetaijat.fi" class="inline-block bg-[#1a3a2a] text-white text-sm px-4 py-2 rounded-md hover:bg-[#2d6a4f] transition-colors">Kysy hintaa</a>
-          </div>
-        </div>
-
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {availableBooks.map(book => (
+          <ProductCard product={book} variant="full" />
+        ))}
       </div>
+      {externalBooks.length > 0 && (
+        <div class="mt-6 space-y-2">
+          {externalBooks.map(book => (
+            <ProductCard product={book} variant="compact" />
+          ))}
+        </div>
+      )}
       <p class="text-sm text-[#6b7280] mt-4">
         Muita kirjoja: katso <a href="/kirjat" class="text-[#2d6a4f] hover:underline">julkaisuluettelo</a>. Saatavuus vaihtelee — kysy sähköpostitse.
       </p>
@@ -102,81 +67,73 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <!-- E-KIRJAT -->
     <section class="mb-14">
-      <h2 class="font-serif text-2xl font-bold text-[#1a3a2a] border-b border-gray-200 pb-3 mb-6">E-kirjat Google Play -kaupasta</h2>
-      <ul class="space-y-2 text-sm text-[#4a4a4a]">
-        <li>→ <a href="https://play.google.com/store/books/details/Matti_J_Kankaanp%C3%A4%C3%A4_Karjalan_Ratsurykmentti_Matrikk?id=fx4REAAAQBAJ" class="text-[#2d6a4f] hover:underline" target="_blank" rel="noopener">Karjalan Ratsurykmentti – Matrikkeli 1700–1737</a></li>
-        <li>→ <a href="https://play.google.com/store/books/details?id=H4mvDwAAQBAJ&PAffiliateID=1011l9KyN" class="text-[#2d6a4f] hover:underline" target="_blank" rel="noopener">Ruoveden ja Keuruun käräjäpöytäkirjoista 1683–1711</a></li>
-        <li>→ <a href="https://play.google.com/store/books/details?id=8I6vDwAAQBAJ&PAffiliateID=1011l9KyN" class="text-[#2d6a4f] hover:underline" target="_blank" rel="noopener">Tyrvään vanhimmat rippikirjat 1693–1722</a></li>
-        <li>→ <a href="https://play.google.com/store/books/details?id=QfemDwAAQBAJ&PAffiliateID=1011l9KyN" class="text-[#2d6a4f] hover:underline" target="_blank" rel="noopener">Porin läänin jalkaväkirykmentin pääkatselmusrulla 1728</a></li>
-        <li>→ <a href="https://play.google.com/store/books/details?id=R_RRDwAAQBAJ&PAffiliateID=1011l9KyN" class="text-[#2d6a4f] hover:underline" target="_blank" rel="noopener">Viipurin ja Savonlinnan läänin henkikirja 1701 – Osa I</a></li>
-        <li>→ <a href="https://play.google.com/store/books/details?id=YfRRDwAAQBAJ&PAffiliateID=1011l9KyN" class="text-[#2d6a4f] hover:underline" target="_blank" rel="noopener">Viipurin ja Savonlinnan läänin henkikirja 1701 – Osa II</a></li>
-        <li>→ <a href="https://play.google.com/store/books/details?id=O2nVDwAAQBAJ&PAffiliateID=1011l9KyN" class="text-[#2d6a4f] hover:underline" target="_blank" rel="noopener">Toiset Aijat I</a></li>
-        <li>→ <a href="https://play.google.com/store/books/details?id=Q7zjDwAAQBAJ&PAffiliateID=1011l9KyN" class="text-[#2d6a4f] hover:underline" target="_blank" rel="noopener">Lundin Taistelu 1676 ja suomalainen ratsuväki</a></li>
-      </ul>
+      <h2 class="font-serif text-2xl font-bold text-[#1a3a2a] border-b border-gray-200 pb-3 mb-6">E-kirjat</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {ebooks.map(book => (
+          <ProductCard product={book} variant="full" />
+        ))}
+      </div>
     </section>
 
-    <!-- ARTIKKELIKOKOELMAT -->
+    <!-- ARTIKKELIKOKOELMAT & E-ARTIKKELIT -->
     <section class="mb-12">
-      <h2 class="font-serif text-2xl font-bold text-[#1a3a2a] border-b border-gray-200 pb-3 mb-2">Artikkelikokoelmat</h2>
+      <h2 class="font-serif text-2xl font-bold text-[#1a3a2a] border-b border-gray-200 pb-3 mb-2">E-artikkelit</h2>
       <p class="text-sm text-[#6b7280] mb-6">
-        PDF-artikkeleita katselmusrullatutkimuksista. Toimitetaan sähköpostitse. €4 per artikkeli tai kaikki sarjan artikkelit yhteishintaan.
+        PDF-artikkeleita ja e-artikkeleita. Toimitetaan sähköpostitse tai Google Play -kaupasta. €4 per artikkeli tai kaikki sarjan artikkelit yhteishintaan.
       </p>
+
+      <!-- Yksittäiset artikkelit -->
+      {singleArticles.length > 0 && (
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+          {singleArticles.map(article => (
+            <ProductCard product={article} variant="full" />
+          ))}
+        </div>
+      )}
+
+      <!-- Artikkelikokoelmat -->
       <div class="space-y-6">
-
-        <!-- Uudenmaan Ratsurykmentti -->
-        <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-          <div class="flex items-start justify-between gap-4 mb-3">
-            <h3 class="font-serif text-lg font-bold text-[#1a3a2a]">Uudenmaan Ratsurykmentti 1641–1809</h3>
-            <div class="shrink-0 text-right">
-              <span class="block text-lg font-bold text-[#1a3a2a]">€80</span>
-              <span class="text-xs text-[#6b7280]">kaikki 27 artikkelia</span>
+        {articleCollections.map(col => (
+          <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+            <div class="flex items-start justify-between gap-4 mb-3">
+              <h3 class="font-serif text-lg font-bold text-[#1a3a2a]">{col.title}</h3>
+              <div class="shrink-0 text-right">
+                <span class="block text-lg font-bold text-[#1a3a2a]">€{col.priceAll}</span>
+                <span class="text-xs text-[#6b7280]">kaikki {col.articleCount} artikkelia</span>
+              </div>
             </div>
+            <p class="text-sm text-[#6b7280] mb-4">€{col.pricePerArticle} / yksittäinen artikkeli · PDF sähköpostitse</p>
+            <ul class="grid sm:grid-cols-2 gap-1 text-sm text-[#4a4a4a] mb-4">
+              {col.articles.map(a => (
+                <li class="flex items-center gap-1.5">
+                  <span class="text-[#2d6a4f]">•</span> {a}
+                </li>
+              ))}
+            </ul>
+            <a
+              href={col.orderUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 bg-[#1a3a2a] text-white px-5 py-2.5 rounded-md font-medium hover:bg-[#2d6a4f] transition-colors text-sm"
+            >
+              Tilaa artikkelit →
+            </a>
+            <button
+              class="add-to-cart-btn inline-flex items-center gap-2 border border-[#1a3a2a] text-[#1a3a2a] px-5 py-2.5 rounded-md font-medium hover:bg-[#1a3a2a] hover:text-white transition-colors text-sm"
+              data-id={col.id}
+              data-title={col.title}
+              data-price={col.priceAll}
+              data-shipping="0"
+              data-type="article-collection"
+              data-image=""
+            >
+              <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+              Lisää koriin (€{col.priceAll})
+            </button>
           </div>
-          <p class="text-sm text-[#6b7280] mb-4">€4 / yksittäinen artikkeli · PDF sähköpostitse</p>
-          <ul class="grid sm:grid-cols-2 gap-1 text-sm text-[#4a4a4a] mb-4">
-            {[1641,1642,1643,1647,1649,1654,1655,'1655–1656 luettelovertailu',1659,1698,1700,1706,1712,1720,1728,1729,1743,1762,1767,1779,1787,1789,1790,1795,1800,1806,1809].map(y => (
-              <li class="flex items-center gap-1.5">
-                <span class="text-[#2d6a4f]">•</span> Uudenmaan Ratsurykmentti {y}
-              </li>
-            ))}
-          </ul>
-          <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSdafbB5W_AJYPs7i2woFzE_j-FFdsqrrtSy1w29JlyTknvdJw/viewform"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 bg-[#1a3a2a] text-white px-5 py-2.5 rounded-md font-medium hover:bg-[#2d6a4f] transition-colors text-sm"
-          >
-            Tilaa artikkelit →
-          </a>
-        </div>
-
-        <!-- Viipurin läänintilit -->
-        <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-          <div class="flex items-start justify-between gap-4 mb-3">
-            <h3 class="font-serif text-lg font-bold text-[#1a3a2a]">Viipurin läänintilit 1635–1724</h3>
-            <div class="shrink-0 text-right">
-              <span class="block text-lg font-bold text-[#1a3a2a]">€70</span>
-              <span class="text-xs text-[#6b7280]">kaikki 23 artikkelia</span>
-            </div>
-          </div>
-          <p class="text-sm text-[#6b7280] mb-4">€4 / yksittäinen artikkeli · PDF sähköpostitse</p>
-          <ul class="grid sm:grid-cols-2 gap-1 text-sm text-[#4a4a4a] mb-4">
-            {[1635,1639,'1655–1666',1665,1670,1673,1682,1683,1697,1699,1700,1701,1702,1703,1705,1706,1707,1708,1709,1710,1711,1712,1724].map(y => (
-              <li class="flex items-center gap-1.5">
-                <span class="text-[#2d6a4f]">•</span> Viipurin läänintilit {y}
-              </li>
-            ))}
-          </ul>
-          <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSe9Wy0K3ahk9ws3qrlb3rX5ZZ1UyEhyjF-nex9tFbbXe7KrFQ/viewform"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 bg-[#1a3a2a] text-white px-5 py-2.5 rounded-md font-medium hover:bg-[#2d6a4f] transition-colors text-sm"
-          >
-            Tilaa artikkelit →
-          </a>
-        </div>
-
+        ))}
       </div>
       <p class="text-sm text-[#6b7280] mt-4 italic">
         Artikkeleita ei saa jakaa muille ilman tekijänoikeusomistajan lupaa.
@@ -190,3 +147,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   </div>
 </BaseLayout>
+
+<script>
+  import { addItem } from '../scripts/cart';
+  import type { CartItem } from '../scripts/cart';
+
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as Element).closest('.add-to-cart-btn') as HTMLButtonElement | null;
+    if (!btn) return;
+
+    const item: CartItem = {
+      id: btn.dataset.id!,
+      title: btn.dataset.title!,
+      price: parseFloat(btn.dataset.price!),
+      shippingPrice: parseFloat(btn.dataset.shipping ?? '0'),
+      type: (btn.dataset.type as CartItem['type']) ?? 'article-collection',
+      quantity: 1,
+      image: btn.dataset.image || undefined,
+    };
+
+    addItem(item);
+
+    const original = btn.innerHTML;
+    btn.innerHTML = '<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Lisätty!';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.innerHTML = original;
+      btn.disabled = false;
+    }, 1500);
+  });
+</script>

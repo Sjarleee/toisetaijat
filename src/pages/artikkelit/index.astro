@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { tagToSlug } from '../../utils/tags';
 
 const allArticles = await getCollection('articles', ({ data }) => !data.draft);
 const sorted = allArticles.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
@@ -57,17 +58,20 @@ const tags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
                       />
                     </div>
                   ) : (
-                    <div class="flex-shrink-0 w-20 text-right pt-1">
-                      <span class="text-xs text-[#6b7280]">
+                    <div class="flex-shrink-0 w-16 text-right pt-1 hidden sm:block">
+                      <time class="text-sm font-medium text-[#2d6a4f]" datetime={article.data.pubDate.toISOString()}>
                         {article.data.pubDate.toLocaleDateString('fi-FI', { day: 'numeric', month: 'numeric' })}
-                      </span>
+                      </time>
                     </div>
                   )}
                   <div class="flex-1 min-w-0">
+                    <time class="text-xs text-[#6b7280] sm:hidden block mb-0.5" datetime={article.data.pubDate.toISOString()}>
+                      {article.data.pubDate.toLocaleDateString('fi-FI', { day: 'numeric', month: 'numeric', year: 'numeric' })}
+                    </time>
                     {article.data.heroImage && (
-                      <span class="text-xs text-[#6b7280]">
-                        {article.data.pubDate.toLocaleDateString('fi-FI', { day: 'numeric', month: 'numeric' })}
-                      </span>
+                      <time class="text-xs text-[#6b7280] block mb-0.5" datetime={article.data.pubDate.toISOString()}>
+                        {article.data.pubDate.toLocaleDateString('fi-FI', { day: 'numeric', month: 'numeric', year: 'numeric' })}
+                      </time>
                     )}
                     <h3 class="font-serif text-base font-bold text-[#1a3a2a] group-hover:text-[#2d6a4f] leading-snug">
                       {article.data.title}
@@ -101,7 +105,7 @@ const tags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
           <div class="flex flex-wrap gap-2">
             {tags.map(([tag, count]) => (
               <a
-                href={`/artikkelit/tagi/${encodeURIComponent(tag)}`}
+                href={`/artikkelit/tagi/${tagToSlug(tag)}`}
                 class="inline-flex items-center gap-1 text-sm bg-white border border-gray-200 hover:border-[#2d6a4f] hover:text-[#2d6a4f] text-[#374151] px-3 py-1.5 rounded-full transition-colors"
               >
                 {tag}

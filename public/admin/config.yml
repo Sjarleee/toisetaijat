@@ -1,12 +1,11 @@
 backend:
   name: github
-  repo: YOUR_GITHUB_USERNAME/toisetaijat
+  repo: Sjarleee/toisetaijat
   branch: main
-  base_url: https://sveltia-cms-auth.YOUR_WORKER.workers.dev  # tai bruk Cloudflare Access
+  base_url: https://www.toisetaijat.fi
+  auth_endpoint: api/auth
 
-# Bruk Cloudflare Pages' innebygde Identity (eller Netlify Identity proxy)
-# For enklest oppsett: bruk sveltia-cms-auth på Cloudflare Workers
-# Se: https://github.com/sveltia/sveltia-cms-auth
+local_backend: true
 
 media_folder: public/images/uploads
 public_folder: /images/uploads
@@ -14,15 +13,79 @@ public_folder: /images/uploads
 locale: fi
 
 collections:
+  - name: pages
+    label: Sivut
+    label_singular: Sivu
+    files:
+      - name: etusivu
+        label: Etusivu
+        file: src/content/pages/etusivu.md
+        fields:
+          - { label: Otsikko, name: title, widget: string }
+          - { label: Kuvaus (hakukoneet), name: description, widget: text, required: false }
+          - { label: Hero-teksti, name: heroSubtitle, widget: text, required: false, hint: Lyhyt esittelyteksti etusivulla }
+          - { label: Ilmoitus näkyy, name: announcementVisible, widget: boolean, default: true, required: false }
+          - { label: Ilmoitusteksti, name: announcementText, widget: text, required: false, hint: 'Keltainen banneri etusivulla. Esim: Kirjojen postitus seuraavan kerran...' }
+      - name: myynissa
+        label: Myynissä
+        file: src/content/pages/myynissa.md
+        fields:
+          - { label: Otsikko, name: title, widget: string }
+          - { label: Kuvaus (hakukoneet), name: description, widget: text, required: false }
+          - { label: Toimitushuomio, name: deliveryNote, widget: text, required: false, hint: Näkyy tilauslomakkeen alla }
+      - name: kirjat
+        label: Kirjat
+        file: src/content/pages/kirjat.md
+        fields:
+          - { label: Otsikko, name: title, widget: string }
+          - { label: Kuvaus (hakukoneet), name: description, widget: text, required: false }
+          - { label: Esittelyteksti, name: introText, widget: text, required: false }
+          - { label: Yhteystietohuomio, name: contactNote, widget: text, required: false, hint: Näkyy sivun alaosassa }
+      - name: matti-j-kankaanpaa
+        label: Matti J. Kankaanpää
+        file: src/content/pages/matti-j-kankaanpaa.md
+        fields:
+          - { label: Otsikko, name: title, widget: string }
+          - { label: Kuvaus (hakukoneet), name: description, widget: text, required: false }
+          - label: Kuva
+            name: photo
+            widget: image
+            required: false
+          - { label: Kuvan alt-teksti, name: photoAlt, widget: string, required: false }
+          - { label: Kuvateksti, name: photoCaption, widget: string, required: false }
+          - label: Kuvan sijoittelu
+            name: photoPlacement
+            widget: select
+            required: false
+            default: right
+            options:
+              - { label: 'Oikealla (teksti vasemmalla)', value: right }
+              - { label: 'Vasemmalla (teksti oikealla)', value: left }
+              - { label: 'Ylhäällä (koko leveys)', value: top }
+              - { label: 'Koko leveys', value: full }
+          - { label: Sisältö, name: body, widget: markdown }
+      - name: ota-yhteytta
+        label: Ota yhteyttä
+        file: src/content/pages/ota-yhteytta.md
+        fields:
+          - { label: Otsikko, name: title, widget: string }
+          - { label: Kuvaus (hakukoneet), name: description, widget: text, required: false }
+          - { label: Johdantoteksti, name: body, widget: markdown }
+          - { label: Nimi, name: name, widget: string, required: false }
+          - { label: Osoite, name: address, widget: string, required: false }
+          - { label: Sähköposti, name: email, widget: string, required: false }
+          - { label: Toimitusaikataulu, name: deliveryInfo, widget: text, required: false }
+
   - name: articles
     label: Artikkelit
     label_singular: Artikkeli
     folder: src/content/articles
     create: true
     slug: '{{slug}}'
-    extension: md
+    extension: mdx
     format: frontmatter
     sortable_fields: ['pubDate', 'title']
+    summary: '{{pubDate}} – {{title}}'
     view_filters:
       - label: Luonnokset
         field: draft
@@ -66,3 +129,138 @@ collections:
         name: body
         widget: markdown
         modes: ['rich_text', 'raw']
+        hint: 'Lisää kuvia Kuva-painikkeella työkaluriviltä (Lisää komponentti → Kuva). Blokkikuvat lisätään Lisämodulit-osion kautta.'
+      - label: Lisämodulit
+        name: blocks
+        widget: list
+        required: false
+        hint: Lisää tuotekortteja, kuvia tai lainauksia artikkelin loppuun
+        types:
+          - label: Tuotekortti
+            name: product
+            widget: object
+            fields:
+              - label: Kirja-ID
+                name: bookId
+                widget: select
+                hint: Valitse kirja tuotetietokannasta
+                options:
+                  - {label: 'Suomalainen ratsuväki Ruotsin ajalla', value: suomalainen-ratsuvaki}
+                  - {label: 'Suuri Pohjansota, iso viha ja suomalaiset', value: suuri-pohjansota}
+                  - {label: 'Ruoveden komppanian miehet Suomen sodassa', value: ruoveden-komppania}
+                  - {label: 'Karjalainen Karilainen', value: karjalainen-karilainen}
+                  - {label: 'Ruoveden ja Keuruun käräjäpöytäkirjoista 1722–1746', value: ruoveden-karajat-1722}
+                  - {label: 'Suur-Ruoveden vanhimmat rippikirjat', value: suur-ruoveden-rippikirjat}
+                  - {label: 'Toiset Aijat II', value: toiset-aijat-ii}
+                  - {label: 'Kimaltelevilta vesiltä', value: kimaltelevilta-vesilta}
+          - label: Kuva ja kuvateksti
+            name: figure
+            widget: object
+            fields:
+              - label: Kuva
+                name: image
+                widget: image
+              - label: Kuvateksti
+                name: caption
+                widget: string
+                required: false
+              - label: Koko
+                name: size
+                widget: select
+                default: full
+                options:
+                  - {label: 'Koko leveys', value: full}
+                  - {label: 'Keskikokoinen (keskitetty)', value: medium}
+                  - {label: 'Pieni', value: small}
+              - label: Sijoittelu
+                name: placement
+                widget: select
+                default: center
+                options:
+                  - {label: 'Keskitetty', value: center}
+                  - {label: 'Vasemmalle (teksti oikealla)', value: left}
+                  - {label: 'Oikealle (teksti vasemmalla)', value: right}
+          - label: Huomio / Lainaus
+            name: callout
+            widget: object
+            fields:
+              - label: Teksti
+                name: text
+                widget: text
+              - label: Tyyppi
+                name: variant
+                widget: select
+                default: note
+                options:
+                  - {label: 'Huomio (sininen)', value: note}
+                  - {label: 'Vinkki (vihreä)', value: tip}
+                  - {label: 'Varoitus (keltainen)', value: warning}
+
+  - name: books
+    label: Kirjat ja e-kirjat
+    label_singular: Kirja
+    folder: src/content/books
+    create: true
+    slug: '{{slug}}'
+    extension: yaml
+    format: yaml
+    sortable_fields: ['title', 'year', 'sortOrder']
+    summary: '{{title}} ({{year}})'
+    fields:
+      - { label: Otsikko, name: title, widget: string }
+      - { label: Kuvaus, name: description, widget: text, required: false }
+      - label: Tyyppi
+        name: productType
+        widget: select
+        options:
+          - { label: 'Fyysinen kirja', value: book }
+          - { label: 'E-kirja', value: ebook }
+          - { label: 'Yksittäinen artikkeli', value: single-article }
+      - { label: Vuosi, name: year, widget: number }
+      - { label: ISBN, name: isbn, widget: string, required: false }
+      - { label: Sivumäärä, name: pages, widget: string, required: false, hint: 'esim. 790' }
+      - { label: Kustantaja, name: publisher, widget: string, required: false }
+      - { label: Kuva, name: image, widget: image, required: false }
+      - { label: Hinta (€), name: price, widget: number, required: false, value_type: float }
+      - { label: Postituskulut (€), name: shippingPrice, widget: number, required: false, value_type: float }
+      - label: Saatavuus
+        name: availability
+        widget: select
+        options:
+          - { label: 'Saatavilla', value: available }
+          - { label: 'Kysy saatavuutta', value: ask }
+          - { label: 'Loppuunmyyty', value: soldout }
+          - { label: 'Myydään muualla', value: external }
+          - { label: 'Vain e-kirja', value: ebook-only }
+      - { label: Tilauslinkki, name: orderUrl, widget: string, required: false }
+      - { label: Artikkelilinkki (sivustolla), name: articleUrl, widget: string, required: false }
+      - { label: E-kirjan URL, name: ebookUrl, widget: string, required: false }
+      - { label: E-kirjan painike-teksti, name: ebookLabel, widget: string, required: false, hint: 'esim. Google Play' }
+      - { label: E-kirjan hinta (€), name: ebookPrice, widget: number, required: false, value_type: float }
+      - { label: Ulkoinen URL, name: externalUrl, widget: string, required: false }
+      - { label: Huomio, name: note, widget: string, required: false, hint: 'esim. Myynnissä Virtain kirjakaupassa' }
+      - { label: Järjestysnumero, name: sortOrder, widget: number, required: false }
+
+  - name: articleCollections
+    label: Artikkelikokoelmat
+    label_singular: Artikkelikokoelma
+    folder: src/content/article-collections
+    create: true
+    slug: '{{slug}}'
+    extension: yaml
+    format: yaml
+    sortable_fields: ['title', 'sortOrder']
+    summary: '{{title}}'
+    fields:
+      - { label: Otsikko, name: title, widget: string }
+      - { label: Kuvaus, name: description, widget: text, required: false }
+      - { label: Hinta / artikkeli (€), name: pricePerArticle, widget: number, value_type: float }
+      - { label: Kokonaishinta (€), name: priceAll, widget: number, value_type: float }
+      - { label: Artikkelien määrä, name: articleCount, widget: number }
+      - { label: Tilauslinkki, name: orderUrl, widget: string }
+      - { label: Artikkelilinkki (sivustolla), name: articleUrl, widget: string, required: false }
+      - { label: Järjestysnumero, name: sortOrder, widget: number, required: false }
+      - label: Artikkelit
+        name: articles
+        widget: list
+        hint: 'Luettelo artikkeleista (esim. vuosiluvut)'

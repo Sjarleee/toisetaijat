@@ -1,37 +1,66 @@
 ---
-const navLinks = [
+import CartIcon from './CartIcon.astro';
+type NavItem = { href: string; label: string };
+
+const navItems: NavItem[] = [
   { href: '/', label: 'Etusivu' },
   { href: '/artikkelit', label: 'Artikkelit' },
-  { href: '/myynissa', label: 'Myynissä' },
   { href: '/kirjat', label: 'Kirjat' },
   { href: '/matti-j-kankaanpaa', label: 'Matti J. Kankaanpää' },
   { href: '/ota-yhteytta', label: 'Ota yhteyttä' },
 ];
 
 const currentPath = Astro.url.pathname;
+
+function isActive(href: string) {
+  if (href === '/') return currentPath === '/';
+  return currentPath.startsWith(href);
+}
 ---
 
-<header class="bg-[#1a3a2a] text-white shadow-lg sticky top-0 z-50">
+<header class="bg-[#1a3a2a] text-white shadow-lg sticky top-0 z-50" style="border-bottom: 3px solid #8b6914; box-shadow: 0 2px 12px rgba(0,0,0,0.35);">
   <div class="max-w-5xl mx-auto px-4 sm:px-6">
     <div class="flex items-center justify-between h-16">
-      <a href="/" class="font-serif text-xl font-bold tracking-wide hover:text-[#d4a843] transition-colors">
+      <a href="/" class="font-serif text-xl font-bold tracking-wide hover:text-[#d4a843] transition-colors flex items-center gap-2">
+        <span class="text-[#d4a843] opacity-60 text-lg select-none">✦</span>
         Toiset Aijat
+        <span class="text-[#d4a843] opacity-60 text-lg select-none">✦</span>
       </a>
 
       <!-- Desktop nav -->
       <nav class="hidden md:flex items-center gap-1">
-        {navLinks.map(link => (
+        {navItems.map(item => (
           <a
-            href={link.href}
+            href={item.href}
             class={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
-              currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href))
+              isActive(item.href)
                 ? 'bg-white/20 text-white'
                 : 'text-white/80 hover:text-white hover:bg-white/10'
             }`}
           >
-            {link.label}
+            {item.label}
           </a>
         ))}
+        <a
+          href="/myynissa"
+          class={`ml-2 px-4 py-1.5 rounded text-sm font-semibold transition-colors ${
+            isActive('/myynissa')
+              ? 'bg-[#b8922e] text-white'
+              : 'bg-[#d4a843] text-[#1a3a2a] hover:bg-[#c9a040]'
+          }`}
+        >
+          Myynissä
+        </a>
+        <a
+          href="/haku"
+          class={`ml-1 p-1.5 rounded transition-colors ${isActive('/haku') ? 'bg-white/20 text-white' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
+          aria-label="Haku"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+          </svg>
+        </a>
+        <CartIcon />
       </nav>
 
       <!-- Mobile hamburger -->
@@ -48,14 +77,35 @@ const currentPath = Astro.url.pathname;
 
     <!-- Mobile nav -->
     <nav id="mobile-menu" class="hidden md:hidden pb-4">
-      {navLinks.map(link => (
+      {navItems.map(item => (
         <a
-          href={link.href}
+          href={item.href}
           class="block px-3 py-2 rounded text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-colors"
         >
-          {link.label}
+          {item.label}
         </a>
       ))}
+      <a
+        href="/myynissa"
+        class="block mx-3 mt-2 px-4 py-2 rounded text-sm font-semibold text-center bg-[#d4a843] text-[#1a3a2a] hover:bg-[#c9a040] transition-colors"
+      >
+        Myynissä
+      </a>
+      <a
+        href="/haku"
+        class="flex items-center gap-2 px-3 py-2 rounded text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-colors mt-1"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+        </svg>
+        Haku
+      </a>
+      <a href="/ostoskori" class="flex items-center gap-2 px-3 py-2 rounded text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
+        Ostoskori
+      </a>
     </nav>
   </div>
 </header>

@@ -1,40 +1,51 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry, render } from 'astro:content';
+
+const page = await getEntry('pages', 'ota-yhteytta');
+const { Content } = await render(page);
+const { name, address, email, deliveryInfo } = page.data;
 ---
 
-<BaseLayout title="Ota yhteyttä" description="Ota yhteyttä Toiset Aijat -sivustoon">
+<BaseLayout title={page.data.title} description={page.data.description}>
   <div class="max-w-2xl mx-auto px-4 sm:px-6 py-12">
-    <h1 class="font-serif text-3xl sm:text-4xl font-bold text-[#1a3a2a] mb-4">Ota yhteyttä</h1>
-    <p class="text-[#6b7280] text-lg mb-10">
-      Kirjojen tilauksista, artikkeleista tai muista kysymyksistä.
-    </p>
+    <h1 class="font-serif text-3xl sm:text-4xl font-bold text-[#1a3a2a] mb-4">{page.data.title}</h1>
+    <div class="text-[#6b7280] text-lg mb-10 prose">
+      <Content />
+    </div>
 
     <div class="bg-white border border-gray-200 rounded-lg p-6 sm:p-8 shadow-sm mb-8">
       <h2 class="font-serif text-xl font-bold text-[#1a3a2a] mb-4">Yhteystiedot</h2>
       <dl class="space-y-3 text-sm">
-        <div class="flex gap-3">
-          <dt class="text-[#6b7280] w-24 flex-shrink-0">Nimi</dt>
-          <dd class="text-[#1c1c1c]">Jarle M. Alvheim</dd>
-        </div>
-        <div class="flex gap-3">
-          <dt class="text-[#6b7280] w-24 flex-shrink-0">Osoite</dt>
-          <dd class="text-[#1c1c1c]">Skullerudstubben 24, 1188 Oslo, Norway</dd>
-        </div>
-        <div class="flex gap-3">
-          <dt class="text-[#6b7280] w-24 flex-shrink-0">Sähköposti</dt>
-          <dd>
-            <a href="mailto:jarle@toisetaijat.fi" class="text-[#2d6a4f] hover:underline font-medium">
-              jarle@toisetaijat.fi
-            </a>
-          </dd>
-        </div>
+        {name && (
+          <div class="flex gap-3">
+            <dt class="text-[#6b7280] w-24 flex-shrink-0">Nimi</dt>
+            <dd class="text-[#1c1c1c]">{name}</dd>
+          </div>
+        )}
+        {address && (
+          <div class="flex gap-3">
+            <dt class="text-[#6b7280] w-24 flex-shrink-0">Osoite</dt>
+            <dd class="text-[#1c1c1c]">{address}</dd>
+          </div>
+        )}
+        {email && (
+          <div class="flex gap-3">
+            <dt class="text-[#6b7280] w-24 flex-shrink-0">Sähköposti</dt>
+            <dd>
+              <a href={`mailto:${email}`} class="text-[#2d6a4f] hover:underline font-medium">
+                {email}
+              </a>
+            </dd>
+          </div>
+        )}
       </dl>
     </div>
 
-    <div class="bg-[#f5f0e8] border border-[#e5d9c3] rounded-lg p-5 text-sm text-[#4a4a4a]">
-      <strong>Kirjojen toimitusaikataulu:</strong> Postitan tilaukset Suomen-käyntieni yhteydessä.
-      Seuraavat ajankohdat: 22–29 huhtikuuta ja 20 toukokuuta – 24 heinäkuuta.
-      Ota yhteyttä etukäteen, niin voidaan sopia toimituksesta.
-    </div>
+    {deliveryInfo && (
+      <div class="bg-[#f5f0e8] border border-[#e5d9c3] rounded-lg p-5 text-sm text-[#4a4a4a]">
+        <strong>Kirjojen toimitusaikataulu:</strong> {deliveryInfo}
+      </div>
+    )}
   </div>
 </BaseLayout>

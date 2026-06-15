@@ -75,7 +75,7 @@ interface Env {
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   // CORS headers for same-origin only
   const origin = request.headers.get('Origin') || '';
-  const allowedOrigins = ['https://www.toisetaijat.fi', 'https://toisetaijat.fi', 'http://localhost:4323'];
+  const allowedOrigins = ['https://www.toisetaijat.fi', 'https://toisetaijat.fi', 'https://toisetaijat.pages.dev', 'http://localhost:4323'];
   const corsOrigin = allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
 
   const corsHeaders = {

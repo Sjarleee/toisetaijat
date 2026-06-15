@@ -54,27 +54,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     const hasCollections = order.items.some(i => i.type === 'article-collection');
     const date = new Date(order.orderedAt).toLocaleString('fi-FI');
 
-    // Build email copy body
-    const emailBody = [
-      `Tilausvahvistus – Toiset Aijat`,
-      `Tilausnumero: ${order.orderId}`,
-      `Päivämäärä: ${date}`,
-      ``,
-      `Tilaaja:`,
-      order.name,
-      order.email,
-      order.phone || '',
-      order.address ? `${order.address}, ${order.postalCode} ${order.city}, ${order.country}` : '',
-      ``,
-      `Tilaus:`,
-      ...order.items.map(i => `  ${i.title} ×${i.quantity} — €${i.price * i.quantity}`),
-      ``,
-      `Yhteensä: €${order.total}`,
-      hasBooks ? `(Postitus €${order.shipping} sisältyy summaan)` : '',
-      order.notes ? `\nLisätiedot: ${order.notes}` : '',
-    ].filter(Boolean).join('\n');
-
-    const mailtoHref = `mailto:${order.email}?subject=Tilausvahvistus ${order.orderId} – Toiset Aijat&body=${encodeURIComponent(emailBody)}`;
 
     root.innerHTML = `
       <div class="text-center mb-10">
@@ -147,15 +126,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <p class="text-[#6b7280]">Kysymyksiä? <a href="mailto:jarle@toisetaijat.fi" class="text-[#2d6a4f] hover:underline">jarle@toisetaijat.fi</a></p>
       </div>
 
-      <!-- Email copy -->
       <div class="flex flex-wrap gap-3">
-        <a href="${mailtoHref}"
-          class="inline-flex items-center gap-2 bg-[#1a3a2a] text-white px-5 py-2.5 rounded-md font-medium hover:bg-[#2d6a4f] transition-colors text-sm">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-          </svg>
-          Lähetä kopio itsellesi
-        </a>
         <a href="/" class="px-5 py-2.5 rounded-md border border-gray-300 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors">
           Etusivulle
         </a>

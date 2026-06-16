@@ -99,7 +99,7 @@ const articleCollections = defineCollection({
     pricePerArticle: z.number(),
     priceAll: z.number(),
     articleCount: z.number(),
-    orderUrl: z.string(),
+    orderUrl: z.string().optional(),
     articleUrl: z.string().optional(),
     sortOrder: z.number().optional(),
     articles: z.array(z.string()),

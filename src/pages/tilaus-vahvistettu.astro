@@ -35,21 +35,120 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   const root = document.getElementById('confirm-root')!;
+  const ref = new URLSearchParams(window.location.search).get('ref');
 
-  let order: Order | null = null;
-  try {
-    const raw = sessionStorage.getItem('last_order');
-    if (raw) order = JSON.parse(raw);
-  } catch {}
-
-  if (!order) {
+  function showAborted() {
     root.innerHTML = `
       <div class="text-center py-12">
-        <p class="text-[#44403c] mb-4">Tilausvahvistusta ei löydy.</p>
-        <a href="/" class="text-[#2d6a4f] hover:underline">← Etusivu</a>
+        <div class="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
+          <svg class="w-9 h-9 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </div>
+        <h1 class="font-serif text-2xl font-bold text-[#1a3a2a] mb-2">Maksu peruutettiin</h1>
+        <p class="text-[#44403c] mb-6">Et suorittanut maksua. Tilauksesi ei ole vahvistettu.</p>
+        <div class="flex flex-wrap gap-3 justify-center">
+          <a href="/tilaus" class="px-5 py-2.5 rounded-md bg-[#1a3a2a] text-white text-sm font-medium hover:bg-[#2d6a4f] transition-colors">
+            ← Yritä uudelleen
+          </a>
+          <a href="/myynissa" class="px-5 py-2.5 rounded-md border border-gray-400 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors">
+            Takaisin tuotteisiin
+          </a>
+        </div>
       </div>
     `;
+  }
+
+  function showExpired() {
+    root.innerHTML = `
+      <div class="text-center py-12">
+        <div class="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
+          <svg class="w-9 h-9 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h1 class="font-serif text-2xl font-bold text-[#1a3a2a] mb-2">Maksu vanheni</h1>
+        <p class="text-[#44403c] mb-6">Maksuistunto vanheni ennen vahvistusta. Tuotteet ovat edelleen ostoskorissasi.</p>
+        <div class="flex flex-wrap gap-3 justify-center">
+          <a href="/tilaus" class="px-5 py-2.5 rounded-md bg-[#1a3a2a] text-white text-sm font-medium hover:bg-[#2d6a4f] transition-colors">
+            ← Yritä uudelleen
+          </a>
+          <a href="/" class="px-5 py-2.5 rounded-md border border-gray-400 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors">
+            Etusivulle
+          </a>
+        </div>
+      </div>
+    `;
+  }
+
+  function showPaymentError(msg?: string) {
+    root.innerHTML = `
+      <div class="text-center py-12">
+        <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+          <svg class="w-9 h-9 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+          </svg>
+        </div>
+        <h1 class="font-serif text-2xl font-bold text-[#1a3a2a] mb-2">Jokin meni pieleen</h1>
+        <p class="text-[#44403c] mb-2">Maksun tarkistus epäonnistui${msg ? ': ' + msg : ''}.</p>
+        <p class="text-[#44403c] mb-6">Ota yhteyttä: <a href="mailto:jarle@toisetaijat.fi" class="text-[#2d6a4f] hover:underline">jarle@toisetaijat.fi</a></p>
+        <a href="/tilaus" class="px-5 py-2.5 rounded-md border border-gray-400 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors">
+          ← Takaisin tilaukseen
+        </a>
+      </div>
+    `;
+  }
+
+  // MobilePay flow: ?ref= present in URL
+  if (ref) {
+    root.innerHTML = `<div class="text-center py-12"><p class="text-[#78716c]">Tarkistetaan maksun tilaa…</p></div>`;
+
+    // Pass order data to status endpoint so it can be saved to Sheet after capture
+    let orderParam = '';
+    try {
+      const raw = sessionStorage.getItem('last_order');
+      if (raw) orderParam = '&order=' + encodeURIComponent(raw);
+    } catch {}
+
+    fetch(`/api/payment/status?ref=${encodeURIComponent(ref)}${orderParam}`)
+      .then(r => r.json())
+      .then((data: { ok: boolean; state?: string; error?: string }) => {
+        if (data.state === 'CAPTURED') {
+          // Fall through to show order details from sessionStorage below
+          renderSuccess();
+        } else if (data.state === 'ABORTED' || data.state === 'TERMINATED') {
+          showAborted();
+        } else if (data.state === 'EXPIRED') {
+          showExpired();
+        } else {
+          showPaymentError(data.error);
+        }
+      })
+      .catch(() => showPaymentError('Yhteysvirhe'));
   } else {
+    renderSuccess();
+  }
+
+  function renderSuccess() {
+    let order: Order | null = null;
+    try {
+      const raw = sessionStorage.getItem('last_order');
+      if (raw) order = JSON.parse(raw);
+    } catch {}
+
+    if (!order) {
+      root.innerHTML = `
+        <div class="text-center py-12">
+          <p class="text-[#44403c] mb-4">Tilausvahvistusta ei löydy.</p>
+          <a href="/" class="text-[#2d6a4f] hover:underline">← Etusivu</a>
+        </div>
+      `;
+      return;
+    }
+
+    // Clear sessionStorage so refresh doesn't re-show
+    try { sessionStorage.removeItem('last_order'); } catch {}
+
     const hasBooks = order.items.some(i => i.type === 'book');
     const hasCollections = order.items.some(i => i.type === 'article-collection');
     const date = new Date(order.orderedAt).toLocaleString('fi-FI');
@@ -62,8 +161,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
           </svg>
         </div>
-        <h1 class="font-serif text-3xl font-bold text-[#1a3a2a] mb-2">Tilaus vastaanotettu!</h1>
+        <h1 class="font-serif text-3xl font-bold text-[#1a3a2a] mb-2">Maksu onnistui!</h1>
         <p class="text-[#44403c]">Tilausnumero: <strong class="text-[#1a3a2a]">${order.orderId}</strong></p>
+        <p class="text-sm text-green-700 mt-1">Maksu veloitettu MobilePay:n kautta</p>
       </div>
 
       <!-- Order details -->
@@ -118,10 +218,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="bg-[#f5f0e8] border border-[#e5d9c3] rounded-lg p-5 mb-6 text-sm space-y-2">
         <p class="font-semibold text-[#1a3a2a]">Mitä tapahtuu seuraavaksi?</p>
         <ul class="text-[#4a4a4a] space-y-1.5 list-disc list-inside">
-          <li>Käsittelemme tilauksesi 1–2 arkipäivän kuluessa.</li>
-          <li>Lähetämme teille laskun sähköpostitse.</li>
-          ${hasBooks ? '<li>Kirjat postitetaan laskun maksamisen jälkeen.</li>' : ''}
-          ${hasCollections ? '<li>PDF-artikkelit toimitetaan sähköpostitse maksun jälkeen.</li>' : ''}
+          <li>Maksu on vastaanotettu — tilaus on vahvistettu.</li>
+          ${hasBooks ? '<li>Kirjat postitetaan mahdollisimman pian.</li>' : ''}
+          ${hasCollections ? '<li>PDF-artikkelit toimitetaan sähköpostitse.</li>' : ''}
         </ul>
         <p class="text-[#44403c]">Kysymyksiä? <a href="mailto:jarle@toisetaijat.fi" class="text-[#2d6a4f] hover:underline">jarle@toisetaijat.fi</a></p>
       </div>
@@ -132,5 +231,5 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </a>
       </div>
     `;
-  }
+  } // end renderSuccess
 </script>

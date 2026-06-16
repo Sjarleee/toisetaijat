@@ -127,12 +127,17 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
         {articleCollections.map(col => (
           <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
             <div class="flex items-start justify-between gap-4 mb-3">
-              <h3 class="font-serif text-lg font-bold text-[#1a3a2a]">{col.title}</h3>
+              <h3 class="font-serif text-lg font-bold text-[#1a3a2a]">
+                {col.articleUrl
+                  ? <a href={col.articleUrl} class="hover:underline hover:text-[#2d6a4f] transition-colors">{col.title}</a>
+                  : col.title}
+              </h3>
               <div class="shrink-0 text-right">
                 <span class="block text-lg font-bold text-[#1a3a2a]">€{col.priceAll}</span>
                 <span class="text-xs text-[#44403c]">kaikki {col.articleCount} artikkelia</span>
               </div>
             </div>
+            {col.description && <p class="text-sm text-[#44403c] mb-3 leading-relaxed">{col.description}</p>}
             <p class="text-sm text-[#44403c] mb-4">€{col.pricePerArticle} / yksittäinen artikkeli · PDF sähköpostitse</p>
             <ul class="grid sm:grid-cols-2 gap-1 text-sm text-[#4a4a4a] mb-4">
               {col.articles.map(a => (

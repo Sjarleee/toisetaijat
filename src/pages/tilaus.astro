@@ -70,9 +70,12 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
       <div id="phone-field">
         <label class="block text-sm font-medium text-[#1a3a2a] mb-1" for="phone">
           Matkapuhelin *
-          <span class="font-normal text-[#44403c] text-xs ml-1">(pakollinen postituksessa — muuten +€1,90 lisämaksu)</span>
+          <span class="font-normal text-[#44403c] text-xs ml-1">(suomalainen numero, esim. +358401234567)</span>
         </label>
         <input id="phone" name="phone" type="tel" required autocomplete="tel"
+          pattern="\+358[0-9]{6,12}"
+          placeholder="+358..."
+          title="Syötä suomalainen puhelinnumero muodossa +358..."
           class="w-full border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent" />
       </div>
 
@@ -86,6 +89,10 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
           <div>
             <label class="block text-sm font-medium text-[#1a3a2a] mb-1" for="postalCode">Postinumero *</label>
             <input id="postalCode" name="postalCode" type="text" required autocomplete="postal-code"
+              pattern="[0-9]{5}"
+              maxlength="5"
+              placeholder="00100"
+              title="Syötä viisinumeroinen suomalainen postinumero"
               class="w-full border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent" />
           </div>
           <div>
@@ -94,27 +101,11 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
               class="w-full border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent" />
           </div>
         </div>
-        <input type="hidden" name="country" value="Suomi" />
-      </div>
-
-      <!-- Payment method (books only) -->
-      <div id="payment-method-field">
-        <p class="block text-sm font-medium text-[#1a3a2a] mb-2">Maksu ja postitus *</p>
-        <div class="space-y-2">
-          <label class="flex items-start gap-3 cursor-pointer">
-            <input type="radio" name="paymentMethod" value="ennakkomaksu" required checked
-              class="mt-0.5 accent-[#2d6a4f]" />
-            <span class="text-sm text-[#4a4a4a]">
-              <strong>Ennakkomaksu</strong> — lähetämme laskun sähköpostiin, lähetys maksun jälkeen
-            </span>
-          </label>
-          <label class="flex items-start gap-3 cursor-pointer">
-            <input type="radio" name="paymentMethod" value="postiennakko"
-              class="mt-0.5 accent-[#2d6a4f]" />
-            <span class="text-sm text-[#4a4a4a]">
-              <strong>Postiennakko</strong> — maksat postimiehelle toimituksen yhteydessä (+€9,90)
-            </span>
-          </label>
+        <div class="mt-4">
+          <label class="block text-sm font-medium text-[#1a3a2a] mb-1">Maa</label>
+          <input type="text" value="Suomi" readonly
+            class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm bg-gray-50 text-[#78716c] cursor-default" />
+          <input type="hidden" name="country" value="Suomi" />
         </div>
       </div>
 
@@ -141,12 +132,12 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
         </a>
         <button id="submit-btn" type="submit"
           class="flex-1 min-w-[200px] bg-[#1a3a2a] text-white px-6 py-2.5 rounded-md font-bold hover:bg-[#2d6a4f] transition-colors text-sm disabled:opacity-60 disabled:cursor-not-allowed">
-          Lähetä tilaus →
+          Maksa MobilePay:llä →
         </button>
       </div>
 
       <p class="text-xs text-[#78716c]">
-        Tilauksen lähettämisen jälkeen saat yhteenvedon. Lähetämme teille laskun sähköpostitse.
+        Sinut ohjataan MobilePay-sovellukseen maksua varten. Maksu veloitetaan heti vahvistuksen jälkeen.
         PDF-artikkelit toimitetaan sähköpostitse maksun jälkeen.
       </p>
     </form>
@@ -162,7 +153,6 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
   const emptyMsg = document.getElementById('empty-cart-msg')!;
   const shippingFields = document.getElementById('shipping-fields')!;
   const finlandNotice = document.getElementById('finland-notice')!;
-  const paymentMethodField = document.getElementById('payment-method-field')!;
   const phoneField = document.getElementById('phone-field')!;
   const hasBooks = items.some(i => i.type === 'book');
 
@@ -210,8 +200,6 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
       shippingFields.innerHTML = `<p class="text-sm text-[#44403c] bg-blue-50 border border-blue-100 rounded-md px-4 py-3">
         Tilaus sisältää vain digitaalisia tuotteita — toimitusosoitetta ei tarvita.
       </p>`;
-      paymentMethodField.style.display = 'none';
-      paymentMethodField.querySelectorAll('input').forEach(i => i.removeAttribute('required'));
       phoneField.querySelector('input')?.removeAttribute('required');
       phoneField.querySelector('label span')?.remove();
     }
@@ -248,7 +236,7 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
       country: fd.get('country') as string || '',
       notes: fd.get('notes') as string || '',
       vatAmount: getVat(getSubtotal()),
-      paymentMethod: fd.get('paymentMethod') as string || 'ennakkomaksu',
+      paymentMethod: 'mobilepay',
       items: getItems(),
       subtotal: getSubtotal(),
       shipping: getShipping(),
@@ -256,18 +244,30 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
     };
 
     try {
-      const res = await fetch('/api/order', {
+      // 1. Store order locally for confirmation page
+      sessionStorage.setItem('last_order', JSON.stringify(order));
+
+      // 2. Create MobilePay payment
+      btn.textContent = 'Siirrytään maksuun…';
+      const totalCents = Math.round((order.subtotal + order.shipping) * 100);
+      const payRes = await fetch('/api/payment/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(order),
+        body: JSON.stringify({
+          orderId: order.orderId,
+          amountCents: totalCents,
+          phone: order.phone || undefined,
+          description: `Kirjatilaus – Toiset Aijat (${order.orderId})`,
+        }),
       });
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!payRes.ok) throw new Error(`Payment API ${payRes.status}`);
+      const payData = await payRes.json() as { ok: boolean; redirectUrl?: string; error?: string };
+      if (!payData.ok || !payData.redirectUrl) throw new Error(payData.error ?? 'No redirectUrl');
 
-      // Store for confirmation page
-      sessionStorage.setItem('last_order', JSON.stringify(order));
+      // 4. Clear cart and redirect to MobilePay
       clearCart();
-      window.location.href = '/tilaus-vahvistettu';
+      window.location.href = payData.redirectUrl;
     } catch (err) {
       btn.disabled = false;
       btn.textContent = 'Lähetä tilaus →';

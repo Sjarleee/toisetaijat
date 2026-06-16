@@ -38,7 +38,7 @@ export interface ArticleCollection {
   pricePerArticle: number;
   priceAll: number;
   articleCount: number;
-  orderUrl: string;
+  orderUrl?: string;
   articleUrl?: string;
   articles: string[];
 }

@@ -94,7 +94,7 @@ const discount = bundle.bundleDiscount ?? 0;
       title: btn.dataset.title!,
       price: parseFloat(btn.dataset.price!),
       shippingPrice: parseFloat(btn.dataset.shipping ?? '0'),
-      type: 'book',
+      type: (btn.dataset.type as CartItem['type']) ?? 'book',
       quantity: 1,
       image: btn.dataset.image || undefined,
     };

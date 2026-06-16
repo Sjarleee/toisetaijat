@@ -45,6 +45,7 @@ const pages = defineCollection({
     shippingNotice: z.string().optional(),
     shippingNoticeVisible: z.boolean().optional(),
     vatRate: z.string().optional(),
+    vatRateShipping: z.string().optional(),
     // myynissa
     introText: z.string().optional(),
     deliveryNote: z.string().optional(),

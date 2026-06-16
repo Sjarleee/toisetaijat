@@ -16,47 +16,12 @@
  * 2. Open Extensions → Apps Script.
  * 3. Paste the following code and save:
  *
- * -------- paste into Apps Script --------
- *
- * function doPost(e) {
- *   try {
- *     var data = JSON.parse(e.postData.contents);
- *     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
- *     if (sheet.getLastRow() === 0) {
- *       sheet.appendRow([
- *         'Päivämäärä','Tilausnumero','Nimi','Sähköposti','Puhelin',
- *         'Osoite','Postinumero','Kaupunki','Maa',
- *         'Tuotteet','Välisumma','Postitus','Yhteensä','Lisätiedot'
- *       ]);
- *     }
- *     var itemStr = data.items.map(function(i) {
- *       return i.title + ' x' + i.quantity + ' (€' + (i.price * i.quantity) + ')';
- *     }).join('; ');
- *     sheet.appendRow([
- *       new Date(data.orderedAt).toLocaleString('fi-FI'),
- *       data.orderId,
- *       data.name,
- *       data.email,
- *       '\'' + (data.phone || ''),
- *       data.address || '',
- *       data.postalCode || '',
- *       data.city || '',
- *       data.country || '',
- *       itemStr,
- *       data.subtotal,
- *       data.shipping,
- *       data.total,
- *       data.notes || ''
- *     ]);
- *     return ContentService.createTextOutput(JSON.stringify({ ok: true }))
- *       .setMimeType(ContentService.MimeType.JSON);
- *   } catch (err) {
- *     return ContentService.createTextOutput(JSON.stringify({ ok: false, error: err.message }))
- *       .setMimeType(ContentService.MimeType.JSON);
- *   }
- * }
- *
- * -------- end of Apps Script code --------
+ * -------- Full Apps Script code (Extensions → Apps Script in the Sheet) --------
+ * See the full script maintained separately — key logToSheet columns:
+ *   Aikaleima, Tilausnumero, Nimi, Sähköposti, Puhelin,
+ *   Osoite, Postinumero, Kaupunki, Maa, Tuotteet,
+ *   Välisumma, ALV, Toimitus, Yhteensä, Maksutapa, Tila, Muistiinpanot
+ * -------- end of Apps Script reference --------
  *
  * 4. Click Deploy → New deployment → Type: Web app
  *    - Execute as: Me

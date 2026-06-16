@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getEntry } from 'astro:content';
 
 const frontpage = await getEntry('pages', 'etusivu');
-const { shippingNotice, shippingNoticeVisible } = frontpage.data;
+const { shippingNotice, shippingNoticeVisible, vatRate = '13,5' } = frontpage.data;
 ---
 
 <BaseLayout title="Tilaus" description="Täytä tilauslomake.">
@@ -30,7 +30,7 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
     </div>
 
     <!-- Order summary (populated client-side) -->
-    <div id="order-summary" class="bg-[#f5f0e8] border border-[#e5d9c3] rounded-lg p-4 mb-8 text-sm">
+    <div id="order-summary" class="bg-[#f5f0e8] border border-[#e5d9c3] rounded-lg p-4 mb-8 text-sm" data-vat-rate={vatRate}>
       <p class="text-[#78716c]">Ladataan tilauksen tietoja…</p>
     </div>
 
@@ -51,12 +51,12 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
       <div class="grid sm:grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-medium text-[#1a3a2a] mb-1" for="firstName">Etunimi *</label>
-          <input id="firstName" name="firstName" type="text" required autocomplete="given-name"
+          <input id="firstName" name="firstName" type="text" required autocomplete="shipping given-name"
             class="w-full border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent" />
         </div>
         <div>
           <label class="block text-sm font-medium text-[#1a3a2a] mb-1" for="lastName">Sukunimi *</label>
-          <input id="lastName" name="lastName" type="text" required autocomplete="family-name"
+          <input id="lastName" name="lastName" type="text" required autocomplete="shipping family-name"
             class="w-full border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent" />
         </div>
       </div>
@@ -72,7 +72,7 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
           Matkapuhelin *
           <span class="font-normal text-[#44403c] text-xs ml-1">(esim. +358401234567)</span>
         </label>
-        <input id="phone" name="phone" type="tel" required autocomplete="tel"
+        <input id="phone" name="phone" type="tel" required autocomplete="shipping tel"
           pattern="\+?[0-9\s\-]{6,20}"
           placeholder="+358..."
           title="Syötä puhelinnumero"
@@ -82,13 +82,13 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
       <div id="shipping-fields">
         <div class="mb-4">
           <label class="block text-sm font-medium text-[#1a3a2a] mb-1" for="address">Katuosoite *</label>
-          <input id="address" name="address" type="text" required autocomplete="street-address"
+          <input id="address" name="address" type="text" required autocomplete="shipping street-address"
             class="w-full border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent" />
         </div>
         <div class="grid sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-medium text-[#1a3a2a] mb-1" for="postalCode">Postinumero *</label>
-            <input id="postalCode" name="postalCode" type="text" required autocomplete="postal-code"
+            <input id="postalCode" name="postalCode" type="text" required autocomplete="shipping postal-code"
               pattern="[0-9]{5}"
               maxlength="5"
               placeholder="00100"
@@ -97,7 +97,7 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
           </div>
           <div>
             <label class="block text-sm font-medium text-[#1a3a2a] mb-1" for="city">Kaupunki *</label>
-            <input id="city" name="city" type="text" required autocomplete="address-level2"
+            <input id="city" name="city" type="text" required autocomplete="shipping address-level2"
               class="w-full border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent" />
           </div>
         </div>
@@ -149,6 +149,7 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
 
   const items = getItems();
   const summary = document.getElementById('order-summary')!;
+  const vatRateLabel = summary.dataset.vatRate ?? '13,5';
   const form = document.getElementById('order-form') as HTMLFormElement;
   const emptyMsg = document.getElementById('empty-cart-msg')!;
   const shippingFields = document.getElementById('shipping-fields')!;
@@ -188,7 +189,7 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
       </div>
       <div class="mt-2 pt-2 border-t border-[#e5d9c3] text-xs text-[#78716c] space-y-0.5">
         <div class="flex justify-between"><span>Veroton hinta</span><span>€${exVat.toFixed(2)}</span></div>
-        <div class="flex justify-between"><span>ALV 13,5 %</span><span>€${vatAmount.toFixed(2)}</span></div>
+        <div class="flex justify-between"><span>ALV ${vatRateLabel} %</span><span>€${vatAmount.toFixed(2)}</span></div>
       </div>
     `;
 

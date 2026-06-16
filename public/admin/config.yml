@@ -22,7 +22,8 @@ collections:
           - { label: Otsikko, name: title, widget: string }
           - { label: Kuvaus (hakukoneet), name: description, widget: text, required: false }
           - { label: Hero-teksti, name: heroSubtitle, widget: text, required: false, hint: Lyhyt esittelyteksti etusivulla }
-          - { label: ALV-kanta kirjoille (%), name: vatRate, widget: string, required: false, hint: 'Esim: 13,5 — näkyy toimitusehdoissa ja tilauslomakkeessa' }
+          - { label: ALV-kanta kirjoille/digitaalisille (%), name: vatRate, widget: string, required: false, hint: 'Esim: 13,5 — näkyy toimitusehdoissa ja tilauslomakkeessa' }
+          - { label: ALV-kanta postitukselle (%), name: vatRateShipping, widget: string, required: false, hint: 'Esim: 25,5 — yleinen ALV-kanta Suomessa' }
           - { label: Ilmoitus näkyy, name: shippingNoticeVisible, widget: boolean, default: true, required: false }
           - { label: Postitusaikataulu (global), name: shippingNotice, widget: text, required: false, hint: 'Näkyy etusivulla, myynti- ja tilaussivulla. Esim: Kirjojen postitus seuraavan kerran...' }
       - name: myynissa

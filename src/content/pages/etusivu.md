@@ -5,4 +5,5 @@ heroSubtitle: "Matti J. Kankaanpään (1943–2017) kirjallisuus- ja muistosivu.
 shippingNotice: "Kirjojen postitus seuraavan kerran 20. toukokuuta – 24. heinäkuuta 2025."
 shippingNoticeVisible: true
 vatRate: "13,5"
+vatRateShipping: "25,5"
 ---

@@ -12,7 +12,7 @@ Skullerudstubben 24\
 NORWAY\
 [jarle@toisetaijat.fi](mailto:jarle@toisetaijat.fi)
 
-Myymme tuotteita täysi-ikäisille yksityishenkilöille. Tuotteiden hinnat sisältävät arvonlisäveron: kirjoille 13,5 %, postitukselle 24 %. Pidätämme oikeuden hintojen ja toimituskulujen muutoksiin.
+Myymme tuotteita täysi-ikäisille yksityishenkilöille. Pidätämme oikeuden hintojen ja toimituskulujen muutoksiin.
 
 #### Tilaaminen
 

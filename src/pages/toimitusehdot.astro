@@ -4,12 +4,18 @@ import { getEntry, render } from 'astro:content';
 
 const page = await getEntry('pages', 'toimitusehdot');
 const { Content } = await render(page);
+const settings = await getEntry('pages', 'etusivu');
+const vatRate = settings.data.vatRate ?? '13,5';
+const vatRateShipping = settings.data.vatRateShipping ?? '25,5';
 ---
 <BaseLayout title={page.data.title} description={page.data.description}>
   <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
     <h1 class="font-serif text-3xl font-bold text-[#1a3a2a] mb-8">{page.data.title}</h1>
     <div class="prose prose-stone max-w-none prose-headings:font-serif prose-headings:text-[#1a3a2a] prose-a:text-[#2d6a4f]">
       <Content />
+      <p class="text-sm text-[#44403c] border border-[#e5d9c3] rounded-md px-4 py-3 bg-[#faf4e8] not-prose mt-[-0.5rem] mb-4">
+        Tuotteiden hinnat sisältävät arvonlisäveron: kirjoille ja digitaalisille julkaisuille {vatRate}&nbsp;%, postitukselle {vatRateShipping}&nbsp;%.
+      </p>
     </div>
   </div>
 </BaseLayout>

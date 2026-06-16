@@ -76,6 +76,12 @@ const searchData = hakemistoEntries.map(entry => {
   const normTag = (t: unknown): string =>
     typeof t === 'string' ? t : (t as { name?: string })?.name ?? '';
 
+  const normTagWithSources = (t: unknown): { name: string; sources: string[] } => {
+    if (typeof t === 'string') return { name: t, sources: [] };
+    const obj = t as { name?: string; sources?: string[] };
+    return { name: obj.name ?? '', sources: obj.sources ?? [] };
+  };
+
   return {
     id: entry.id,
     title: d.title,
@@ -86,11 +92,11 @@ const searchData = hakemistoEntries.map(entry => {
     price,
     ctaLabel,
     ctaStyle,
-    persons: d.persons.map(normTag).filter(Boolean),
+    persons: d.persons.map(normTagWithSources).filter(p => p.name),
     places: d.places.map(normTag).filter(Boolean),
     events: d.events.map(normTag).filter(Boolean),
     regiments: d.regiments.map(normTag).filter(Boolean),
-    families: d.families.map(normTag).filter(Boolean),
+    families: d.families.map(normTagWithSources).filter(f => f.name),
     other: d.other.map(normTag).filter(Boolean),
   };
 });
@@ -150,21 +156,29 @@ const searchData = hakemistoEntries.map(entry => {
       .replace(/"/g, '&quot;');
   }
 
-  function chips(terms, colorClass) {
+  function chips(terms, colorClass, withSources = false) {
     if (!terms.length) return '';
     const shown = terms.slice(0, MAX_CHIPS);
     const rest = terms.length - MAX_CHIPS;
-    const html = shown.map(t => `<span class="text-xs ${colorClass} rounded px-1.5 py-0.5">${esc(t)}</span>`).join('');
+    const html = shown.map(t => {
+      if (withSources && typeof t === 'object') {
+        const srcHtml = t.sources && t.sources.length
+          ? `<span class="text-[10px] text-gray-400 block leading-tight mt-0.5">${t.sources.map(s => esc(s)).join(', ')}</span>`
+          : '';
+        return `<span class="text-xs ${colorClass} rounded px-1.5 py-0.5 inline-flex flex-col">${esc(t.name)}${srcHtml}</span>`;
+      }
+      return `<span class="text-xs ${colorClass} rounded px-1.5 py-0.5">${esc(typeof t === 'object' ? t.name : t)}</span>`;
+    }).join('');
     const more = rest > 0 ? `<span class="text-xs text-gray-400 italic">+${rest} lisää</span>` : '';
     return html + more;
   }
 
-  function matchRow(label, terms, colorClass) {
+  function matchRow(label, terms, colorClass, withSources = false) {
     if (!terms.length) return '';
     return `
       <div class="flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
         <span class="text-xs text-gray-400 font-medium shrink-0">${label}:</span>
-        ${chips(terms, colorClass)}
+        ${chips(terms, colorClass, withSources)}
       </div>`;
   }
 
@@ -195,11 +209,11 @@ const searchData = hakemistoEntries.map(entry => {
     const matchesHtml = hasKeywordMatches ? `
       <div class="mt-3 space-y-1.5 border-t border-gray-100 pt-3">
         <p class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-1">Löytyi:</p>
-        ${matchRow('Henkilöt', r.mPersons, 'bg-blue-50 text-blue-700')}
+        ${matchRow('Henkilöt', r.mPersons, 'bg-blue-50 text-blue-700', true)}
         ${matchRow('Paikat', r.mPlaces, 'bg-green-50 text-green-700')}
         ${matchRow('Tapahtumat', r.mEvents, 'bg-orange-50 text-orange-700')}
         ${matchRow('Rykmentit', r.mRegiments, 'bg-purple-50 text-purple-700')}
-        ${matchRow('Suvut', r.mFamilies, 'bg-pink-50 text-pink-700')}
+        ${matchRow('Suvut', r.mFamilies, 'bg-pink-50 text-pink-700', true)}
         ${matchRow('Muut', r.mOther, 'bg-gray-100 text-gray-600')}
       </div>` : '';
 
@@ -252,11 +266,11 @@ const searchData = hakemistoEntries.map(entry => {
     for (const entry of searchData) {
       const titleHit = entry.title.toLowerCase().includes(q);
       const descHit = entry.description.toLowerCase().includes(q);
-      const mPersons = entry.persons.filter(t => t.toLowerCase().includes(q));
+      const mPersons = entry.persons.filter(t => t.name.toLowerCase().includes(q));
       const mPlaces = entry.places.filter(t => t.toLowerCase().includes(q));
       const mEvents = entry.events.filter(t => t.toLowerCase().includes(q));
       const mRegiments = entry.regiments.filter(t => t.toLowerCase().includes(q));
-      const mFamilies = entry.families.filter(t => t.toLowerCase().includes(q));
+      const mFamilies = entry.families.filter(t => t.name.toLowerCase().includes(q));
       const mOther = entry.other.filter(t => t.toLowerCase().includes(q));
 
       if (titleHit || descHit || mPersons.length || mPlaces.length ||

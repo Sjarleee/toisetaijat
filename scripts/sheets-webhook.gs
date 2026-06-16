@@ -118,6 +118,93 @@ function getNextInvoiceNumber() {
 }
 
 // ============================================================
+// Debug: run manually to verify Drive access + log item IDs
+// ============================================================
+function testDriveAccess() {
+  var ok = 0, fail = 0;
+  for (var id in PDF_ARTICLES) {
+    try {
+      var f = DriveApp.getFileById(PDF_ARTICLES[id]);
+      Logger.log('OK: ' + id + ' → ' + f.getName());
+      ok++;
+    } catch (err) {
+      Logger.log('FAIL: ' + id + ' → ' + err);
+      fail++;
+    }
+  }
+  Logger.log('--- ' + ok + ' ok, ' + fail + ' failed ---');
+  // Also verify palautusehdot
+  try {
+    DriveApp.getFileById(PALAUTUSEHDOT_FILE_ID);
+    Logger.log('Palautusehdot: OK');
+  } catch (err) {
+    Logger.log('Palautusehdot: FAIL → ' + err);
+  }
+}
+
+function testOrder() {
+  var fakeOrder = {
+    orderId: 'TEST-001',
+    invoiceNumber: '2026-TEST',
+    orderedAt: new Date().toISOString(),
+    name: 'Testi Käyttäjä',
+    email: Session.getActiveUser().getEmail(),
+    phone: '',
+    address: '',
+    postalCode: '',
+    city: '',
+    country: '',
+    items: [
+      { id: 'viipurin-laanintilit-1673', title: 'Viipurin läänintilit – 1673', price: 4, quantity: 1, type: 'article-collection' },
+    ],
+    subtotal: 4,
+    vatAmount: 0.47,
+    shipping: 0,
+    total: 4,
+    paymentState: 'CAPTURED',
+    notes: '',
+  };
+  sendAdminEmail(fakeOrder);
+  sendConfirmationEmail(fakeOrder);
+  Logger.log('testOrder done – check inbox');
+}
+
+// Simulerer hva frontend sender i dag (BundleCard-bug: type er 'book' for alt)
+// Kjør denne for å bekrefte at articleItems er tom → ingen PDF-vedlegg
+function testWithBuggedType() {
+  var fakeOrder = {
+    orderId: 'TEST-BUG',
+    invoiceNumber: '2026-BUG',
+    orderedAt: new Date().toISOString(),
+    name: 'Testi Käyttäjä',
+    email: Session.getActiveUser().getEmail(),
+    phone: '', address: '', postalCode: '', city: '', country: '',
+    items: [
+      { id: 'viipurin-laanintilit-1673', title: 'Viipurin läänintilit – 1673', price: 4, quantity: 1, type: 'book' },
+    ],
+    subtotal: 4, vatAmount: 0.47, shipping: 0, total: 4,
+    paymentState: 'CAPTURED', notes: '',
+  };
+  Logger.log('=== testWithBuggedType ===');
+  Logger.log('Forventet: articleItems=0, ingen PDF-vedlegg');
+  var articleItems = (fakeOrder.items || []).filter(function(i) { return i.type === 'article-collection'; });
+  Logger.log('articleItems.length: ' + articleItems.length);
+  Logger.log('Kjøres uten å sende epost – se ovenfor');
+}
+
+// Kjør begge og sammenlign i loggen
+function testCompare() {
+  Logger.log('--- Med riktig type (article-collection) ---');
+  var correct = [{ id: 'viipurin-laanintilit-1673', type: 'article-collection' }];
+  Logger.log('articleItems: ' + correct.filter(function(i) { return i.type === 'article-collection'; }).length);
+
+  Logger.log('--- Med feil type (book, BundleCard-bug) ---');
+  var bugged = [{ id: 'viipurin-laanintilit-1673', type: 'book' }];
+  Logger.log('articleItems: ' + bugged.filter(function(i) { return i.type === 'article-collection'; }).length);
+  Logger.log('Fix: BundleCard.astro linje ~97 hardkoder type:book – skal lese dataset.type');
+}
+
+// ============================================================
 // Webhook entry point
 // ============================================================
 function doPost(e) {
@@ -252,7 +339,7 @@ function createReceiptPdf(data) {
   var partiesTable = body.appendTable([
     ['MYYJÄ', 'OSTAJA'],
     [
-      'Toiset Aijat – Matti J. Kankaanpään perikunta\nJarle M. Alvheim\nSkullerudstubben 24, 1188 Oslo\nY-tunnus: 2901392-1\njarle@toisetaijat.fi',
+      'Toiset Aijat – Matti J. Kankaanpää – Perikunta\nJarle M. Alvheim\nSkullerudstubben 24, 1188 Oslo\nY-tunnus: 2901392-1\njarle@toisetaijat.fi',
       data.name + '\n' + data.email
         + (data.phone ? '\n' + data.phone : '')
         + (data.address ? '\n' + data.address + '\n' + data.postalCode + ' ' + data.city : '')
@@ -321,7 +408,8 @@ function sendConfirmationEmail(data) {
   var hasBooks       = (data.items || []).some(function(i) { return i.type === 'book'; });
   var articleItems   = (data.items || []).filter(function(i) { return i.type === 'article-collection'; });
 
-  // --- Collect article PDF blobs ---
+    Logger.log('All items: ' + JSON.stringify((data.items || []).map(function(i) { return {id: i.id, type: i.type}; })));
+    Logger.log('articleItems count: ' + articleItems.length);
   var articleBlobs = [];
   var missing = [];
   articleItems.forEach(function(item) {
@@ -375,7 +463,7 @@ function sendConfirmationEmail(data) {
     + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid #e5d9c3;border-top:none;">'
     + '<div style="padding:16px 24px;border-right:1px solid #e5d9c3;">'
     + '<p style="font-size:11px;text-transform:uppercase;color:#9ca3af;margin:0 0 6px;">Myyjä</p>'
-    + '<strong>Toiset Aijat – Matti J. Kankaanpään perikunta</strong><br>'
+    + '<strong>Toiset Aijat – Matti J. Kankaanpää – Perikunta</strong><br>'
     + 'Jarle M. Alvheim<br>Skullerudstubben 24, 1188 Oslo<br>'
     + 'Y-tunnus: 2901392-1<br>jarle@toisetaijat.fi<br>www.toisetaijat.fi'
     + '</div>'
@@ -415,7 +503,7 @@ function sendConfirmationEmail(data) {
       : '')
     + (hasBooks
       ? '<div style="border:1px solid #e5d9c3;border-top:none;padding:14px 24px;background:#fff;font-size:13px;">'
-        + '📦 Kirjatilaus toimitetaan postitse lähipäivinä Virtain Kirjakaupalta.'
+        + '📦 Kirjatilaus toimitetaan postitse lähipäivinä.'
         + '</div>'
       : '')
     + '<div style="border:1px solid #e5d9c3;border-top:none;padding:16px 24px;background:#f9fafb;font-size:12px;color:#4a4a4a;">'

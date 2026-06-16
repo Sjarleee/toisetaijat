@@ -12,29 +12,29 @@ persons:
 - name: Mattsson
   born: '1736'
   sources:
-  - Tilaus VMA.txt
+  - Tilaus VMA
 - name: Brita Johansdr
   born: '1770'
   sources:
-  - Tilaus VMA.txt
+  - Tilaus VMA
 - name: Ohtola
   born: '1802'
   sources:
-  - Tilaus VMA.txt
+  - Tilaus VMA
 - name: Liisa Kaapontytär
   sources:
-  - Tilaus VMA.txt
+  - Tilaus VMA
 - name: Aleksander Kaaponpoika Ohtola
   born: '1828'
   sources:
-  - Tilaus VMA.txt
+  - Tilaus VMA
 - name: Aleksander Kaaponpoika
   sources:
-  - Tilaus VMA.txt
+  - Tilaus VMA
 families:
 - sources:
-  - Inkeri TK 1702.txt
+  - Inkeri TK 1702
   name: Heikin
 - sources:
-  - Tilaus VMA.txt
+  - Tilaus VMA
   name: Kaapon

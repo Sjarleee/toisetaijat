@@ -74,6 +74,27 @@ collections:
           - { label: Osoite, name: address, widget: string, required: false }
           - { label: Sähköposti, name: email, widget: string, required: false }
           - { label: Toimitusaikataulu, name: deliveryInfo, widget: text, required: false }
+      - name: tekijanoikeus
+        label: Tekijänoikeus
+        file: src/content/pages/tekijanoikeus.md
+        fields:
+          - { label: Otsikko, name: title, widget: string }
+          - { label: Kuvaus (hakukoneet), name: description, widget: text, required: false }
+          - { label: Sisältö, name: body, widget: markdown }
+      - name: toimitusehdot
+        label: Toimitusehdot
+        file: src/content/pages/toimitusehdot.md
+        fields:
+          - { label: Otsikko, name: title, widget: string }
+          - { label: Kuvaus (hakukoneet), name: description, widget: text, required: false }
+          - { label: Sisältö, name: body, widget: markdown }
+      - name: tietosuoja
+        label: Tietosuoja
+        file: src/content/pages/tietosuoja.md
+        fields:
+          - { label: Otsikko, name: title, widget: string }
+          - { label: Kuvaus (hakukoneet), name: description, widget: text, required: false }
+          - { label: Sisältö, name: body, widget: markdown }
 
   - name: articles
     label: Artikkelit

@@ -1,25 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry, render } from 'astro:content';
+
+const page = await getEntry('pages', 'tekijanoikeus');
+const { Content } = await render(page);
 ---
-<BaseLayout title="Tekijänoikeus" description="Tekijänoikeustiedot – T:mi Toiset Aijat">
+<BaseLayout title={page.data.title} description={page.data.description}>
   <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
-    <h1 class="font-serif text-3xl font-bold text-[#1a3a2a] mb-8">Tekijänoikeus</h1>
-    <div class="prose prose-stone max-w-none">
-      <p>Kaikki toisetaijat.fi-sivustolla julkaistu sisältö – artikkelit, kirjat, kuvat, hakemistot ja muu aineisto – on T:mi Toiset Aijat:n tai sen yhteistyökumppaneiden tekijänoikeudella suojattua omaisuutta, ellei toisin mainita.</p>
-
-      <h3>Tutkimuspalvelut</h3>
-      <p>Maksu sukututkimuspalvelusta ei koskaan sisällä tekijänoikeuksien siirtoa. Tutkimustulokset on tarkoitettu tilaajan henkilökohtaiseen käyttöön. Tekijänoikeudet säilyvät T:mi Toiset Aijat:lla, ellei niiden luovutuksesta ole erikseen ja kirjallisesti sovittu.</p>
-
-      <h3>Lainaaminen ja julkaiseminen</h3>
-      <p>Lyhyiden otteiden lainaaminen on sallittua asianmukaisella lähdeviitteellä. Jos haluatte käyttää tekstiä, tutkimusta tai kuvia laajemmin – esimerkiksi omassa julkaisussanne, sukukirjassanne tai verkkosivustollanne – pyydämme ottamaan yhteyttä etukäteen.</p>
-      <p>Etukäteen sovittu käyttölupa on aina helpompaa ja edullisempaa järjestää kuin jälkikäteen tehty sopimus.</p>
-
-      <h3>Kuvat</h3>
-      <p>Sivustolla käytetyt kuvat ovat joko T:mi Toiset Aijat:n omia tai asianmukaisilla luvilla käytettyjä. Kuvien kopioiminen tai jakaminen ilman lupaa on kielletty.</p>
-
-      <h3>Yhteydenotot</h3>
-      <p>Tekijänoikeusasioissa ota yhteyttä: <a href="mailto:jarle@toisetaijat.fi" class="text-[#2d6a4f] underline hover:no-underline">jarle@toisetaijat.fi</a></p>
-      <p>Lisää tietoa tekijänoikeuksista: <a href="https://www.kopiosto.fi/" class="text-[#2d6a4f] underline hover:no-underline" target="_blank" rel="noopener">kopiosto.fi</a></p>
+    <h1 class="font-serif text-3xl font-bold text-[#1a3a2a] mb-8">{page.data.title}</h1>
+    <div class="prose prose-stone max-w-none prose-headings:font-serif prose-headings:text-[#1a3a2a] prose-a:text-[#2d6a4f]">
+      <Content />
     </div>
   </div>
 </BaseLayout>

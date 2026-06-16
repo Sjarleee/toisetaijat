@@ -1,46 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getEntry } from 'astro:content';
+import { getEntry, render } from 'astro:content';
 
-const frontpage = await getEntry('pages', 'etusivu');
-const vatRate = frontpage.data.vatRate ?? '13,5';
+const page = await getEntry('pages', 'toimitusehdot');
+const { Content } = await render(page);
 ---
-<BaseLayout title="Toimitusehdot" description="Toimitusehdot – T:mi Toiset Aijat">
+<BaseLayout title={page.data.title} description={page.data.description}>
   <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
-    <h1 class="font-serif text-3xl font-bold text-[#1a3a2a] mb-8">Toimitusehdot</h1>
-    <div class="prose prose-stone max-w-none">
-      <h4>Toimittaja</h4>
-      <p>
-        T:mi Toiset Aijat<br />
-        Jarle M. Alvheim<br />
-        Skullerudstubben 24<br />
-        1188 OSLO<br />
-        NORWAY<br />
-        <a href="mailto:jarle@toisetaijat.fi" class="text-[#2d6a4f] underline hover:no-underline">jarle@toisetaijat.fi</a>
-      </p>
-      <p>Myymme tuotteita täysi-ikäisille yksityishenkilöille. Tuotteiden hinnat sisältävät arvonlisäveron: kirjoille {vatRate} %, postitukselle 24 %. Pidätämme oikeuden hintojen ja toimituskulujen muutoksiin.</p>
-
-      <h4>Tilaaminen</h4>
-      <p>Kaikki asiakastiedot käsitellään luottamuksellisesti. Tilauksen yhteydessä kerättyjä yhteystietoja ei käytetä muuhun kuin tilauksen toimittamiseen tai siinä ilmenevien epäselvyyksien selvittämiseen. Tilatessasi sitoudut kulloinkin voimassa oleviin toimitusehtoihin.</p>
-      <p>Kirjojen hintoihin lisätään toimituskulut. Useamman kirjan tilauksessa toimituskulut ovat pienemmät kuin yksittäin tilattaessa.</p>
-
-      <h4>Maksaminen</h4>
-      <p>Maksu tapahtuu MobilePay-palvelun kautta tai laskulla. Laskulla on 14 päivän maksuaika. Jos haluat kirjat lähetettäväksi ennen eräpäivää, maksu tulee suorittaa ensin.</p>
-
-      <h4>Tilausvahvistus</h4>
-      <p>Kun olemme vastaanottaneet tilauksesi, lähetämme tilausvahvistuksen sähköpostitse. Vahvistus sisältää tilauksen tiedot ja maksutiedot.</p>
-
-      <h4>Toimitus – kirjat</h4>
-      <p>Kirjatilaukset toimitetaan ainoastaan Suomeen. Kirjat lähetetään maksun vastaanottamisen jälkeen Virtain Kirjakaupalta.</p>
-
-      <h4>Toimitus – PDF-artikkelit</h4>
-      <p>PDF-artikkelit toimitetaan sähköpostitse tilausvahvistuksen yhteydessä. Toimitus kaikkialle maailmaan.</p>
-
-      <h4>Peruuttaminen</h4>
-      <p><strong>Kirjat:</strong> Sinulla on oikeus peruuttaa tilaus 14 päivän kuluessa kirjan vastaanottamisesta ilman erityistä syytä. Peruuttamisesta tulee ilmoittaa meille ennen määräajan päättymistä. Palautamme maksamasi summan viivytyksettä, viimeistään 14 päivän kuluessa peruuttamisilmoituksen saatuamme. Palautuskulut ovat ostajan vastuulla.</p>
-      <p><strong>PDF-artikkelit:</strong> Digitaalisille tuotteille ei ole peruuttamisoikeutta sen jälkeen, kun tiedosto on toimitettu, koska kyseessä on sähköinen sisältö joka toimitetaan välittömästi tilauksen jälkeen.</p>
-
-      <p class="text-sm text-[#78716c]"><em>Päivitetty kesäkuu 2026</em></p>
+    <h1 class="font-serif text-3xl font-bold text-[#1a3a2a] mb-8">{page.data.title}</h1>
+    <div class="prose prose-stone max-w-none prose-headings:font-serif prose-headings:text-[#1a3a2a] prose-a:text-[#2d6a4f]">
+      <Content />
     </div>
   </div>
 </BaseLayout>

@@ -4,7 +4,7 @@ import { getEntry, render } from 'astro:content';
 
 const page = await getEntry('pages', 'ota-yhteytta');
 const { Content } = await render(page);
-const { name, address, email, deliveryInfo } = page.data;
+const { name, address, email, deliveryInfo, businessId } = page.data;
 ---
 
 <BaseLayout title={page.data.title} description={page.data.description}>
@@ -37,6 +37,12 @@ const { name, address, email, deliveryInfo } = page.data;
                 {email}
               </a>
             </dd>
+          </div>
+        )}
+        {businessId && (
+          <div class="flex gap-3">
+            <dt class="text-[#44403c] w-24 flex-shrink-0">Y-tunnus</dt>
+            <dd class="text-[#1c1c1c]">{businessId}</dd>
           </div>
         )}
       </dl>

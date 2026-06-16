@@ -60,6 +60,7 @@ const pages = defineCollection({
     address: z.string().optional(),
     email: z.string().optional(),
     deliveryInfo: z.string().optional(),
+    businessId: z.string().optional(),
   }),
 });
 

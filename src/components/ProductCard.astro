@@ -158,6 +158,8 @@ const soldOut = product.availability === 'soldout';
   import type { CartItem } from '../scripts/cart';
 
   // Event delegation: one listener handles all .add-to-cart-btn on the page
+  if ((window as any).__cartClickRegistered) return;
+  (window as any).__cartClickRegistered = true;
   document.addEventListener('click', (e) => {
     const btn = (e.target as Element).closest('.add-to-cart-btn') as HTMLButtonElement | null;
     if (!btn) return;

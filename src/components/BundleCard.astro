@@ -84,6 +84,8 @@ const discount = bundle.bundleDiscount ?? 0;
   import { addItem } from '../scripts/cart';
   import type { CartItem } from '../scripts/cart';
 
+  if ((window as any).__cartClickRegistered) return;
+  (window as any).__cartClickRegistered = true;
   document.addEventListener('click', (e) => {
     const btn = (e.target as Element).closest('.add-to-cart-btn') as HTMLButtonElement | null;
     if (!btn) return;

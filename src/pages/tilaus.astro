@@ -47,7 +47,7 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
     </div>
 
     <!-- Checkout form -->
-    <form id="order-form" class="space-y-5" novalidate>
+    <form id="order-form" class="space-y-5" autocomplete="on" novalidate>
       <div class="grid sm:grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-medium text-[#1a3a2a] mb-1" for="firstName">Etunimi *</label>
@@ -70,12 +70,12 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
       <div id="phone-field">
         <label class="block text-sm font-medium text-[#1a3a2a] mb-1" for="phone">
           Matkapuhelin *
-          <span class="font-normal text-[#44403c] text-xs ml-1">(suomalainen numero, esim. +358401234567)</span>
+          <span class="font-normal text-[#44403c] text-xs ml-1">(esim. +358401234567)</span>
         </label>
         <input id="phone" name="phone" type="tel" required autocomplete="tel"
-          pattern="\+358[0-9]{6,12}"
+          pattern="\+?[0-9\s\-]{6,20}"
           placeholder="+358..."
-          title="Syötä suomalainen puhelinnumero muodossa +358..."
+          title="Syötä puhelinnumero"
           class="w-full border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent" />
       </div>
 

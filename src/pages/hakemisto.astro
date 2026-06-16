@@ -73,6 +73,9 @@ const searchData = hakemistoEntries.map(entry => {
     url = '/ota-yhteytta';
   }
 
+  const normTag = (t: unknown): string =>
+    typeof t === 'string' ? t : (t as { name?: string })?.name ?? '';
+
   return {
     id: entry.id,
     title: d.title,
@@ -83,12 +86,12 @@ const searchData = hakemistoEntries.map(entry => {
     price,
     ctaLabel,
     ctaStyle,
-    persons: d.persons,
-    places: d.places,
-    events: d.events,
-    regiments: d.regiments,
-    families: d.families,
-    other: d.other,
+    persons: d.persons.map(normTag).filter(Boolean),
+    places: d.places.map(normTag).filter(Boolean),
+    events: d.events.map(normTag).filter(Boolean),
+    regiments: d.regiments.map(normTag).filter(Boolean),
+    families: d.families.map(normTag).filter(Boolean),
+    other: d.other.map(normTag).filter(Boolean),
   };
 });
 ---

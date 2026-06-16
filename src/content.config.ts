@@ -106,6 +106,12 @@ const articleCollections = defineCollection({
   }),
 });
 
+// Hakemisto tag entries can be plain strings or objects with a name field
+const hakemistoTagSchema = z.union([
+  z.string(),
+  z.object({ name: z.string().optional() }).passthrough(),
+]);
+
 const hakemisto = defineCollection({
   loader: glob({ pattern: '**/*.yaml', base: './src/content/hakemisto' }),
   schema: z.object({
@@ -117,12 +123,12 @@ const hakemisto = defineCollection({
       z.object({ type: z.literal('article-collection'), id: z.string() }),
       z.object({ type: z.literal('unpublished'), label: z.string(), note: z.string().optional() }),
     ]),
-    persons: z.array(z.string()).default([]),
-    places: z.array(z.string()).default([]),
-    events: z.array(z.string()).default([]),
-    regiments: z.array(z.string()).default([]),
-    families: z.array(z.string()).default([]),
-    other: z.array(z.string()).default([]),
+    persons: z.array(hakemistoTagSchema).default([]),
+    places: z.array(hakemistoTagSchema).default([]),
+    events: z.array(hakemistoTagSchema).default([]),
+    regiments: z.array(hakemistoTagSchema).default([]),
+    families: z.array(hakemistoTagSchema).default([]),
+    other: z.array(hakemistoTagSchema).default([]),
   }),
 });
 

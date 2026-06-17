@@ -22,7 +22,7 @@ Kirjojen hintoihin lisätään toimituskulut. Useamman kirjan tilauksessa toimit
 
 #### Maksaminen
 
-Maksu tapahtuu MobilePay-palvelun kautta tai laskulla. Laskulla on 14 päivän maksuaika. Jos haluat kirjat lähetettäväksi ennen eräpäivää, maksu tulee suorittaa ensin.
+Maksu tapahtuu MobilePay-palvelun kautta.
 
 #### Tilausvahvistus
 

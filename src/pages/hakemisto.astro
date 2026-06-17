@@ -108,10 +108,15 @@ const searchData = hakemistoEntries.map(entry => {
 >
   <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
     <h1 class="font-serif text-3xl sm:text-4xl font-bold text-[#1a3a2a] mb-3">Hakemisto</h1>
-    <p class="text-[#44403c] text-sm mb-8 max-w-2xl leading-relaxed">
+    <p class="text-[#44403c] text-sm mb-5 max-w-2xl leading-relaxed">
       Hae henkilöitä, paikkoja, tapahtumia, rykmenttejä ja sukuja Matti J. Kankaanpään julkaisuista
       ja tutkimuksista. Tulokset viittaavat saatavilla oleviin kirjoihin, artikkeleihin tai
       yhteydenottopyyntöön julkaisemattomasta aineistosta.
+    </p>
+    <p class="text-[#44403c] text-xs mb-5 max-w-2xl leading-relaxed">
+      Databasen bygger på Matti J. Kankaanpääs personlige slektsforskning og inneholder nær
+      <strong>1&nbsp;900 primærdokumenter</strong>. Totalt er over <strong>17&nbsp;000 personreferanser</strong>
+      og <strong>1&nbsp;600 familiereferanser</strong> indeksert og søkbare.
     </p>
 
     <div class="relative mb-6">
@@ -355,7 +360,7 @@ const searchData = hakemistoEntries.map(entry => {
     search(val);
   });
 
-  function openInquiry(idx) {
+  window.openInquiry = function openInquiry(idx) {
     const r = currentResults[idx];
     if (!r) return;
 
@@ -394,7 +399,7 @@ const searchData = hakemistoEntries.map(entry => {
     document.body.style.overflow = 'hidden';
   }
 
-  function closeInquiry() {
+  window.closeInquiry = function closeInquiry() {
     document.getElementById('inquiry-modal').classList.add('hidden');
     document.body.style.overflow = '';
   }

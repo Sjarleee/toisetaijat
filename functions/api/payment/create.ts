@@ -21,8 +21,7 @@
  *   { ok: true, redirectUrl: string, reference: string }
  */
 
-// 🔁 Bytt til https://api.vipps.no for produksjon
-const MP_BASE = 'https://apitest.vipps.no';
+const MP_BASE = 'https://api.vipps.no';
 
 const ALLOWED_ORIGINS = [
   'https://www.toisetaijat.fi',

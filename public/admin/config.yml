@@ -106,7 +106,7 @@ collections:
     extension: mdx
     format: frontmatter
     sortable_fields: ['pubDate', 'title']
-    summary: '{{pubDate}} – {{title}}'
+    summary: '{{title}}'
     view_filters:
       - label: Luonnokset
         field: draft

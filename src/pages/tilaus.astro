@@ -266,8 +266,7 @@ const { shippingNotice, shippingNoticeVisible, vatRate = '13,5' } = frontpage.da
       const payData = await payRes.json() as { ok: boolean; redirectUrl?: string; error?: string };
       if (!payData.ok || !payData.redirectUrl) throw new Error(payData.error ?? 'No redirectUrl');
 
-      // 4. Clear cart and redirect to MobilePay
-      clearCart();
+      // 4. Redirect to MobilePay (cart is cleared only after confirmed CAPTURED payment)
       window.location.href = payData.redirectUrl;
     } catch (err) {
       btn.disabled = false;

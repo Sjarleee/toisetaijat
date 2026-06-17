@@ -11,6 +11,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <script>
+  import { clearCart } from '../scripts/cart';
+
   interface OrderItem {
     title: string;
     quantity: number;
@@ -114,7 +116,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       .then(r => r.json())
       .then((data: { ok: boolean; state?: string; error?: string }) => {
         if (data.state === 'CAPTURED') {
-          // Fall through to show order details from sessionStorage below
+          clearCart();
           renderSuccess();
         } else if (data.state === 'ABORTED' || data.state === 'TERMINATED') {
           showAborted();

@@ -131,6 +131,35 @@ const bundle = allBookEntries
     )}
   </section>
 
+  <!-- Hakemisto promo -->
+  <section class="border-y border-[#2d6a4f]/30" style="background: linear-gradient(to bottom, #eef4f0, #e4ede7);">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-2 mb-3">
+        <span class="inline-block bg-[#2d6a4f] text-white text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-full self-start">Uutuus</span>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-[#1a3a2a]">Hakemisto</h2>
+      </div>
+      <p class="text-[#44403c] text-base leading-relaxed mb-6 max-w-2xl">
+        Hae henkilöitä, paikkoja, tapahtumia, rykmenttejä ja sukuja Matti J. Kankaanpään julkaisuista ja tutkimuksista. Tulokset viittaavat saatavilla oleviin kirjoihin, artikkeleihin tai yhteydenottopyyntöön julkaisemattomasta aineistosta.
+      </p>
+      <form action="/hakemisto" method="get" class="flex gap-2 max-w-xl">
+        <div class="relative flex-1">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+          </svg>
+          <input
+            type="search"
+            name="q"
+            placeholder="Hae nimellä, paikalla, rykmentillä..."
+            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-[#2d6a4f] bg-white"
+          />
+        </div>
+        <button type="submit" class="bg-[#2d6a4f] text-white px-5 py-3 rounded-lg font-semibold hover:bg-[#245c42] transition-colors whitespace-nowrap">
+          Hae →
+        </button>
+      </form>
+    </div>
+  </section>
+
   <!-- Books & Bundle -->
   <section class="border-y border-[#d8c9a8]" style="background: linear-gradient(to bottom, #ede2c8, #e8d8b8);">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 py-14">

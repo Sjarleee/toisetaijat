@@ -10,6 +10,7 @@ Jarle M. Alvheim\
 Skullerudstubben 24\
 1188 OSLO\
 NORWAY\
+Y-tunnus: 2901392-1\
 [jarle@toisetaijat.fi](mailto:jarle@toisetaijat.fi)
 
 Myymme tuotteita täysi-ikäisille yksityishenkilöille. Pidätämme oikeuden hintojen ja toimituskulujen muutoksiin.

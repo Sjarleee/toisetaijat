@@ -206,6 +206,28 @@ const { shippingNotice, shippingNoticeVisible, vatRate = '13,5' } = frontpage.da
     }
   }
 
+  // Pre-fill form from previous attempt (stored in sessionStorage)
+  try {
+    const raw = sessionStorage.getItem('last_order');
+    if (raw) {
+      const prev = JSON.parse(raw);
+      const nameParts = (prev.name ?? '').split(' ');
+      const setVal = (id: string, val: string) => {
+        const el = document.getElementById(id) as HTMLInputElement | null;
+        if (el && val) el.value = val;
+      };
+      setVal('firstName', nameParts.slice(0, -1).join(' ') || nameParts[0] || '');
+      setVal('lastName', nameParts.length > 1 ? nameParts[nameParts.length - 1] : '');
+      setVal('email', prev.email ?? '');
+      setVal('phone', prev.phone ?? '');
+      setVal('address', prev.address ?? '');
+      setVal('postalCode', prev.postalCode ?? '');
+      setVal('city', prev.city ?? '');
+      const notesEl = document.getElementById('notes') as HTMLTextAreaElement | null;
+      if (notesEl && prev.notes) notesEl.value = prev.notes;
+    }
+  } catch {}
+
   // Form submission
   form.addEventListener('submit', async (e) => {
     e.preventDefault();

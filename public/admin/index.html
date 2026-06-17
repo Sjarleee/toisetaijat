@@ -6,15 +6,21 @@
     <meta name="robots" content="noindex" />
     <title>Toiset Aijat – CMS</title>
     <style>
-      /* Compact image preview in block widgets */
+      /* Compact image preview in all image widgets (hero, block, etc.) */
       [class*="ImageWidgetContent"] img,
-      [class*="image-widget"] img {
+      [class*="image-widget"] img,
+      [class*="imageUpload"] img,
+      [class*="ImagePreview"] img,
+      [data-testid="image-field"] img {
         max-height: 120px !important;
         width: auto !important;
         object-fit: contain;
       }
       [class*="ImageWidgetContent"],
-      [class*="image-widget"] {
+      [class*="image-widget"],
+      [class*="imageUpload"],
+      [class*="ImagePreview"],
+      [data-testid="image-field"] {
         max-height: 140px !important;
         overflow: hidden;
       }

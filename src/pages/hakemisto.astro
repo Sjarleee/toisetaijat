@@ -432,7 +432,7 @@ const searchData = hakemistoEntries.map(entry => {
       const data = await res.json();
       if (data.ok) {
         successEl.classList.remove('hidden');
-        form.querySelectorAll('input, textarea, button[type="submit"]').forEach(el => el.disabled = true);
+        e.currentTarget.querySelectorAll('input, textarea, button[type="submit"]').forEach(el => el.disabled = true);
       } else {
         throw new Error(data.error || 'Tuntematon virhe');
       }

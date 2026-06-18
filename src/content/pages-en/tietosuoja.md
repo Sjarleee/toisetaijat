@@ -33,7 +33,7 @@ Order data is stored in a secure Google Sheets spreadsheet used for order manage
 
 Payments are processed via MobilePay (Vipps MobilePay AS). The information required for the payment transaction (name, phone number) is passed to Vipps MobilePay AS for payment processing. Vipps MobilePay AS acts as an independent data controller for this data under its own privacy policy.
 
-More information: [MobilePay privacy](https://www.mobilepay.fi/tietosuoja)
+More information: [MobilePay privacy](https://mobilepay.fi/gdpr)
 
 ### Cookies and Local Storage
 

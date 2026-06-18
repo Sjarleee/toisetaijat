@@ -33,7 +33,7 @@ Tilaustiedot tallennetaan suojattuun Google Sheets -taulukkoon, jota käytetää
 
 Maksaminen tapahtuu MobilePay-palvelun (Vipps MobilePay AS) kautta. Maksutapahtuman yhteydessä tarvittavat tiedot (nimi, puhelinnumero) välitetään Vipps MobilePay AS:lle maksun käsittelyä varten. Vipps MobilePay AS toimii näiden tietojen osalta itsenäisenä rekisterinpitäjänä oman tietosuojakäytäntönsä mukaisesti.
 
-Lisätietoja: [MobilePay tietosuoja](https://www.mobilepay.fi/tietosuoja)
+Lisätietoja: [MobilePay tietosuoja](https://mobilepay.fi/gdpr)
 
 ### Evästeet ja paikallinen tallennustila
 

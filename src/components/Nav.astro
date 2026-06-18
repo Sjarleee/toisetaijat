@@ -54,6 +54,9 @@ function getOppositeLocaleHref(path: string, currentLang: 'fi' | 'en'): string {
     '/toimitusehdot': '/en/terms',
     '/haku': '/en/articles',
     '/myynissa': '/en/for-sale',
+    '/ostoskori': '/en/for-sale',
+    '/tilaus': '/en/for-sale',
+    '/tilaus-vahvistettu': '/en/for-sale',
   };
   const en2fi: Record<string, string> = Object.fromEntries(
     Object.entries(fi2en).map(([fi, en]) => [en, fi])
@@ -61,11 +64,17 @@ function getOppositeLocaleHref(path: string, currentLang: 'fi' | 'en'): string {
   en2fi['/en'] = '/';
 
   if (currentLang === 'fi') {
+    if (p.startsWith('/artikkelit/tagi/')) {
+      return p.replace('/artikkelit/tagi/', '/en/articles/tag/');
+    }
     if (p.startsWith('/artikkelit/')) {
       return p.replace('/artikkelit/', '/en/articles/');
     }
     return fi2en[p] ?? `/en${p}`;
   } else {
+    if (p.startsWith('/en/articles/tag/')) {
+      return p.replace('/en/articles/tag/', '/artikkelit/tagi/');
+    }
     if (p.startsWith('/en/articles/')) {
       return p.replace('/en/articles/', '/artikkelit/');
     }

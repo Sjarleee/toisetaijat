@@ -1,0 +1,192 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import BundleCard from '../../components/BundleCard.astro';
+import { entryToBook, entryToCollection } from '../../data/products';
+import { getEntry, getCollection } from 'astro:content';
+
+const allBookEntries = await getCollection('books');
+const allCollectionEntries = await getCollection('articleCollections');
+
+const books = allBookEntries
+  .filter(e => e.data.productType === 'book')
+  .sort((a, b) => (a.data.sortOrder ?? 99) - (b.data.sortOrder ?? 99))
+  .map(entryToBook);
+
+const bundles = allBookEntries
+  .filter(e => e.data.productType === 'bundle')
+  .sort((a, b) => (a.data.sortOrder ?? 99) - (b.data.sortOrder ?? 99))
+  .map(entryToBook);
+
+const ebooks = allBookEntries
+  .filter(e => e.data.productType === 'ebook')
+  .sort((a, b) => (a.data.sortOrder ?? 99) - (b.data.sortOrder ?? 99))
+  .map(entryToBook);
+
+const singleArticles = allBookEntries
+  .filter(e => e.data.productType === 'single-article')
+  .sort((a, b) => (a.data.sortOrder ?? 99) - (b.data.sortOrder ?? 99))
+  .map(entryToBook);
+
+const articleCollections = allCollectionEntries
+  .sort((a, b) => (a.data.sortOrder ?? 99) - (b.data.sortOrder ?? 99))
+  .map(entryToCollection);
+
+const availableBooks = books.filter(b => b.availability !== 'soldout' && b.availability !== 'external');
+const externalBooks = books.filter(b => b.availability === 'external');
+
+const page = await getEntry('pages_en', 'myynissa');
+const frontpage = await getEntry('pages_en', 'etusivu');
+const { shippingNotice, shippingNoticeVisible } = frontpage.data;
+---
+
+<BaseLayout title={page.data.title} description={page.data.description} lang="en">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-12">
+
+    <h1 class="font-serif text-3xl sm:text-4xl font-bold text-[#1a3a2a] mb-2">{page.data.title}</h1>
+    <p class="text-[#44403c] mb-4 text-lg">Books and article collections available to order.</p>
+
+    <!-- Global shipping notice -->
+    {shippingNoticeVisible !== false && shippingNotice && (
+    <div class="flex items-start gap-3 bg-[#8b6914]/10 border border-[#8b6914]/40 rounded-lg p-4 mb-8 text-[#6b4f0a]">
+      <span class="text-xl shrink-0 mt-0.5">📦</span>
+      <div>
+        <p class="font-semibold text-sm">Shipping schedule</p>
+        <p class="text-sm mt-0.5">{shippingNotice}</p>
+      </div>
+    </div>
+    )}
+
+    <!-- Delivery note -->
+    {!shippingNotice && page.data.deliveryNote && (
+    <div class="bg-[#d4a843]/10 border border-[#d4a843]/40 rounded-lg p-4 mb-10 text-sm text-[#6b4f0a]">
+      {page.data.deliveryNote}
+    </div>
+    )}
+
+    <!-- BOOK BUNDLES -->
+    {bundles.length > 0 && (
+    <section class="mb-14">
+      <h2 class="font-serif text-2xl font-bold text-[#1a3a2a] border-b border-gray-200 pb-3 mb-6">Book bundles</h2>
+      <div class="grid sm:grid-cols-2 gap-6 max-w-2xl">
+        {bundles.map(bundle => (
+          <BundleCard bundle={bundle} books={books} />
+        ))}
+      </div>
+    </section>
+    )}
+
+    <!-- BOOKS -->
+    <section class="mb-14">
+      <h2 class="font-serif text-2xl font-bold text-[#1a3a2a] border-b border-gray-200 pb-3 mb-6">Books</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {availableBooks.map(book => (
+          <ProductCard product={book} variant="full" />
+        ))}
+      </div>
+      {externalBooks.length > 0 && (
+        <div class="mt-6 space-y-2">
+          {externalBooks.map(book => (
+            <ProductCard product={book} variant="compact" />
+          ))}
+        </div>
+      )}
+      <p class="text-sm text-[#44403c] mt-4">
+        Other publications: see the <a href="/en/books" class="text-[#2d6a4f] hover:underline">publications list</a>. Availability varies — ask by email.
+      </p>
+    </section>
+
+    <!-- E-BOOKS -->
+    {ebooks.length > 0 && (
+    <section class="mb-14">
+      <h2 class="font-serif text-2xl font-bold text-[#1a3a2a] border-b border-gray-200 pb-3 mb-6">E-books</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {ebooks.map(book => (
+          <ProductCard product={book} variant="full" />
+        ))}
+      </div>
+    </section>
+    )}
+
+    <!-- ARTICLE COLLECTIONS & E-ARTICLES -->
+    <section class="mb-12">
+      <h2 class="font-serif text-2xl font-bold text-[#1a3a2a] border-b border-gray-200 pb-3 mb-2">E-articles</h2>
+      <p class="text-sm text-[#44403c] mb-6">
+        PDF articles and e-articles. Delivered by email or via Google Play. €4 per article or all articles in a series at a bundle price.
+      </p>
+
+      <!-- Single articles -->
+      {singleArticles.length > 0 && (
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+          {singleArticles.map(article => (
+            <ProductCard product={article} variant="full" />
+          ))}
+        </div>
+      )}
+
+      <!-- Article collections -->
+      <div class="space-y-6">
+        {articleCollections.map(col => (
+          <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+            <div class="flex items-start justify-between gap-4 mb-3">
+              <h3 class="font-serif text-lg font-bold text-[#1a3a2a]">
+                {col.articleUrl
+                  ? <a href={col.articleUrl} class="hover:underline hover:text-[#2d6a4f] transition-colors">{col.title}</a>
+                  : col.title}
+              </h3>
+              <div class="shrink-0 text-right">
+                <span class="block text-lg font-bold text-[#1a3a2a]">€{col.priceAll}</span>
+                <span class="text-xs text-[#44403c]">all {col.articleCount} articles</span>
+              </div>
+            </div>
+            {col.description && <p class="text-sm text-[#44403c] mb-3 leading-relaxed">{col.description}</p>}
+            <p class="text-sm text-[#44403c] mb-4">€{col.pricePerArticle} / single article · PDF by email</p>
+            <ul class="grid sm:grid-cols-2 gap-1 text-sm text-[#4a4a4a] mb-4">
+              {col.articles.map(a => (
+                <li class="flex items-center justify-between gap-2 py-1 border-b border-gray-100 last:border-0">
+                  <span class="text-[#44403c]">{a}</span>
+                  <button
+                    class="add-to-cart-btn shrink-0 text-xs bg-[#1a3a2a]/5 hover:bg-[#1a3a2a] text-[#1a3a2a] hover:text-white border border-[#1a3a2a]/20 hover:border-[#1a3a2a] px-2 py-0.5 rounded transition-colors"
+                    data-id={`${col.id}-${a.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '').toLowerCase()}`}
+                    data-title={`${col.title} – ${a}`}
+                    data-price={col.pricePerArticle}
+                    data-shipping="0"
+                    data-type="article-collection"
+                    data-image=""
+                  >
+                    + €{col.pricePerArticle}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <div class="flex flex-wrap items-center gap-3 mt-4">
+              <button
+                class="add-to-cart-btn inline-flex items-center gap-2 bg-[#1a3a2a] text-white px-5 py-2.5 rounded-md font-medium hover:bg-[#2d6a4f] transition-colors text-sm"
+                data-id={col.id}
+                data-title={`${col.title} – all ${col.articleCount} articles`}
+                data-price={col.priceAll}
+                data-shipping="0"
+                data-type="article-collection"
+                data-image=""
+              >
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                All {col.articleCount} articles – €{col.priceAll}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p class="text-sm text-[#44403c] mt-4 italic">
+        Articles may not be shared with others without permission from the copyright holder.
+      </p>
+    </section>
+
+    <div class="p-5 bg-[#f5f0e8] border border-[#e5d9c3] rounded-lg text-sm text-[#4a4a4a]">
+      Questions about ordering?
+      <a href="mailto:jarle@toisetaijat.fi" class="text-[#2d6a4f] hover:underline font-medium ml-1">jarle@toisetaijat.fi</a>
+    </div>
+
+  </div>
+</BaseLayout>

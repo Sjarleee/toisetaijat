@@ -27,8 +27,8 @@ const navItems: NavItem[] = lang === 'en'
       { href: '/ota-yhteytta', label: 'Ota yhteyttä' },
     ];
 
-const shopHref = lang === 'en' ? `${base}/books` : '/myynissa';
-const shopLabel = lang === 'en' ? 'Books' : 'Myynissä';
+const shopHref = lang === 'en' ? `${base}/for-sale` : '/myynissa';
+const shopLabel = lang === 'en' ? 'For Sale' : 'Myynissä';
 const searchHref = lang === 'en' ? `${base}/articles` : '/haku';
 const searchAriaLabel = lang === 'en' ? 'Search' : 'Haku';
 const menuAriaLabel = lang === 'en' ? 'Open menu' : 'Avaa valikko';
@@ -53,7 +53,7 @@ function getOppositeLocaleHref(path: string, currentLang: 'fi' | 'en'): string {
     '/tekijanoikeus': '/en/copyright',
     '/toimitusehdot': '/en/terms',
     '/haku': '/en/articles',
-    '/myynissa': '/en/books',
+    '/myynissa': '/en/for-sale',
   };
   const en2fi: Record<string, string> = Object.fromEntries(
     Object.entries(fi2en).map(([fi, en]) => [en, fi])

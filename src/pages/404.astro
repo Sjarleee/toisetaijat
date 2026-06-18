@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Try to detect language from URL
+const url = Astro.url;
+const isEnglish = url.pathname.startsWith('/en/');
+const lang = isEnglish ? 'en' : 'fi';
+
+const homeHref = isEnglish ? '/en/' : '/';
+const articlesHref = isEnglish ? '/en/articles' : '/artikkelit';
+const forSaleHref = isEnglish ? '/en/for-sale' : '/myynissa';
+
+const t = isEnglish
+  ? {
+      title: 'Page not found',
+      heading: 'Page not found',
+      description: 'The page you are looking for does not exist or has been moved.',
+      home: 'Home',
+      articles: 'Articles',
+      forSale: 'For sale',
+      back: 'Go back',
+    }
+  : {
+      title: 'Sivua ei löydy',
+      heading: 'Sivua ei löydy',
+      description: 'Etsimääsi sivua ei ole olemassa tai se on siirretty.',
+      home: 'Etusivu',
+      articles: 'Artikkelit',
+      forSale: 'Myynissä',
+      back: 'Takaisin',
+    };
+---
+
+<BaseLayout title={t.title} description={t.description} lang={lang}>
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 py-24 text-center">
+    <p class="text-7xl font-serif font-bold text-[#d4a843] mb-6">404</p>
+    <h1 class="font-serif text-3xl font-bold text-[#1a3a2a] mb-4">{t.heading}</h1>
+    <p class="text-[#44403c] text-lg mb-10">{t.description}</p>
+    <div class="flex flex-wrap justify-center gap-3">
+      <a href={homeHref} class="bg-[#1a3a2a] text-white px-5 py-2.5 rounded-md font-medium hover:bg-[#2d6a4f] transition-colors text-sm">
+        {t.home}
+      </a>
+      <a href={articlesHref} class="border border-[#1a3a2a] text-[#1a3a2a] px-5 py-2.5 rounded-md font-medium hover:bg-[#1a3a2a]/5 transition-colors text-sm">
+        {t.articles}
+      </a>
+      <a href={forSaleHref} class="border border-[#1a3a2a] text-[#1a3a2a] px-5 py-2.5 rounded-md font-medium hover:bg-[#1a3a2a]/5 transition-colors text-sm">
+        {t.forSale}
+      </a>
+    </div>
+  </div>
+</BaseLayout>

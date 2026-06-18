@@ -120,6 +120,7 @@ const searchData = hakemistoEntries.map(entry => {
     </p>
 
     <div class="relative mb-6">
+      <label for="search-input" class="sr-only">Hae hakemistosta</label>
       <input
         id="search-input"
         type="search"
@@ -132,7 +133,7 @@ const searchData = hakemistoEntries.map(entry => {
       </svg>
     </div>
 
-    <p id="result-count" class="text-sm text-[#44403c] mb-4 min-h-[1.25rem]"></p>
+    <p id="result-count" class="text-sm text-[#44403c] mb-4 min-h-[1.25rem]" aria-live="polite" aria-atomic="true"></p>
     <div id="results" class="space-y-4"></div>
     <p id="no-results" class="hidden text-[#44403c]">
       Ei tuloksia haulla &ldquo;<span id="no-results-query"></span>&rdquo;.

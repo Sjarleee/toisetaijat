@@ -87,13 +87,13 @@ function isActive(href: string) {
   <div class="max-w-5xl mx-auto px-4 sm:px-6">
     <div class="flex items-center justify-between h-16">
       <a href={lang === 'en' ? '/en/' : '/'} class="font-serif text-xl font-bold tracking-wide hover:text-[#d4a843] transition-colors flex items-center gap-2 whitespace-nowrap shrink-0">
-        <span class="text-[#d4a843] opacity-60 text-lg select-none">✦</span>
+        <span class="text-[#d4a843] opacity-60 text-lg select-none" aria-hidden="true">✦</span>
         Toiset Aijat
-        <span class="text-[#d4a843] opacity-60 text-lg select-none">✦</span>
+        <span class="text-[#d4a843] opacity-60 text-lg select-none" aria-hidden="true">✦</span>
       </a>
 
       <!-- Desktop nav -->
-      <nav class="hidden md:flex items-center gap-1">
+      <nav class="hidden md:flex items-center gap-1" aria-label={lang === 'en' ? 'Main navigation' : 'Päänavigaatio'}>
         {navItems.map(item => (
           <a
             href={item.href}
@@ -131,10 +131,10 @@ function isActive(href: string) {
         <!-- Language switcher -->
         <a
           href={langSwitchHref}
-          title={langSwitchTitle}
+          aria-label={langSwitchTitle}
           class="ml-1 px-2 py-1 rounded text-xl leading-none hover:bg-white/10 transition-colors"
         >
-          {langSwitchLabel}
+          <span aria-hidden="true">{langSwitchLabel}</span>
         </a>
       </nav>
 
@@ -143,6 +143,8 @@ function isActive(href: string) {
         id="menu-toggle"
         class="md:hidden p-2 rounded hover:bg-white/10 transition-colors"
         aria-label={menuAriaLabel}
+        aria-expanded="false"
+        aria-controls="mobile-menu"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
@@ -151,7 +153,7 @@ function isActive(href: string) {
     </div>
 
     <!-- Mobile nav -->
-    <nav id="mobile-menu" class="hidden md:hidden pb-4">
+    <nav id="mobile-menu" class="hidden md:hidden pb-4" aria-label={lang === 'en' ? 'Mobile navigation' : 'Mobiilinavigaatio'}>
       {navItems.map(item => (
         <a
           href={item.href}
@@ -200,6 +202,8 @@ function isActive(href: string) {
   const toggle = document.getElementById('menu-toggle');
   const menu = document.getElementById('mobile-menu');
   toggle?.addEventListener('click', () => {
+    const isOpen = !menu?.classList.contains('hidden');
     menu?.classList.toggle('hidden');
+    toggle.setAttribute('aria-expanded', String(!isOpen));
   });
 </script>

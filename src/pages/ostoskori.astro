@@ -57,9 +57,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </div>
             ${item.type === 'book' ? `
               <div class="flex items-center gap-1 shrink-0">
-                <button class="qty-dec w-7 h-7 rounded border border-gray-400 hover:bg-gray-100 text-base font-medium flex items-center justify-center" data-id="${item.id}">−</button>
-                <span class="w-7 text-center text-sm font-semibold">${item.quantity}</span>
-                <button class="qty-inc w-7 h-7 rounded border border-gray-400 hover:bg-gray-100 text-base font-medium flex items-center justify-center" data-id="${item.id}">+</button>
+                <button class="qty-dec w-7 h-7 rounded border border-gray-400 hover:bg-gray-100 text-base font-medium flex items-center justify-center" data-id="${item.id}" aria-label="Vähennä ${item.title} määrää">−</button>
+                <span class="w-7 text-center text-sm font-semibold" aria-live="polite">${item.quantity}</span>
+                <button class="qty-inc w-7 h-7 rounded border border-gray-400 hover:bg-gray-100 text-base font-medium flex items-center justify-center" data-id="${item.id}" aria-label="Lisää ${item.title} määrää">+</button>
               </div>
             ` : `<span class="text-sm text-[#44403c] shrink-0">×${item.quantity}</span>`}
             <div class="text-right shrink-0 min-w-[52px]">

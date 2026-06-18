@@ -22,12 +22,15 @@
 
   function updateBadge(count: number) {
     const badge = document.getElementById('cart-badge');
-    if (!badge) return;
+    const link = document.getElementById('cart-icon-link');
+    if (!badge || !link) return;
     if (count > 0) {
       badge.textContent = count > 9 ? '9+' : String(count);
       badge.classList.remove('hidden');
+      link.setAttribute('aria-label', `Ostoskori (${count} tuote${count === 1 ? '' : 'tta'})`);
     } else {
       badge.classList.add('hidden');
+      link.setAttribute('aria-label', 'Ostoskori');
     }
   }
 

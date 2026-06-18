@@ -24,6 +24,7 @@ const { Content } = await render(article);
   tags={article.data.tags}
   sourceUrl={article.data.sourceUrl}
   blocks={article.data.blocks}
+  slug={article.id}
 >
   <Content components={{ Figure }} />
 </ArticleLayout>

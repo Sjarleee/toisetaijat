@@ -2,6 +2,8 @@
 import BaseLayout from './BaseLayout.astro';
 import BlockRenderer from '../components/BlockRenderer.astro';
 import { tagToSlug } from '../utils/tags';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 
 interface Props {
   title: string;
@@ -13,9 +15,10 @@ interface Props {
   sourceUrl?: string;
   blocks?: any[];
   lang?: 'fi' | 'en';
+  slug?: string;
 }
 
-const { title, description, pubDate, updatedDate, heroImage, tags = [], sourceUrl, blocks, lang = 'fi' } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags = [], sourceUrl, blocks, lang = 'fi', slug: slugProp } = Astro.props;
 
 const productBlocks = blocks?.filter(b => b.type === 'product') ?? [];
 const otherBlocks = blocks?.filter(b => b.type !== 'product') ?? [];
@@ -31,12 +34,27 @@ const formattedDate = pubDate.toLocaleDateString(dateLocale, {
 const tagBase = lang === 'en' ? '/en/articles/tag' : '/artikkelit/tagi';
 const backHref = lang === 'en' ? '/en/articles' : '/artikkelit';
 const backLabel = lang === 'en' ? '← All articles' : '← Kaikki artikkelit';
+const relatedLabel = lang === 'en' ? 'Read also' : 'Lue myös';
 
 const SITE = 'https://www.toisetaijat.fi';
-const slug = Astro.url.pathname.split('/').filter(Boolean).pop() ?? '';
+const slug = slugProp ?? Astro.url.pathname.split('/').filter(Boolean).pop() ?? '';
 const hreflangFi = `${SITE}/artikkelit/${slug}`;
 const hreflangEn = `${SITE}/en/articles/${slug}`;
 const canonicalUrl = `${SITE}${Astro.url.pathname}`;
+
+// Related articles: same collection, overlapping tags, exclude self
+const collection = lang === 'en' ? 'articles_en' : 'articles';
+const allArticles = await getCollection(collection as any, ({ data }: any) => !data.draft);
+const related = allArticles
+  .filter((a: any) => a.id !== slug && a.data.tags?.some((t: string) => tags.includes(t)))
+  .sort((a: any, b: any) => {
+    const commonA = a.data.tags?.filter((t: string) => tags.includes(t)).length ?? 0;
+    const commonB = b.data.tags?.filter((t: string) => tags.includes(t)).length ?? 0;
+    return commonB - commonA || b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+  })
+  .slice(0, 3);
+
+const articleBase = lang === 'en' ? '/en/articles' : '/artikkelit';
 
 const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
@@ -79,6 +97,10 @@ const jsonLd = JSON.stringify({
       <img
         src={heroImage}
         alt={title}
+        width={900}
+        height={400}
+        loading="eager"
+        decoding="async"
         class="w-full h-64 object-cover rounded-lg mb-8 shadow"
       />
     )}
@@ -130,5 +152,39 @@ const jsonLd = JSON.stringify({
         {backLabel}
       </a>
     </footer>
+
+    {related.length > 0 && (
+      <aside class="mt-10 pt-8 border-t border-gray-200">
+        <h2 class="font-serif text-xl font-bold text-[#1a3a2a] mb-5">{relatedLabel}</h2>
+        <div class="space-y-3">
+          {related.map((a: any) => (
+            <a
+              href={`${articleBase}/${a.id}`}
+              class="group flex gap-4 p-3 rounded-lg border border-gray-100 hover:border-[#2d6a4f] hover:bg-[#f0f7f3] transition-all"
+            >
+              {a.data.heroImage && (
+                <img
+                  src={a.data.heroImage}
+                  alt=""
+                  width={72}
+                  height={72}
+                  loading="lazy"
+                  decoding="async"
+                  class="w-18 h-18 rounded object-cover flex-shrink-0"
+                />
+              )}
+              <div class="min-w-0">
+                <p class="text-xs text-[#78716c] mb-0.5">
+                  {a.data.pubDate.toLocaleDateString(dateLocale, { year: 'numeric', month: 'long' })}
+                </p>
+                <h3 class="font-serif font-bold text-[#1a3a2a] group-hover:text-[#2d6a4f] leading-snug text-sm">
+                  {a.data.title}
+                </h3>
+              </div>
+            </a>
+          ))}
+        </div>
+      </aside>
+    )}
   </article>
 </BaseLayout>

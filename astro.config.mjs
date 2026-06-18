@@ -20,6 +20,13 @@ export default defineConfig({
   },
   integrations: [
     mdx(),
-    sitemap(),
+    sitemap({
+      filter: (page) => ![
+        'https://www.toisetaijat.fi/tilaus/',
+        'https://www.toisetaijat.fi/tilaus-vahvistettu/',
+        'https://www.toisetaijat.fi/ostoskori/',
+        'https://www.toisetaijat.fi/haku/',
+      ].includes(page),
+    }),
   ],
 });

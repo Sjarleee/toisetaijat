@@ -39,7 +39,7 @@ const currentPath = Astro.url.pathname;
 const langSwitchHref = lang === 'en'
   ? currentPath.replace(/^\/en(\/|$)/, '/') || '/'
   : `/en${currentPath}`;
-const langSwitchLabel = lang === 'en' ? 'FI' : 'EN';
+const langSwitchLabel = lang === 'en' ? '🇫🇮' : '🇬🇧';
 const langSwitchTitle = lang === 'en' ? 'Suomeksi' : 'In English';
 
 function isActive(href: string) {

@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getEntry, render } from 'astro:content';
+
+const page = await getEntry('pages_en', 'toimitusehdot');
+const { Content } = await render(page);
+---
+
+<BaseLayout title={page.data.title} description={page.data.description} lang="en">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 py-12">
+    <h1 class="font-serif text-3xl font-bold text-[#1a3a2a] mb-8">{page.data.title}</h1>
+    <div class="prose prose-lg max-w-none prose-headings:font-serif prose-headings:text-[#1a3a2a] prose-a:text-[#2d6a4f]">
+      <Content />
+    </div>
+  </div>
+</BaseLayout>

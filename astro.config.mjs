@@ -8,6 +8,13 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://www.toisetaijat.fi',
   output: 'static',
+  i18n: {
+    defaultLocale: 'fi',
+    locales: ['fi', 'en'],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
   vite: {
     plugins: [tailwindcss()]
   },

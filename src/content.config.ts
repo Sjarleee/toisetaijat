@@ -133,4 +133,48 @@ const hakemisto = defineCollection({
   }),
 });
 
-export const collections = { articles, pages, books, articleCollections, hakemisto };
+const articles_en = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/articles-en' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
+    heroImage: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    sourceUrl: z.string().url().optional(),
+    draft: z.boolean().default(false),
+    blocks: z.array(blockSchema).optional(),
+    /** Slug of the corresponding Finnish article */
+    fiSlug: z.string().optional(),
+  }),
+});
+
+const pages_en = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/pages-en' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    // homepage
+    heroSubtitle: z.string().optional(),
+    shippingNotice: z.string().optional(),
+    shippingNoticeVisible: z.boolean().optional(),
+    // myynissa / books
+    introText: z.string().optional(),
+    deliveryNote: z.string().optional(),
+    contactNote: z.string().optional(),
+    // matti-j-kankaanpaa
+    photo: z.string().optional(),
+    photoAlt: z.string().optional(),
+    photoCaption: z.string().optional(),
+    photoPlacement: z.enum(['right', 'left', 'top', 'full']).optional(),
+    // contact
+    name: z.string().optional(),
+    address: z.string().optional(),
+    email: z.string().optional(),
+    deliveryInfo: z.string().optional(),
+    businessId: z.string().optional(),
+  }),
+});
+
+export const collections = { articles, pages, books, articleCollections, hakemisto, articles_en, pages_en };

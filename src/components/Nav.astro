@@ -2,19 +2,48 @@
 import CartIcon from './CartIcon.astro';
 type NavItem = { href: string; label: string };
 
-const navItems: NavItem[] = [
-  { href: '/', label: 'Etusivu' },
-  { href: '/artikkelit', label: 'Artikkelit' },
-  { href: '/kirjat', label: 'Julkaisut' },
-  { href: '/hakemisto', label: 'Hakemisto' },
-  { href: '/matti-j-kankaanpaa', label: 'Matti J. Kankaanpää' },
-  { href: '/ota-yhteytta', label: 'Ota yhteyttä' },
-];
+interface Props {
+  lang?: 'fi' | 'en';
+}
 
+const { lang = 'fi' } = Astro.props;
+const base = lang === 'en' ? '/en' : '';
+
+const navItems: NavItem[] = lang === 'en'
+  ? [
+      { href: `${base}/`, label: 'Home' },
+      { href: `${base}/articles`, label: 'Articles' },
+      { href: `${base}/books`, label: 'Publications' },
+      { href: `${base}/hakemisto`, label: 'Index' },
+      { href: `${base}/about`, label: 'Matti J. Kankaanpää' },
+      { href: `${base}/contact`, label: 'Contact' },
+    ]
+  : [
+      { href: '/', label: 'Etusivu' },
+      { href: '/artikkelit', label: 'Artikkelit' },
+      { href: '/kirjat', label: 'Julkaisut' },
+      { href: '/hakemisto', label: 'Hakemisto' },
+      { href: '/matti-j-kankaanpaa', label: 'Matti J. Kankaanpää' },
+      { href: '/ota-yhteytta', label: 'Ota yhteyttä' },
+    ];
+
+const shopHref = lang === 'en' ? `${base}/books` : '/myynissa';
+const shopLabel = lang === 'en' ? 'Books' : 'Myynissä';
+const searchHref = lang === 'en' ? `${base}/articles` : '/haku';
+const searchAriaLabel = lang === 'en' ? 'Search' : 'Haku';
+const menuAriaLabel = lang === 'en' ? 'Open menu' : 'Avaa valikko';
+const cartLabel = lang === 'en' ? 'Cart' : 'Ostoskori';
+
+// Language switcher: opposite language link
 const currentPath = Astro.url.pathname;
+const langSwitchHref = lang === 'en'
+  ? currentPath.replace(/^\/en(\/|$)/, '/') || '/'
+  : `/en${currentPath}`;
+const langSwitchLabel = lang === 'en' ? 'FI' : 'EN';
+const langSwitchTitle = lang === 'en' ? 'Suomeksi' : 'In English';
 
 function isActive(href: string) {
-  if (href === '/') return currentPath === '/';
+  if (href === '/' || href === '/en/') return currentPath === href;
   return currentPath.startsWith(href);
 }
 ---
@@ -22,7 +51,7 @@ function isActive(href: string) {
 <header class="bg-[#1a3a2a] text-white shadow-lg sticky top-0 z-50" style="border-bottom: 3px solid #8b6914; box-shadow: 0 2px 12px rgba(0,0,0,0.35);">
   <div class="max-w-5xl mx-auto px-4 sm:px-6">
     <div class="flex items-center justify-between h-16">
-      <a href="/" class="font-serif text-xl font-bold tracking-wide hover:text-[#d4a843] transition-colors flex items-center gap-2">
+      <a href={lang === 'en' ? '/en/' : '/'} class="font-serif text-xl font-bold tracking-wide hover:text-[#d4a843] transition-colors flex items-center gap-2">
         <span class="text-[#d4a843] opacity-60 text-lg select-none">✦</span>
         Toiset Aijat
         <span class="text-[#d4a843] opacity-60 text-lg select-none">✦</span>
@@ -43,32 +72,42 @@ function isActive(href: string) {
           </a>
         ))}
         <a
-          href="/myynissa"
+          href={shopHref}
           class={`ml-2 px-4 py-1.5 rounded text-sm font-semibold transition-colors ${
-            isActive('/myynissa')
+            isActive(shopHref)
               ? 'bg-[#b8922e] text-white'
               : 'bg-[#d4a843] text-[#1a3a2a] hover:bg-[#c9a040]'
           }`}
         >
-          Myynissä
+          {shopLabel}
         </a>
+        {lang === 'fi' && (
+          <a
+            href={searchHref}
+            class={`ml-1 p-1.5 rounded transition-colors ${isActive(searchHref) ? 'bg-white/20 text-white' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
+            aria-label={searchAriaLabel}
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+            </svg>
+          </a>
+        )}
+        {lang === 'fi' && <CartIcon />}
+        <!-- Language switcher -->
         <a
-          href="/haku"
-          class={`ml-1 p-1.5 rounded transition-colors ${isActive('/haku') ? 'bg-white/20 text-white' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
-          aria-label="Haku"
+          href={langSwitchHref}
+          title={langSwitchTitle}
+          class="ml-1 px-2 py-1 rounded text-xs font-semibold text-white/70 hover:text-white hover:bg-white/10 transition-colors border border-white/20"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
-          </svg>
+          {langSwitchLabel}
         </a>
-        <CartIcon />
       </nav>
 
       <!-- Mobile hamburger -->
       <button
         id="menu-toggle"
         class="md:hidden p-2 rounded hover:bg-white/10 transition-colors"
-        aria-label="Avaa valikko"
+        aria-label={menuAriaLabel}
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
@@ -87,25 +126,35 @@ function isActive(href: string) {
         </a>
       ))}
       <a
-        href="/myynissa"
+        href={shopHref}
         class="block mx-3 mt-2 px-4 py-2 rounded text-sm font-semibold text-center bg-[#d4a843] text-[#1a3a2a] hover:bg-[#c9a040] transition-colors"
       >
-        Myynissä
+        {shopLabel}
       </a>
+      {lang === 'fi' && (
+        <a
+          href={searchHref}
+          class="flex items-center gap-2 px-3 py-2 rounded text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-colors mt-1"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+          </svg>
+          {searchAriaLabel}
+        </a>
+      )}
+      {lang === 'fi' && (
+        <a href="/ostoskori" class="flex items-center gap-2 px-3 py-2 rounded text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+          {cartLabel}
+        </a>
+      )}
       <a
-        href="/haku"
-        class="flex items-center gap-2 px-3 py-2 rounded text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-colors mt-1"
+        href={langSwitchHref}
+        class="block px-3 py-2 rounded text-sm font-medium text-white/60 hover:text-white hover:bg-white/10 transition-colors mt-1"
       >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
-        </svg>
-        Haku
-      </a>
-      <a href="/ostoskori" class="flex items-center gap-2 px-3 py-2 rounded text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-colors">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-        </svg>
-        Ostoskori
+        {langSwitchTitle}
       </a>
     </nav>
   </div>

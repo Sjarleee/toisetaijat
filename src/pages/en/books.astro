@@ -1,0 +1,96 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, getEntry } from 'astro:content';
+import { entryToBook } from '../../data/products';
+
+const page = await getEntry('pages_en', 'kirjat');
+const allBookEntries = await getCollection('books');
+const books = allBookEntries
+  .sort((a, b) => (b.data.year ?? 0) - (a.data.year ?? 0))
+  .map(entryToBook);
+---
+
+<BaseLayout title={page.data.title} description={page.data.description} lang="en">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-12">
+    <h1 class="font-serif text-3xl sm:text-4xl font-bold text-[#1a3a2a] mb-2">{page.data.title}</h1>
+    <p class="text-[#44403c] mb-10 text-lg">
+      {page.data.introText}
+    </p>
+
+    <div class="space-y-8">
+      {books.map(book => (
+        <div class="flex gap-6 p-6 bg-white border border-gray-200 rounded-lg">
+          {book.image && (
+            <div class="flex-shrink-0 w-24">
+              <img src={book.image} alt={book.title} class="w-full aspect-[2/3] object-cover rounded shadow" loading="lazy" />
+            </div>
+          )}
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="text-xs text-[#78716c] mb-1">{book.year}</p>
+                <h2 class="font-serif font-bold text-[#1a3a2a] leading-snug">
+                  {book.articleUrl
+                    ? <a href={book.articleUrl} class="hover:text-[#2d6a4f] hover:underline">{book.title}</a>
+                    : book.title
+                  }
+                </h2>
+              </div>
+            </div>
+            {book.description && (
+              <p class="text-sm text-[#44403c] mt-2">{book.description}</p>
+            )}
+            <div class="mt-3 flex flex-wrap gap-2 items-center">
+              {book.ebookUrl && (
+                <a
+                  href={book.ebookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#d4a843] text-[#1a3a2a] rounded text-sm font-semibold hover:bg-[#b8922e] transition-colors"
+                >
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                  {book.ebookLabel ?? 'Buy on Google Play'}
+                  {book.ebookPrice != null && <span class="ml-1">€{book.ebookPrice}</span>}
+                </a>
+              )}
+              {book.externalUrl && !book.ebookUrl && (
+                <a
+                  href={book.externalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#1a3a2a] text-white rounded text-sm font-semibold hover:bg-[#2d6a4f] transition-colors"
+                >
+                  Order →
+                </a>
+              )}
+              {book.availability === 'available' && !book.ebookUrl && !book.externalUrl && (
+                <a
+                  href="/en/contact"
+                  class="inline-flex items-center gap-1.5 px-4 py-2 border border-[#1a3a2a] text-[#1a3a2a] rounded text-sm font-semibold hover:bg-[#1a3a2a]/5 transition-colors"
+                >
+                  Order by email
+                  {book.price != null && <span>€{book.price}</span>}
+                </a>
+              )}
+              {book.availability === 'soldout' && (
+                <span class="px-3 py-1.5 bg-gray-100 text-gray-500 rounded text-sm">Sold out</span>
+              )}
+              {book.availability === 'ask' && (
+                <a href="/en/contact" class="text-sm text-[#2d6a4f] hover:underline">Enquire</a>
+              )}
+            </div>
+            {book.note && <p class="text-xs text-[#78716c] mt-2 italic">{book.note}</p>}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-12 p-6 bg-[#f5f0e8] rounded-lg border border-[#d4a843]/30">
+      <p class="text-sm text-[#44403c]">
+        {page.data.contactNote ?? 'For orders and enquiries about physical books, please use the contact page.'}
+        {' '}
+        <a href="/en/contact" class="text-[#2d6a4f] font-medium hover:underline">Contact →</a>
+      </p>
+    </div>
+  </div>
+</BaseLayout>

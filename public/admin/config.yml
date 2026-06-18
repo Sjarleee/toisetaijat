@@ -288,3 +288,175 @@ collections:
         name: articles
         widget: list
         hint: 'Luettelo artikkeleista (esim. vuosiluvut)'
+
+  # ── English content ──────────────────────────────────────────────────────────
+
+  - name: pages_en
+    label: Pages (English)
+    label_singular: Page (EN)
+    files:
+      - name: etusivu
+        label: Homepage (EN)
+        file: src/content/pages-en/etusivu.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Description (SEO), name: description, widget: text, required: false }
+          - { label: Hero subtitle, name: heroSubtitle, widget: text, required: false }
+          - { label: Shipping notice visible, name: shippingNoticeVisible, widget: boolean, default: false, required: false }
+          - { label: Shipping notice, name: shippingNotice, widget: text, required: false }
+      - name: myynissa
+        label: For Sale (EN)
+        file: src/content/pages-en/myynissa.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Description (SEO), name: description, widget: text, required: false }
+          - { label: Intro text, name: introText, widget: text, required: false }
+          - { label: Delivery note, name: deliveryNote, widget: text, required: false }
+      - name: kirjat
+        label: Publications (EN)
+        file: src/content/pages-en/kirjat.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Description (SEO), name: description, widget: text, required: false }
+          - { label: Intro text, name: introText, widget: text, required: false }
+          - { label: Contact note, name: contactNote, widget: text, required: false }
+      - name: matti-j-kankaanpaa
+        label: About Matti (EN)
+        file: src/content/pages-en/matti-j-kankaanpaa.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Description (SEO), name: description, widget: text, required: false }
+          - label: Photo
+            name: photo
+            widget: image
+            required: false
+          - { label: Photo alt text, name: photoAlt, widget: string, required: false }
+          - { label: Photo caption, name: photoCaption, widget: string, required: false }
+          - label: Photo placement
+            name: photoPlacement
+            widget: select
+            required: false
+            default: right
+            options:
+              - { label: 'Right (text left)', value: right }
+              - { label: 'Left (text right)', value: left }
+              - { label: 'Top (full width)', value: top }
+              - { label: 'Full width', value: full }
+          - { label: Content, name: body, widget: markdown }
+      - name: ota-yhteytta
+        label: Contact (EN)
+        file: src/content/pages-en/ota-yhteytta.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Description (SEO), name: description, widget: text, required: false }
+          - { label: Intro text, name: body, widget: markdown }
+          - { label: Name, name: name, widget: string, required: false }
+          - { label: Address, name: address, widget: string, required: false }
+          - { label: Email, name: email, widget: string, required: false }
+          - { label: Delivery info, name: deliveryInfo, widget: text, required: false }
+      - name: tekijanoikeus
+        label: Copyright (EN)
+        file: src/content/pages-en/tekijanoikeus.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Description (SEO), name: description, widget: text, required: false }
+          - { label: Content, name: body, widget: markdown }
+      - name: toimitusehdot
+        label: Terms (EN)
+        file: src/content/pages-en/toimitusehdot.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Description (SEO), name: description, widget: text, required: false }
+          - { label: Content, name: body, widget: markdown }
+      - name: tietosuoja
+        label: Privacy (EN)
+        file: src/content/pages-en/tietosuoja.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Description (SEO), name: description, widget: text, required: false }
+          - { label: Content, name: body, widget: markdown }
+
+  - name: articles_en
+    label: Articles (English)
+    label_singular: Article (EN)
+    folder: src/content/articles-en
+    create: true
+    slug: '{{slug}}'
+    extension: mdx
+    format: frontmatter
+    sortable_fields: ['pubDate', 'title']
+    summary: '{{title}}'
+    view_filters:
+      - label: Drafts
+        field: draft
+        pattern: true
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: text, required: false, hint: Short description shown in listings and search engines }
+      - label: Publication date
+        name: pubDate
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        default: ''
+      - label: Updated date
+        name: updatedDate
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        required: false
+      - { label: Hero image, name: heroImage, widget: image, required: false }
+      - { label: Tags, name: tags, widget: list, required: false }
+      - { label: Draft, name: draft, widget: boolean, default: false, hint: Drafts are not published }
+      - { label: Finnish slug (fiSlug), name: fiSlug, widget: string, required: false, hint: 'Slug of the corresponding Finnish article, e.g. suomalainen-ratsuvaki-ruotsin-ajalla' }
+      - label: Content
+        name: body
+        widget: markdown
+        modes: ['rich_text', 'raw']
+      - label: Extra blocks
+        name: blocks
+        widget: list
+        required: false
+        types:
+          - label: Product card
+            name: product
+            widget: object
+            fields:
+              - label: Book ID
+                name: bookId
+                widget: string
+          - label: Figure
+            name: figure
+            widget: object
+            fields:
+              - { label: Image, name: image, widget: image }
+              - { label: Caption, name: caption, widget: string, required: false }
+              - label: Size
+                name: size
+                widget: select
+                default: full
+                options:
+                  - {label: 'Full width', value: full}
+                  - {label: 'Medium', value: medium}
+                  - {label: 'Small', value: small}
+              - label: Placement
+                name: placement
+                widget: select
+                default: center
+                options:
+                  - {label: 'Center', value: center}
+                  - {label: 'Left', value: left}
+                  - {label: 'Right', value: right}
+          - label: Callout
+            name: callout
+            widget: object
+            fields:
+              - { label: Text, name: text, widget: text }
+              - label: Variant
+                name: variant
+                widget: select
+                default: note
+                options:
+                  - {label: 'Note (blue)', value: note}
+                  - {label: 'Tip (green)', value: tip}
+                  - {label: 'Warning (yellow)', value: warning}

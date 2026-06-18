@@ -1,0 +1,450 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const hakemistoEntries = await getCollection('hakemisto');
+const allBooks = await getCollection('books');
+const allArticles = await getCollection('articles', ({ data }) => !data.draft);
+const allArticleCollections = await getCollection('articleCollections');
+
+const bookMap = Object.fromEntries(allBooks.map(b => [b.id, b.data]));
+const articleMap = Object.fromEntries(allArticles.map(a => [a.id, a.data]));
+const collectionMap = Object.fromEntries(allArticleCollections.map(c => [c.id, c.data]));
+
+type CtaStyle = 'gold' | 'green' | 'gray';
+
+const searchData = hakemistoEntries.map(entry => {
+  const d = entry.data;
+  const ref = d.reference;
+
+  let url: string | null = null;
+  let price: number | null = null;
+  let refLabel = '';
+  let ctaLabel = '';
+  let ctaStyle: CtaStyle = 'gold';
+
+  if (ref.type === 'book') {
+    const book = bookMap[ref.id];
+    if (book) {
+      price = book.price ?? book.ebookPrice ?? null;
+      if (book.productType === 'ebook' || book.availability === 'ebook-only') {
+        refLabel = 'E-book';
+        ctaLabel = 'Read e-book →';
+        ctaStyle = 'green';
+        url = book.ebookUrl ?? null;
+      } else if (book.availability === 'soldout') {
+        refLabel = 'Book (out of print)';
+        ctaLabel = 'Out of print';
+        ctaStyle = 'gray';
+        url = book.articleUrl ?? null;
+      } else if (book.availability === 'ask') {
+        refLabel = 'Book';
+        ctaLabel = 'Ask for availability →';
+        ctaStyle = 'gray';
+        url = '/en/contact';
+      } else {
+        refLabel = 'Book';
+        ctaLabel = 'More info →';
+        ctaStyle = 'gold';
+        url = book.articleUrl ?? null;
+      }
+    }
+  } else if (ref.type === 'article') {
+    const article = articleMap[ref.id];
+    if (article) {
+      url = `/artikkelit/${ref.id}`;
+    }
+    refLabel = 'Article';
+    ctaLabel = 'Read article →';
+    ctaStyle = 'green';
+  } else if (ref.type === 'article-collection') {
+    const col = collectionMap[ref.id];
+    if (col) {
+      url = col.articleUrl ?? col.orderUrl;
+      price = col.priceAll;
+    }
+    refLabel = 'Article collection';
+    ctaLabel = 'View articles →';
+    ctaStyle = 'gold';
+  } else if (ref.type === 'unpublished') {
+    refLabel = ref.label;
+    ctaLabel = 'Contact us →';
+    ctaStyle = 'gray';
+    url = '/en/contact';
+  }
+
+  const normTag = (t: unknown): string =>
+    typeof t === 'string' ? t : (t as { name?: string })?.name ?? '';
+
+  const normTagWithSources = (t: unknown): { name: string; sources: string[] } => {
+    if (typeof t === 'string') return { name: t, sources: [] };
+    const obj = t as { name?: string; sources?: string[] };
+    return { name: obj.name ?? '', sources: obj.sources ?? [] };
+  };
+
+  return {
+    id: entry.id,
+    title: d.title,
+    description: d.description,
+    refType: ref.type,
+    refLabel,
+    url,
+    price,
+    ctaLabel,
+    ctaStyle,
+    persons: d.persons.map(normTagWithSources).filter(p => p.name),
+    places: d.places.map(normTag).filter(Boolean),
+    events: d.events.map(normTag).filter(Boolean),
+    regiments: d.regiments.map(normTag).filter(Boolean),
+    families: d.families.map(normTagWithSources).filter(f => f.name),
+    other: d.other.map(normTag).filter(Boolean),
+  };
+});
+---
+
+<BaseLayout
+  title="Index"
+  description="Search for persons, places, events and regiments in Matti J. Kankaanpää's publications and research."
+  lang="en"
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+    <h1 class="font-serif text-3xl sm:text-4xl font-bold text-[#1a3a2a] mb-3">Genealogical Index</h1>
+    <p class="text-[#44403c] text-sm mb-5 max-w-2xl leading-relaxed">
+      Search for persons, places, events, regiments and families in Matti J. Kankaanpää's publications
+      and research. Results link to available books, articles, or an enquiry form for unpublished material.
+    </p>
+    <p class="text-[#44403c] text-xs mb-5 max-w-2xl leading-relaxed">
+      The database is based on Matti J. Kankaanpää's personal genealogical research and contains nearly
+      <strong>1&nbsp;900 source documents</strong>. Over <strong>17&nbsp;000 personal references</strong>
+      and <strong>1&nbsp;600 family references</strong> have been indexed and are searchable.
+      Note: names and place names are in Finnish or Swedish.
+    </p>
+
+    <div class="relative mb-6">
+      <input
+        id="search-input"
+        type="search"
+        placeholder="Search by name, place, event, regiment..."
+        autofocus
+        class="w-full px-4 py-3 pl-11 border border-gray-400 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-[#2d6a4f]"
+      />
+      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+      </svg>
+    </div>
+
+    <p id="result-count" class="text-sm text-[#44403c] mb-4 min-h-[1.25rem]"></p>
+    <div id="results" class="space-y-4"></div>
+    <p id="no-results" class="hidden text-[#44403c]">
+      No results for &ldquo;<span id="no-results-query"></span>&rdquo;.
+    </p>
+    <p id="start-prompt" class="text-[#44403c] text-sm">
+      Type a search term above — for example a person's name, a parish or a regiment name.
+    </p>
+  </div>
+</BaseLayout>
+
+<!-- Inquiry Modal -->
+<div id="inquiry-modal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+  <div class="absolute inset-0 bg-black/50" onclick="closeInquiry()"></div>
+  <div class="relative z-10 w-full max-w-lg mx-auto mt-12 mx-4 bg-white rounded-lg shadow-xl overflow-y-auto max-h-[85vh]">
+    <div class="p-6 sm:p-8">
+      <button onclick="closeInquiry()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl leading-none" aria-label="Close">&times;</button>
+      <h2 id="modal-heading" class="font-serif text-xl font-bold text-[#1a3a2a] mb-1">Enquire about unpublished material</h2>
+      <p id="modal-collection" class="text-sm text-gray-500 mb-4"></p>
+
+      <div class="bg-amber-50 border border-amber-200 rounded p-3 text-xs text-amber-800 mb-4 leading-relaxed">
+        <strong>Pricing:</strong> €45/hr, minimum 1 hour. Not all references may be shareable due to privacy or copyright considerations.
+      </div>
+
+      <div id="modal-matched" class="mb-4"></div>
+
+      <form id="inquiry-form" novalidate class="space-y-4">
+        <div>
+          <label for="inq-name" class="block text-sm font-medium text-gray-700 mb-1">Name <span class="text-red-500">*</span></label>
+          <input type="text" id="inq-name" name="name" required autocomplete="name"
+            class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-[#2d6a4f]" />
+        </div>
+        <div>
+          <label for="inq-email" class="block text-sm font-medium text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
+          <input type="email" id="inq-email" name="email" required autocomplete="email"
+            class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-[#2d6a4f]" />
+        </div>
+        <div>
+          <label for="inq-message" class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+          <textarea id="inq-message" name="message" rows="3"
+            class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-[#2d6a4f]"
+            placeholder="Tell us more about your research question..."></textarea>
+        </div>
+        <input type="hidden" id="inq-collection" name="collection" />
+        <input type="hidden" id="inq-matched" name="matched" />
+        <input type="hidden" id="inq-sources" name="sources" />
+        <div class="flex gap-3 pt-1">
+          <button type="submit" id="inq-submit"
+            class="flex-1 bg-[#2d6a4f] text-white py-2.5 rounded font-semibold text-sm hover:bg-[#245c42] transition-colors disabled:opacity-50">
+            Send enquiry →
+          </button>
+          <button type="button" onclick="closeInquiry()"
+            class="px-4 py-2.5 rounded border border-gray-300 text-sm text-gray-600 hover:bg-gray-50">
+            Cancel
+          </button>
+        </div>
+        <p id="inq-error" class="text-red-600 text-xs hidden"></p>
+        <p id="inq-success" class="text-[#2d6a4f] text-sm hidden font-medium">
+          Enquiry sent! We will be in touch shortly.
+        </p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ searchData }}>
+  const input = document.getElementById('search-input');
+  const resultsEl = document.getElementById('results');
+  const noResultsEl = document.getElementById('no-results');
+  const noResultsQuery = document.getElementById('no-results-query');
+  const countEl = document.getElementById('result-count');
+  const startPrompt = document.getElementById('start-prompt');
+
+  const MAX_CHIPS = 5;
+  let currentResults = [];
+
+  function esc(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function chips(terms, colorClass, withSources = false) {
+    if (!terms.length) return '';
+    const shown = terms.slice(0, MAX_CHIPS);
+    const rest = terms.length - MAX_CHIPS;
+    const html = shown.map(t => {
+      if (withSources && typeof t === 'object') {
+        const srcHtml = t.sources && t.sources.length
+          ? `<span class="text-[10px] text-gray-400 block leading-tight mt-0.5">${t.sources.map(s => esc(s)).join(', ')}</span>`
+          : '';
+        return `<span class="text-xs ${colorClass} rounded px-1.5 py-0.5 inline-flex flex-col">${esc(t.name)}${srcHtml}</span>`;
+      }
+      return `<span class="text-xs ${colorClass} rounded px-1.5 py-0.5">${esc(typeof t === 'object' ? t.name : t)}</span>`;
+    }).join('');
+    const more = rest > 0 ? `<span class="text-xs text-gray-400 italic">+${rest} more</span>` : '';
+    return html + more;
+  }
+
+  function matchRow(label, terms, colorClass, withSources = false) {
+    if (!terms.length) return '';
+    return `
+      <div class="flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
+        <span class="text-xs text-gray-400 font-medium shrink-0">${label}:</span>
+        ${chips(terms, colorClass, withSources)}
+      </div>`;
+  }
+
+  function badgeClass(refType) {
+    const map = {
+      book: 'bg-[#1a3a2a] text-white',
+      article: 'bg-[#2d6a4f] text-white',
+      'article-collection': 'bg-purple-700 text-white',
+      unpublished: 'bg-gray-500 text-white',
+    };
+    return map[refType] ?? 'bg-gray-500 text-white';
+  }
+
+  function ctaClass(style) {
+    const map = {
+      gold: 'bg-[#d4a843] text-[#1a3a2a] hover:bg-[#c9a040]',
+      green: 'bg-[#2d6a4f] text-white hover:bg-[#245c42]',
+      gray: 'bg-gray-500 text-white hover:bg-gray-600',
+    };
+    return map[style] ?? map.gray;
+  }
+
+  function renderCard(r) {
+    const hasKeywordMatches =
+      r.mPersons.length || r.mPlaces.length || r.mEvents.length ||
+      r.mRegiments.length || r.mFamilies.length || r.mOther.length;
+
+    const matchesHtml = hasKeywordMatches ? `
+      <div class="mt-3 space-y-1.5 border-t border-gray-100 pt-3">
+        <p class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-1">Found:</p>
+        ${matchRow('Persons', r.mPersons, 'bg-blue-50 text-blue-700')}
+        ${matchRow('Places', r.mPlaces, 'bg-green-50 text-green-700')}
+        ${matchRow('Events', r.mEvents, 'bg-orange-50 text-orange-700')}
+        ${matchRow('Regiments', r.mRegiments, 'bg-purple-50 text-purple-700')}
+        ${matchRow('Families', r.mFamilies, 'bg-pink-50 text-pink-700')}
+        ${matchRow('Other', r.mOther, 'bg-gray-100 text-gray-600')}
+      </div>` : '';
+
+    const priceHtml = r.price
+      ? `<span class="text-sm font-semibold text-[#d4a843]">${r.price} €</span>`
+      : '';
+
+    const ctaHtml = r.refType === 'unpublished'
+      ? `<button onclick="openInquiry(${r._idx})" class="inline-block mt-4 px-4 py-2 rounded text-sm font-semibold transition-colors bg-gray-500 text-white hover:bg-gray-600 cursor-pointer">${esc(r.ctaLabel)}</button>`
+      : r.url
+      ? `<a href="${esc(r.url)}" class="inline-block mt-4 px-4 py-2 rounded text-sm font-semibold transition-colors ${ctaClass(r.ctaStyle)}">${esc(r.ctaLabel)}</a>`
+      : `<span class="inline-block mt-4 px-4 py-2 rounded text-sm font-semibold bg-gray-200 text-gray-500 cursor-default">${esc(r.ctaLabel)}</span>`;
+
+    return `
+      <div class="p-5 bg-white rounded-lg border border-gray-200 hover:border-[#2d6a4f] hover:shadow-sm transition-all duration-200">
+        <div class="flex items-center justify-between gap-3 mb-2">
+          <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${badgeClass(r.refType)}">${esc(r.refLabel)}</span>
+          ${priceHtml}
+        </div>
+        <h2 class="font-serif text-lg font-bold text-[#1a3a2a] leading-snug">${esc(r.title)}</h2>
+        ${r.description ? `<p class="text-sm text-[#44403c] mt-1 line-clamp-3">${esc(r.description)}</p>` : ''}
+        ${matchesHtml}
+        ${ctaHtml}
+      </div>`;
+  }
+
+  function render(results, query) {
+    startPrompt.classList.add('hidden');
+    if (results.length === 0) {
+      resultsEl.innerHTML = '';
+      noResultsEl.classList.remove('hidden');
+      noResultsQuery.textContent = query;
+      countEl.textContent = '';
+      return;
+    }
+    noResultsEl.classList.add('hidden');
+    countEl.textContent = `${results.length} source${results.length === 1 ? '' : 's'}`;
+    currentResults = results;
+    resultsEl.innerHTML = results.map((r, i) => renderCard({ ...r, _idx: i })).join('');
+  }
+
+  function search(query) {
+    const q = query.toLowerCase().trim();
+    if (!q) {
+      resultsEl.innerHTML = '';
+      noResultsEl.classList.add('hidden');
+      countEl.textContent = '';
+      startPrompt.classList.remove('hidden');
+      return;
+    }
+
+    const results = [];
+    for (const entry of searchData) {
+      const titleHit = entry.title.toLowerCase().includes(q);
+      const descHit = entry.description.toLowerCase().includes(q);
+      const mPersons = entry.persons.filter(t => t.name.toLowerCase().includes(q));
+      const mPlaces = entry.places.filter(t => t.toLowerCase().includes(q));
+      const mEvents = entry.events.filter(t => t.toLowerCase().includes(q));
+      const mRegiments = entry.regiments.filter(t => t.toLowerCase().includes(q));
+      const mFamilies = entry.families.filter(t => t.name.toLowerCase().includes(q));
+      const mOther = entry.other.filter(t => t.toLowerCase().includes(q));
+
+      if (titleHit || descHit || mPersons.length || mPlaces.length ||
+          mEvents.length || mRegiments.length || mFamilies.length || mOther.length) {
+        results.push({ ...entry, mPersons, mPlaces, mEvents, mRegiments, mFamilies, mOther });
+      }
+    }
+    render(results, query);
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const initialQ = params.get('q') ?? '';
+  if (initialQ) {
+    input.value = initialQ;
+    search(initialQ);
+  }
+
+  input.addEventListener('input', e => {
+    const val = e.target.value;
+    const url = new URL(window.location.href);
+    if (val) url.searchParams.set('q', val); else url.searchParams.delete('q');
+    history.replaceState(null, '', url);
+    search(val);
+  });
+
+  window.openInquiry = function openInquiry(idx) {
+    const r = currentResults[idx];
+    if (!r) return;
+
+    document.getElementById('modal-collection').textContent = r.title;
+    document.getElementById('inq-collection').value = r.title;
+
+    const allMatched = [
+      ...r.mPersons.map(p => (typeof p === 'object' ? p.name : p)),
+      ...r.mFamilies.map(f => (typeof f === 'object' ? f.name : f)),
+    ];
+    const matchedEl = document.getElementById('modal-matched');
+    if (allMatched.length) {
+      matchedEl.innerHTML = `<p class="text-xs text-gray-500 font-medium mb-1">Matched:</p><div class="flex flex-wrap gap-1">${allMatched.map(n => `<span class="text-xs bg-blue-50 text-blue-700 rounded px-1.5 py-0.5">${esc(n)}</span>`).join('')}</div>`;
+    } else {
+      matchedEl.innerHTML = '';
+    }
+
+    const allSources = [
+      ...r.mPersons.filter(p => typeof p === 'object' && p.sources).flatMap(p => p.sources.map(s => `${p.name}: ${s}`)),
+      ...r.mFamilies.filter(f => typeof f === 'object' && f.sources).flatMap(f => f.sources.map(s => `${f.name}: ${s}`)),
+    ];
+
+    const form = document.getElementById('inquiry-form');
+    form.reset();
+    document.getElementById('inq-collection').value = r.title;
+    document.getElementById('inq-matched').value = allMatched.join(', ');
+    document.getElementById('inq-sources').value = allSources.join('\n');
+    document.getElementById('inq-error').classList.add('hidden');
+    document.getElementById('inq-success').classList.add('hidden');
+    const submitBtn = document.getElementById('inq-submit');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Send enquiry \u2192';
+    form.querySelectorAll('input, textarea').forEach(el => el.disabled = false);
+
+    document.getElementById('inquiry-modal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  window.closeInquiry = function closeInquiry() {
+    document.getElementById('inquiry-modal').classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('inquiry-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = document.getElementById('inq-submit');
+    const errorEl = document.getElementById('inq-error');
+    const successEl = document.getElementById('inq-success');
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+    errorEl.classList.add('hidden');
+
+    const payload = {
+      name: document.getElementById('inq-name').value.trim(),
+      email: document.getElementById('inq-email').value.trim(),
+      message: document.getElementById('inq-message').value.trim(),
+      collection: document.getElementById('inq-collection').value,
+      matched: document.getElementById('inq-matched').value,
+      sources: document.getElementById('inq-sources').value,
+    };
+
+    try {
+      const res = await fetch('/api/hakemisto-inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        successEl.classList.remove('hidden');
+        e.currentTarget.querySelectorAll('input, textarea, button[type="submit"]').forEach(el => el.disabled = true);
+      } else {
+        throw new Error(data.error || 'Unknown error');
+      }
+    } catch (err) {
+      errorEl.textContent = `Failed to send: ${err.message}. Please try again or send an email directly.`;
+      errorEl.classList.remove('hidden');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send enquiry \u2192';
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeInquiry();
+  });
+</script>

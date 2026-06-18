@@ -1,4 +1,9 @@
 ---
+interface Props {
+  lang?: 'fi' | 'en';
+}
+const { lang = 'fi' } = Astro.props;
+const base = lang === 'en' ? '/en' : '';
 ---
 
 <footer class="bg-[#1a3a2a] text-white mt-16">
@@ -7,21 +12,36 @@
       <div>
         <h3 class="font-serif text-lg font-bold mb-3">Toiset Aijat</h3>
         <p class="text-white/70 text-sm leading-relaxed">
-          Matti J. Kankaanpään (1943–2017) kirjallisuus- ja muistosivu.
-          Sukututkimus, historia ja kustannustoiminta.
+          {lang === 'en'
+            ? "Matti J. Kankaanpää's (1943–2017) literary and memorial site. Genealogy, history and publishing."
+            : "Matti J. Kankaanpään (1943–2017) kirjallisuus- ja muistosivu. Sukututkimus, historia ja kustannustoiminta."}
         </p>
       </div>
       <div>
-        <h3 class="font-semibold mb-3 text-sm uppercase tracking-wide text-white/60">Sivut</h3>
+        <h3 class="font-semibold mb-3 text-sm uppercase tracking-wide text-white/60">
+          {lang === 'en' ? 'Pages' : 'Sivut'}
+        </h3>
         <ul class="space-y-1.5 text-sm">
-          <li><a href="/artikkelit" class="text-white/80 hover:text-white transition-colors">Artikkelit</a></li>
-          <li><a href="/myynissa" class="text-white/80 hover:text-white transition-colors">Myynissä</a></li>
-          <li><a href="/kirjat" class="text-white/80 hover:text-white transition-colors">Kirjat</a></li>
-          <li><a href="/matti-j-kankaanpaa" class="text-white/80 hover:text-white transition-colors">Matti J. Kankaanpää</a></li>
+          {lang === 'en' ? (
+            <>
+              <li><a href={`${base}/articles`} class="text-white/80 hover:text-white transition-colors">Articles</a></li>
+              <li><a href={`${base}/books`} class="text-white/80 hover:text-white transition-colors">Publications</a></li>
+              <li><a href={`${base}/about`} class="text-white/80 hover:text-white transition-colors">Matti J. Kankaanpää</a></li>
+            </>
+          ) : (
+            <>
+              <li><a href="/artikkelit" class="text-white/80 hover:text-white transition-colors">Artikkelit</a></li>
+              <li><a href="/myynissa" class="text-white/80 hover:text-white transition-colors">Myynissä</a></li>
+              <li><a href="/kirjat" class="text-white/80 hover:text-white transition-colors">Kirjat</a></li>
+              <li><a href="/matti-j-kankaanpaa" class="text-white/80 hover:text-white transition-colors">Matti J. Kankaanpää</a></li>
+            </>
+          )}
         </ul>
       </div>
       <div>
-        <h3 class="font-semibold mb-3 text-sm uppercase tracking-wide text-white/60">Yhteystiedot</h3>
+        <h3 class="font-semibold mb-3 text-sm uppercase tracking-wide text-white/60">
+          {lang === 'en' ? 'Contact' : 'Yhteystiedot'}
+        </h3>
         <ul class="space-y-1.5 text-sm text-white/80">
           <li>Jarle M. Alvheim</li>
           <li>Skullerudstubben 24</li>
@@ -37,9 +57,19 @@
     <div class="mt-8 pt-6 border-t border-white/20 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-white/50">
       <span>© {new Date().getFullYear()} T:mi Toiset Aijat &middot; Y-tunnus 2901392-1</span>
       <div class="flex gap-4">
-        <a href="/tekijanoikeus" class="hover:text-white/80 transition-colors">Tekijänoikeus</a>
-        <a href="/toimitusehdot" class="hover:text-white/80 transition-colors">Toimitusehdot</a>
-        <a href="/tietosuoja" class="hover:text-white/80 transition-colors">Tietosuoja</a>
+        {lang === 'en' ? (
+          <>
+            <a href={`${base}/copyright`} class="hover:text-white/80 transition-colors">Copyright</a>
+            <a href={`${base}/terms`} class="hover:text-white/80 transition-colors">Terms</a>
+            <a href={`${base}/privacy`} class="hover:text-white/80 transition-colors">Privacy</a>
+          </>
+        ) : (
+          <>
+            <a href="/tekijanoikeus" class="hover:text-white/80 transition-colors">Tekijänoikeus</a>
+            <a href="/toimitusehdot" class="hover:text-white/80 transition-colors">Toimitusehdot</a>
+            <a href="/tietosuoja" class="hover:text-white/80 transition-colors">Tietosuoja</a>
+          </>
+        )}
       </div>
     </div>
   </div>

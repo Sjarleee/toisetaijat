@@ -12,22 +12,28 @@ interface Props {
   tags?: string[];
   sourceUrl?: string;
   blocks?: any[];
+  lang?: 'fi' | 'en';
 }
 
-const { title, description, pubDate, updatedDate, heroImage, tags = [], sourceUrl, blocks } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags = [], sourceUrl, blocks, lang = 'fi' } = Astro.props;
 
 const productBlocks = blocks?.filter(b => b.type === 'product') ?? [];
 const otherBlocks = blocks?.filter(b => b.type !== 'product') ?? [];
 
-const formattedDate = pubDate.toLocaleDateString('fi-FI', {
+const dateLocale = lang === 'en' ? 'en-GB' : 'fi-FI';
+const formattedDate = pubDate.toLocaleDateString(dateLocale, {
   weekday: 'long',
   year: 'numeric',
   month: 'long',
   day: 'numeric',
 });
+
+const tagBase = lang === 'en' ? '/en/articles/tag' : '/artikkelit/tagi';
+const backHref = lang === 'en' ? '/en/articles' : '/artikkelit';
+const backLabel = lang === 'en' ? '← All articles' : '← Kaikki artikkelit';
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} lang={lang}>
   <article class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
     {heroImage && (
       <img
@@ -48,7 +54,7 @@ const formattedDate = pubDate.toLocaleDateString('fi-FI', {
         <div class="flex gap-2 mt-4 flex-wrap">
           {tags.map(tag => (
             <a
-              href={`/artikkelit/tagi/${tagToSlug(tag)}`}
+              href={`${tagBase}/${tagToSlug(tag)}`}
               class="text-xs bg-[#1a3a2a]/10 text-[#1a3a2a] hover:bg-[#1a3a2a]/20 px-2.5 py-1 rounded-full transition-colors"
             >
               {tag}
@@ -80,8 +86,8 @@ const formattedDate = pubDate.toLocaleDateString('fi-FI', {
     )}
 
     <footer class="mt-12 pt-6 border-t border-gray-200 space-y-4">
-      <a href="/artikkelit" class="inline-block text-[#2d6a4f] hover:underline font-medium">
-        ← Kaikki artikkelit
+      <a href={backHref} class="inline-block text-[#2d6a4f] hover:underline font-medium">
+        {backLabel}
       </a>
     </footer>
   </article>

@@ -8,19 +8,21 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  lang?: 'fi' | 'en';
 }
 
 const {
   title,
   description = 'Matti J. Kankaanpään kirjallisuus- ja muistosivu – sukututkimus, historia, kirjat',
   ogImage = '/og-default.jpg',
+  lang = 'fi',
 } = Astro.props;
 
 const siteTitle = title === 'Toiset Aijat' ? title : `${title} – Toiset Aijat`;
 ---
 
 <!doctype html>
-<html lang="fi">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -35,11 +37,11 @@ const siteTitle = title === 'Toiset Aijat' ? title : `${title} – Toiset Aijat`
     <title>{siteTitle}</title>
   </head>
   <body class="min-h-screen flex flex-col">
-    <Nav />
+    <Nav lang={lang} />
     <main class="flex-1">
       <slot />
     </main>
-    <Footer />
+    <Footer lang={lang} />
     <CookieBanner />
   </body>
 </html>

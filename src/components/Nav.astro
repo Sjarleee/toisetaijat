@@ -65,7 +65,8 @@ function getOppositeLocaleHref(path: string, currentLang: 'fi' | 'en'): string {
 
   if (currentLang === 'fi') {
     if (p.startsWith('/artikkelit/tagi/')) {
-      return p.replace('/artikkelit/tagi/', '/en/articles/tag/');
+      // Tag slugs differ between languages — fall back to articles list
+      return '/en/articles';
     }
     if (p.startsWith('/artikkelit/')) {
       return p.replace('/artikkelit/', '/en/articles/');
@@ -73,7 +74,8 @@ function getOppositeLocaleHref(path: string, currentLang: 'fi' | 'en'): string {
     return fi2en[p] ?? `/en${p}`;
   } else {
     if (p.startsWith('/en/articles/tag/')) {
-      return p.replace('/en/articles/tag/', '/artikkelit/tagi/');
+      // Tag slugs differ between languages — fall back to articles list
+      return '/artikkelit';
     }
     if (p.startsWith('/en/articles/')) {
       return p.replace('/en/articles/', '/artikkelit/');

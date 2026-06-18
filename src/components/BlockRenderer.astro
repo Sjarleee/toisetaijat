@@ -5,7 +5,7 @@ import { entryToBook } from '../data/products';
 
 type Block =
   | { type: 'product'; bookId: string }
-  | { type: 'figure'; image: string; caption?: string; size?: 'full' | 'medium' | 'small'; placement?: 'center' | 'left' | 'right' }
+  | { type: 'figure'; image: string; alt?: string; caption?: string; size?: 'full' | 'medium' | 'small'; placement?: 'center' | 'left' | 'right' }
   | { type: 'callout'; text: string; variant?: 'note' | 'tip' | 'warning' };
 
 interface Props {
@@ -55,7 +55,7 @@ const calloutIcons = {
         <figure class={wrapClass}>
           <img
             src={block.image}
-            alt={block.caption ?? ''}
+            alt={block.alt ?? block.caption ?? ''}
             class="w-full rounded-lg shadow"
             loading="lazy"
           />

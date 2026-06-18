@@ -13,6 +13,22 @@ const collectionMap = Object.fromEntries(allArticleCollections.map(c => [c.id, c
 
 type CtaStyle = 'gold' | 'green' | 'gray';
 
+// English translations for Finnish collection titles/descriptions
+const titleEn: Record<string, string> = {
+  'Esipolviaineisto': 'Ancestry records',
+  'Kirkonkirja-aineisto': 'Church records collection',
+  'Sukututkimusaineisto – SUVUT-kokoelma': 'Genealogical research – SUVUT collection',
+  'Taloaineisto': 'Farm household records',
+  'Muut tiedot': 'Other records',
+};
+const descEn: Record<string, string> = {
+  'Esipolviaineisto': "Matti J. Kankaanpää's ancestry research records.",
+  'Kirkonkirja-aineisto': "Matti J. Kankaanpää's notes from Finnish church records.",
+  'Sukututkimusaineisto – SUVUT-kokoelma': "Matti J. Kankaanpää's personal genealogical research notes.",
+  'Taloaineisto': "Matti J. Kankaanpää's farm household records related to genealogical research.",
+  'Muut tiedot': "Other genealogical research material by Matti J. Kankaanpää.",
+};
+
 const searchData = hakemistoEntries.map(entry => {
   const d = entry.data;
   const ref = d.reference;
@@ -52,7 +68,7 @@ const searchData = hakemistoEntries.map(entry => {
   } else if (ref.type === 'article') {
     const article = articleMap[ref.id];
     if (article) {
-      url = `/artikkelit/${ref.id}`;
+      url = `/en/articles/${ref.id}`;
     }
     refLabel = 'Article';
     ctaLabel = 'Read article →';
@@ -67,7 +83,7 @@ const searchData = hakemistoEntries.map(entry => {
     ctaLabel = 'View articles →';
     ctaStyle = 'gold';
   } else if (ref.type === 'unpublished') {
-    refLabel = ref.label;
+    refLabel = titleEn[ref.label] ?? ref.label;
     ctaLabel = 'Contact us →';
     ctaStyle = 'gray';
     url = '/en/contact';
@@ -84,8 +100,8 @@ const searchData = hakemistoEntries.map(entry => {
 
   return {
     id: entry.id,
-    title: d.title,
-    description: d.description,
+    title: titleEn[d.title] ?? d.title,
+    description: descEn[d.title] ?? d.description,
     refType: ref.type,
     refLabel,
     url,

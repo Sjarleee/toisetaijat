@@ -9,6 +9,7 @@ const blockSchema = z.discriminatedUnion('type', [
   z.object({
     type: z.literal('figure'),
     image: z.string(),
+    alt: z.string().optional(),
     caption: z.string().optional(),
     size: z.enum(['full', 'medium', 'small']).default('full'),
     placement: z.enum(['center', 'left', 'right']).default('center'),

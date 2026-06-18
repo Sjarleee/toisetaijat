@@ -1,54 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry, render } from 'astro:content';
+
+const page = await getEntry('pages', 'tietosuoja');
+const { Content } = await render(page);
 ---
-<BaseLayout title="Tietosuoja" description="Tietosuojakäytäntö – T:mi Toiset Aijat">
+<BaseLayout title={page.data.title} description={page.data.description}>
   <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
-    <h1 class="font-serif text-3xl font-bold text-[#1a3a2a] mb-8">Tietosuoja</h1>
-    <div class="prose prose-stone max-w-none">
-      <p>Tämä tietosuojakäytäntö kuvaa, kuinka T:mi Toiset Aijat kerää, käyttää ja suojaa henkilötietojasi. Noudatamme EU:n yleistä tietosuoja-asetusta (GDPR).</p>
-
-      <h3>Rekisterinpitäjä</h3>
-      <p>
-        T:mi Toiset Aijat<br />
-        Sähköposti: <a href="mailto:jarle@toisetaijat.fi" class="text-[#2d6a4f] underline hover:no-underline">jarle@toisetaijat.fi</a>
-      </p>
-
-      <h3>Kerättävät henkilötiedot ja käyttötarkoitus</h3>
-      <h4>Tilaukset</h4>
-      <p>Tilauksen yhteydessä keräämme seuraavat tiedot:</p>
-      <ul>
-        <li>Nimi</li>
-        <li>Postiosoite (kirjatilauksia varten)</li>
-        <li>Sähköpostiosoite (tilausvahvistusta ja toimitusta varten)</li>
-        <li>Puhelinnumero (tarvittaessa toimitusta varten)</li>
-      </ul>
-      <p>Tietoja käytetään ainoastaan tilauksen toimittamiseen. Niitä ei käytetä markkinointiin eikä luovuteta kolmansille osapuolille muutoin kuin maksun- ja toimituksen käsittelyn edellyttämässä laajuudessa.</p>
-      <p>Tilaustiedot tallennetaan suojattuun Google Sheets -taulukkoon, jota käytetään tilausten hallintaan. Googlen tietosuojakäytäntö: <a href="https://policies.google.com/privacy" class="text-[#2d6a4f] underline hover:no-underline" target="_blank" rel="noopener">policies.google.com/privacy</a></p>
-
-      <h4>Maksaminen – MobilePay</h4>
-      <p>Maksaminen tapahtuu MobilePay-palvelun (Vipps MobilePay AS) kautta. Maksutapahtuman yhteydessä tarvittavat tiedot (nimi, puhelinnumero) välitetään Vipps MobilePay AS:lle maksun käsittelyä varten. Vipps MobilePay AS toimii näiden tietojen osalta itsenäisenä rekisterinpitäjänä oman tietosuojakäytäntönsä mukaisesti.</p>
-      <p>Lisätietoja: <a href="https://www.mobilepay.fi/tietosuoja" class="text-[#2d6a4f] underline hover:no-underline" target="_blank" rel="noopener">MobilePay tietosuoja</a></p>
-
-      <h3>Evästeet</h3>
-      <p>Käyttämällä toisetaijat.fi-sivustoa hyväksyt, että voimme asentaa evästeitä selaimeesi. Evästeet ovat pieniä tekstitiedostoja, joita käytetään sivuston käytettävyyden parantamiseksi ja kävijätilastojen seurantaan.</p>
-      <p><strong>Google Analytics -evästeet:</strong> Käytämme Google Analyticsia sivuston kävijätilastojen seuraamiseen. Tiedot ovat anonyymejä eivätkä sisällä henkilökohtaisesti tunnistettavia tietoja. Voit estää evästeet muuttamalla selaimesi asetuksia – tällöin sivuston jotkut toiminnot eivät välttämättä toimi optimaalisesti.</p>
-      <p>Lisätietoja: <a href="https://policies.google.com/privacy" class="text-[#2d6a4f] underline hover:no-underline" target="_blank" rel="noopener">Googlen tietosuojakäytäntö</a></p>
-
-      <h3>Tietojen säilytysaika</h3>
-      <p>Tilausten henkilötietoja säilytetään niin kauan kuin se on tarpeen tilauksen toimittamiseksi ja mahdollisten reklamaatioiden käsittelemiseksi, kuitenkin enintään kirjanpitolain edellyttämän ajan (6 vuotta).</p>
-
-      <h3>Rekisteröidyn oikeudet</h3>
-      <p>Sinulla on oikeus:</p>
-      <ul>
-        <li>saada tietää, mitä henkilötietoja sinusta on tallennettu</li>
-        <li>pyytää tietojen oikaisemista tai poistamista</li>
-        <li>rajoittaa tai vastustaa tietojesi käsittelyä</li>
-        <li>pyytää tietojesi siirtämistä toiselle rekisterinpitäjälle</li>
-        <li>tehdä valitus tietosuojaviranomaiselle (<a href="https://tietosuoja.fi" class="text-[#2d6a4f] underline hover:no-underline" target="_blank" rel="noopener">tietosuoja.fi</a>)</li>
-      </ul>
-
-      <h3>Yhteydenotot</h3>
-      <p>Tietosuojaa koskevissa asioissa ota yhteyttä: <a href="mailto:jarle@toisetaijat.fi" class="text-[#2d6a4f] underline hover:no-underline">jarle@toisetaijat.fi</a></p>
+    <h1 class="font-serif text-3xl font-bold text-[#1a3a2a] mb-8">{page.data.title}</h1>
+    <div class="prose prose-stone max-w-none prose-headings:font-serif prose-headings:text-[#1a3a2a] prose-a:text-[#2d6a4f]">
+      <Content />
     </div>
   </div>
 </BaseLayout>

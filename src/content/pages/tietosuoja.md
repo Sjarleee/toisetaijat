@@ -8,6 +8,10 @@ Tämä tietosuojakäytäntö kuvaa, kuinka T:mi Toiset Aijat kerää, käyttää
 ### Rekisterinpitäjä
 
 T:mi Toiset Aijat\
+Jarle M. Alvheim\
+Skullerudstubben 24\
+1188 Oslo, Norway\
+Y-tunnus: 2901392-1\
 Sähköposti: [jarle@toisetaijat.fi](mailto:jarle@toisetaijat.fi)
 
 ### Kerättävät henkilötiedot ja käyttötarkoitus

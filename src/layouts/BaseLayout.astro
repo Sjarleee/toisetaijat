@@ -17,7 +17,7 @@ interface Props {
 const {
   title,
   description = 'Matti J. Kankaanpään kirjallisuus- ja muistosivu – sukututkimus, historia, kirjat',
-  ogImage = '/og-default.jpg',
+  ogImage = '/images/toiset-aijat-i/toisetaijat_page_1.jpg',
   ogType = 'website',
   lang = 'fi',
   hreflangFi,
@@ -42,12 +42,14 @@ const ogImageAbsolute = ogImage.startsWith('http') ? ogImage : `${SITE}${ogImage
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImageAbsolute} />
     <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content={lang === 'en' ? 'en_GB' : 'fi_FI'} />
     <meta name="twitter:card" content="summary_large_image" />
     {hreflangFi && <link rel="alternate" hreflang="fi" href={hreflangFi} />}
     {hreflangEn && <link rel="alternate" hreflang="en" href={hreflangEn} />}
     {(hreflangFi || hreflangEn) && <link rel="alternate" hreflang="x-default" href={hreflangFi ?? hreflangEn} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Toiset Aijat" href="/rss.xml" />
     <slot name="head" />
     <title>{siteTitle}</title>
   </head>

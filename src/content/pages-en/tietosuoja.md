@@ -12,7 +12,7 @@ Jarle M. Alvheim\
 Skullerudstubben 24\
 1188 Oslo, Norway\
 Business ID: 2901392-1\
-Email: [jarle@toisetaijat.fi](mailto:jarle@toisetaijat.fi)
+Email: [jarle&#64;toisetaijat.fi](mailto:jarle&#64;toisetaijat.fi)
 
 ### Personal Data Collected and Purpose
 
@@ -71,4 +71,4 @@ You have the right to:
 
 ### Contact
 
-For privacy-related matters, please contact: [jarle@toisetaijat.fi](mailto:jarle@toisetaijat.fi)
+For privacy-related matters, please contact: [jarle&#64;toisetaijat.fi](mailto:jarle&#64;toisetaijat.fi)

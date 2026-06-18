@@ -62,12 +62,15 @@ def make_session() -> requests.Session:
 
 def normalise(href: str, base: str):
     href = href.strip()
-    if not href or href.startswith(("mailto:", "tel:", "javascript:", "#")):
+    if not href or href.startswith(("mailto:", "tel:", "javascript:", "#", "//cdn-cgi/")):
         return None
     if href.startswith("//"):
         href = "https:" + href
     if not href.startswith("http"):
         href = urllib.parse.urljoin(base, href)
+    # skip cloudflare internal paths
+    if "/cdn-cgi/" in href:
+        return None
     # strip fragment
     href = href.split("#")[0]
     return href.rstrip("/") or None

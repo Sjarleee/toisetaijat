@@ -12,7 +12,7 @@ Jarle M. Alvheim\
 Skullerudstubben 24\
 1188 Oslo, Norway\
 Y-tunnus: 2901392-1\
-Sähköposti: [jarle@toisetaijat.fi](mailto:jarle@toisetaijat.fi)
+Sähköposti: [jarle&#64;toisetaijat.fi](mailto:jarle&#64;toisetaijat.fi)
 
 ### Kerättävät henkilötiedot ja käyttötarkoitus
 
@@ -71,4 +71,4 @@ Sinulla on oikeus:
 
 ### Yhteydenotot
 
-Tietosuojaa koskevissa asioissa ota yhteyttä: [jarle@toisetaijat.fi](mailto:jarle@toisetaijat.fi)
+Tietosuojaa koskevissa asioissa ota yhteyttä: [jarle&#64;toisetaijat.fi](mailto:jarle&#64;toisetaijat.fi)

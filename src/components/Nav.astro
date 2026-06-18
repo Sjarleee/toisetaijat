@@ -38,6 +38,9 @@ const cartLabel = lang === 'en' ? 'Cart' : 'Ostoskori';
 const currentPath = Astro.url.pathname;
 
 function getOppositeLocaleHref(path: string, currentLang: 'fi' | 'en'): string {
+  // Normalize: remove trailing slash (except root)
+  const p = path.length > 1 ? path.replace(/\/$/, '') : path;
+
   // Explicit path mappings between Finnish and English
   const fi2en: Record<string, string> = {
     '/': '/en/',
@@ -55,24 +58,18 @@ function getOppositeLocaleHref(path: string, currentLang: 'fi' | 'en'): string {
   const en2fi: Record<string, string> = Object.fromEntries(
     Object.entries(fi2en).map(([fi, en]) => [en, fi])
   );
-  // Extra EN-only mappings that don't have a Finnish equivalent
-  en2fi['/en/articles'] = '/artikkelit';
-  en2fi['/en/books'] = '/kirjat';
+  en2fi['/en'] = '/';
 
   if (currentLang === 'fi') {
-    // Article slug: /artikkelit/[slug] → /en/articles/[slug]
-    if (path.startsWith('/artikkelit/')) {
-      return path.replace('/artikkelit/', '/en/articles/');
+    if (p.startsWith('/artikkelit/')) {
+      return p.replace('/artikkelit/', '/en/articles/');
     }
-    // Tag page: /artikkelit/tagi/[tag] is handled above by startsWith
-    return fi2en[path] ?? `/en${path}`;
+    return fi2en[p] ?? `/en${p}`;
   } else {
-    // English → Finnish
-    // Article slug: /en/articles/[slug] → /artikkelit/[slug]
-    if (path.startsWith('/en/articles/')) {
-      return path.replace('/en/articles/', '/artikkelit/');
+    if (p.startsWith('/en/articles/')) {
+      return p.replace('/en/articles/', '/artikkelit/');
     }
-    return en2fi[path] ?? (path.replace(/^\/en/, '') || '/');
+    return en2fi[p] ?? (p.replace(/^\/en/, '') || '/');
   }
 }
 

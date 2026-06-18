@@ -27,5 +27,5 @@ Takeout/
 # jetbrains setting folder
 .idea/
 .wrangler/
-articles/
+/articles/
 

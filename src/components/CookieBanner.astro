@@ -1,0 +1,68 @@
+<div
+  id="cookie-banner"
+  class="fixed bottom-0 left-0 right-0 z-50 bg-[#2c3e2d] text-[#e8dfc8] border-t-2 border-[#c9a84c] p-4 shadow-lg hidden"
+>
+  <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-start sm:items-center gap-4">
+    <p class="text-sm flex-1">
+      Käytämme evästeitä Google Analytics -seurantaan ja Google AdSense -mainontaan. Hyväksymällä sallit kolmansien osapuolten evästeet.
+      <a href="/tietosuoja" class="underline hover:text-[#c9a84c]">Lue lisää</a>
+    </p>
+    <div class="flex gap-3 shrink-0">
+      <button
+        id="cookie-decline"
+        class="px-4 py-2 text-sm border border-[#c9a84c] text-[#c9a84c] rounded hover:bg-[#c9a84c] hover:text-[#2c3e2d] transition-colors"
+      >
+        Hylkää
+      </button>
+      <button
+        id="cookie-accept"
+        class="px-4 py-2 text-sm bg-[#c9a84c] text-[#2c3e2d] rounded hover:bg-[#b8963e] transition-colors font-semibold"
+      >
+        Hyväksy
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const GA_ID = 'G-W3RTLN7P6H';
+  const ADSENSE_CLIENT = 'ca-pub-7819273577313896';
+
+  function loadAnalytics() {
+    const gaScript = document.createElement('script');
+    gaScript.async = true;
+    gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+    document.head.appendChild(gaScript);
+
+    (window as any).dataLayer = (window as any).dataLayer || [];
+    function gtag(...args: any[]) { (window as any).dataLayer.push(args); }
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+
+    const adsScript = document.createElement('script');
+    adsScript.async = true;
+    adsScript.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
+    adsScript.crossOrigin = 'anonymous';
+    document.head.appendChild(adsScript);
+  }
+
+  const banner = document.getElementById('cookie-banner')!;
+  const consent = localStorage.getItem('cookie-consent');
+
+  if (consent === 'accepted') {
+    loadAnalytics();
+  } else if (!consent) {
+    banner.classList.remove('hidden');
+  }
+
+  document.getElementById('cookie-accept')!.addEventListener('click', () => {
+    localStorage.setItem('cookie-consent', 'accepted');
+    banner.classList.add('hidden');
+    loadAnalytics();
+  });
+
+  document.getElementById('cookie-decline')!.addEventListener('click', () => {
+    localStorage.setItem('cookie-consent', 'declined');
+    banner.classList.add('hidden');
+  });
+</script>

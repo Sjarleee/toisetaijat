@@ -31,13 +31,25 @@ Maksaminen tapahtuu MobilePay-palvelun (Vipps MobilePay AS) kautta. Maksutapahtu
 
 Lisätietoja: [MobilePay tietosuoja](https://www.mobilepay.fi/tietosuoja)
 
-### Evästeet
+### Evästeet ja paikallinen tallennustila
 
-Käyttämällä toisetaijat.fi-sivustoa hyväksyt, että voimme asentaa evästeitä selaimeesi. Evästeet ovat pieniä tekstitiedostoja, joita käytetään sivuston käytettävyyden parantamiseksi ja kävijätilastojen seurantaan.
+#### Toiminnalliset (ei vaadi suostumusta)
 
-**Google Analytics -evästeet:** Käytämme Google Analyticsia sivuston kävijätilastojen seuraamiseen. Tiedot ovat anonyymejä eivätkä sisällä henkilökohtaisesti tunnistettavia tietoja. Voit estää evästeet muuttamalla selaimesi asetuksia – tällöin sivuston jotkut toiminnot eivät välttämättä toimi optimaalisesti.
+**Selain LocalStorage – ostoskori:** Ostoskorin sisältö tallennetaan selaimen paikalliseen tallennustilaan (localStorage). Tiedot pysyvät vain omalla laitteellasi eikä niitä lähetetä palvelimelle.
 
-Lisätietoja: [Googlen tietosuojakäytäntö](https://policies.google.com/privacy)
+**Cloudflare:** Sivusto toimii Cloudflaren CDN-verkon kautta. Cloudflare saattaa asettaa teknisiä evästeitä (esim. `cf_clearance`) tietoturvan ja suorituskyvyn varmistamiseksi. Nämä ovat välttämättömiä evästeitä eivätkä vaadi suostumusta. Lisätietoja: [Cloudflaren tietosuoja](https://www.cloudflare.com/privacypolicy/)
+
+#### Analytiikka- ja mainosevästeet (vaatii suostumuksen)
+
+Nämä evästeet ladataan vain, jos hyväksyt evästeet sivuston evästebannerin kautta.
+
+**Google Analytics:** Käytämme Google Analyticsia sivuston kävijätilastojen seuraamiseen. Google kerää tietoja sivuston käytöstä evästeiden avulla. Lisätietoja: [Googlen tietosuojakäytäntö](https://policies.google.com/privacy)
+
+**Google AdSense:** Käytämme Google AdSensea mainosten näyttämiseen. Google ja sen kumppanit voivat käyttää evästeitä mainosten personointiin. Lisätietoja: [Googlen mainosten tietosuoja](https://policies.google.com/technologies/ads)
+
+#### Suostumuksen peruuttaminen
+
+Voit peruuttaa antamasi suostumuksen milloin tahansa tyhjentämällä selaimen paikallisen tallennustilan (localStorage) tai käyttämällä selaimen yksityistä selailutilaa.
 
 ### Tietojen säilytysaika
 

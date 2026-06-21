@@ -4,8 +4,8 @@ interface Props {
 }
 const { lang = 'fi' } = Astro.props;
 const t = lang === 'en'
-  ? { text: 'We use cookies for Google Analytics and Google AdSense. By accepting, you allow third-party cookies.', link: '/en/privacy/', more: 'Read more', decline: 'Decline', accept: 'Accept' }
-  : { text: 'Käytämme evästeitä Google Analytics -seurantaan ja Google AdSense -mainontaan. Hyväksymällä sallit kolmansien osapuolten evästeet.', link: '/tietosuoja', more: 'Lue lisää', decline: 'Hylkää', accept: 'Hyväksy' };
+  ? { text: 'We use cookies for Google Analytics. By accepting, you allow third-party cookies.', link: '/en/privacy/', more: 'Read more', decline: 'Decline', accept: 'Accept' }
+  : { text: 'Käytämme evästeitä Google Analytics -seurantaan. Hyväksymällä sallit kolmansien osapuolten evästeet.', link: '/tietosuoja', more: 'Lue lisää', decline: 'Hylkää', accept: 'Hyväksy' };
 ---
 
 <div
@@ -40,7 +40,6 @@ const t = lang === 'en'
 
 <script>
   const GA_ID = 'G-W3RTLN7P6H';
-  const ADSENSE_CLIENT = 'ca-pub-7819273577313896';
 
   function loadAnalytics() {
     const gaScript = document.createElement('script');
@@ -53,11 +52,6 @@ const t = lang === 'en'
     gtag('js', new Date());
     gtag('config', GA_ID);
 
-    const adsScript = document.createElement('script');
-    adsScript.async = true;
-    adsScript.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
-    adsScript.crossOrigin = 'anonymous';
-    document.head.appendChild(adsScript);
   }
 
   const banner = document.getElementById('cookie-banner')!;

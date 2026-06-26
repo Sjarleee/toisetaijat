@@ -189,4 +189,17 @@ const { shippingNotice, shippingNoticeVisible } = frontpage.data;
   </div>
 </BaseLayout>
 
+<script define:vars={{ gaItems: [...availableBooks, ...bundles, ...ebooks, ...singleArticles, ...articleCollections].filter(p => p.price).map((p, index) => ({ item_id: p.id, item_name: p.title, price: p.price, quantity: 1, index })) }}>
+  try {
+    const gtag = (window as any).gtag;
+    if (typeof gtag === 'function') {
+      gtag('event', 'view_item_list', {
+        item_list_id: 'myynissa',
+        item_list_name: 'Myynissä',
+        items: gaItems,
+      });
+    }
+  } catch {}
+</script>
+
 

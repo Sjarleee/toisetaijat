@@ -193,6 +193,25 @@ const { shippingNotice, shippingNoticeVisible, vatRate = '13,5' } = frontpage.da
       </div>
     `;
 
+    // GA4 begin_checkout
+    try {
+      const gtag = (window as any).gtag;
+      if (typeof gtag === 'function') {
+        gtag('event', 'begin_checkout', {
+          currency: 'EUR',
+          value: total,
+          items: items.map((item, index) => ({
+            item_id: item.id,
+            item_name: item.title,
+            price: item.price,
+            quantity: item.quantity,
+            item_category: item.type === 'book' ? 'Kirja' : 'Artikkelikokoelma',
+            index,
+          })),
+        });
+      }
+    } catch {}
+
     if (hasBooks) {
       finlandNotice.classList.remove('hidden');
     } else {

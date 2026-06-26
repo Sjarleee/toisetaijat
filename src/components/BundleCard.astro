@@ -99,6 +99,18 @@ const discount = bundle.bundleDiscount ?? 0;
       image: btn.dataset.image || undefined,
     };
     addItem(item);
+
+    try {
+      const gtag = (window as any).gtag;
+      if (typeof gtag === 'function') {
+        gtag('event', 'add_to_cart', {
+          currency: 'EUR',
+          value: item.price,
+          items: [{ item_id: item.id, item_name: item.title, price: item.price, quantity: 1, item_category: item.type === 'book' ? 'Kirja' : 'Artikkelikokoelma' }],
+        });
+      }
+    } catch {}
+
     const original = btn.innerHTML;
     btn.innerHTML = '<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Lisätty!';
     btn.disabled = true;

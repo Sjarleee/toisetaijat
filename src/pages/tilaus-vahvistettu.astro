@@ -151,6 +151,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     // Clear sessionStorage so refresh doesn't re-show
     try { sessionStorage.removeItem('last_order'); } catch {}
 
+    // GA4 purchase event
+    try {
+      const gtag = (window as any).gtag;
+      if (typeof gtag === 'function') {
+        gtag('event', 'purchase', {
+          transaction_id: order.orderId,
+          value: order.total,
+          currency: 'EUR',
+          shipping: order.shipping,
+          items: order.items.map((item: OrderItem, index: number) => ({
+            item_id: item.type + '_' + item.title.toLowerCase().replace(/\s+/g, '_'),
+            item_name: item.title,
+            price: item.price,
+            quantity: item.quantity,
+            item_category: item.type === 'book' ? 'Kirja' : 'Artikkelikokoelma',
+            index,
+          })),
+        });
+      }
+    } catch {}
+
     const hasBooks = order.items.some(i => i.type === 'book');
     const hasCollections = order.items.some(i => i.type === 'article-collection');
     const date = new Date(order.orderedAt).toLocaleString('fi-FI');
